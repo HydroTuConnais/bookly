@@ -1,70 +1,162 @@
-# Getting Started with Create React App
+# NotionLite - React + Express + JWT
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Ce projet est une application de gestion de projets et de documents inspirée de Notion. Elle utilise **React** pour le front-end, **Express** pour le back-end, et **JWT (JSON Web Tokens)** pour la gestion de l'authentification.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚀 Fonctionnalités
 
-### `npm start`
+### Front-End (React) :
+- Interface utilisateur simple et intuitive.
+- Création, édition et suppression de notes.
+- Gestion des utilisateurs via un système de connexion/déconnexion.
+- Interface réactive pour une expérience utilisateur optimale.
 
-Runs the app in the development mode.\
-Open [http://localhost:4000](http://localhost:4000) to view it in your browser.
+### Back-End (Express) :
+- API REST pour gérer les utilisateurs et les notes.
+- Authentification sécurisée via JWT.
+- Validation et gestion des requêtes via **middleware**.
+- Base de données structurée pour stocker les utilisateurs et les notes.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## 📂 Structure du projet
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Front-End
+```
+/src
+  |-- /components    # Composants React (Login, Notes, etc.)
+  |-- /pages         # Pages principales (Dashboard, Login)
+  |-- /services      # Gestion des appels API
+  |-- /utils         # Utilitaires (gestion des tokens, etc.)
+  |-- App.js         # Entrée principale de l'application
+```
 
-### `npm run build`
+### Back-End
+```
+/server
+  |-- /routes        # Routes pour utilisateurs et notes
+  |-- /controllers   # Logique des API (CRUD)
+  |-- /models        # Modèles de la base de données
+  |-- /middleware    # Middleware pour la gestion des requêtes et l'authentification
+  |-- server.js      # Entrée principale du serveur Express
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🛠️ Technologies utilisées
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Front-End :
+- React
+- React Router
+- Axios (pour les appels API)
+- CSS (ou une librairie CSS comme Tailwind)
 
-### `npm run eject`
+### Back-End :
+- Node.js
+- Express.js
+- SQLite
+- JWT (JSON Web Token) pour l'authentification
+- Bcrypt pour le hachage des mots de passe
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 📦 Installation et exécution
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Prérequis :
+- Node.js v16 ou supérieur
+- SQLite
+- Un éditeur de code (Visual Studio Code recommandé)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Étapes :
+1. Clonez le dépôt :
+   ```bash
+   git clone https://github.com/username/notionlite.git
+   cd notionlite
+   ```
 
-## Learn More
+2. Installez les dépendances pour le front-end :
+   ```bash
+   cd client
+   npm install
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+3. Installez les dépendances pour le back-end :
+   ```bash
+   cd ../server
+   npm install
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+4. Configurez les variables d'environnement :
+   Créez un fichier `.env` dans le dossier 
 
-### Code Splitting
+server
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+ avec les clés suivantes :
+   ```
+   SERVER_PORT=5000
+   JWT_SECRET=votre_secret
+   ```
 
-### Analyzing the Bundle Size
+5. Lancez le serveur back-end :
+   ```bash
+   cd server
+   npm run dev
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+6. Lancez le front-end :
+   ```bash
+   cd client
+   npm start
+   ```
 
-### Making a Progressive Web App
+7. Ouvrez votre navigateur à l'adresse suivante :
+   ```
+   http://localhost:3000
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## 🔒 Authentification JWT
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- **Connexion** : Lorsqu'un utilisateur se connecte, un JWT est généré et envoyé au client. Ce token est stocké dans le localStorage.
+- **Middleware de protection** : Les routes nécessitant une authentification sont protégées par un middleware qui vérifie le JWT dans le header `Authorization`.
 
-### Deployment
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 📖 API Routes
 
-### `npm run build` fails to minify
+### Utilisateurs
+- `POST /api/auth/register` : Crée un nouvel utilisateur.
+- `POST /api/auth/login` : Connecte un utilisateur et renvoie un token JWT.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Notes
+- `GET /api/notes` : Récupère toutes les notes de l'utilisateur.
+- `POST /api/notes` : Crée une nouvelle note.
+- `PUT /api/notes/:id` : Met à jour une note.
+- `DELETE /api/notes/:id` : Supprime une note.
+
+---
+
+## 📋 To-Do
+
+- [ ] Ajouter des tests unitaires.
+- [ ] Implémenter la gestion des fichiers (upload).
+- [ ] Ajouter une interface de recherche de notes.
+
+---
+
+## 🤝 Contribution
+
+Les contributions sont les bienvenues !  
+Créez une branche, proposez vos modifications via une **Pull Request** et nous serons heureux de les examiner. 😊
+
+---
+
+## 🧑‍💻 Auteur
+
+- **Martig Antonin**
+
+---
+
+**Merci d'avoir exploré ce projet !** 🌟
