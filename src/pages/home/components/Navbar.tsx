@@ -5,9 +5,11 @@ import { cn } from '../../../lib/utils';
 import { ModeToggle } from '../../../components/mode-toggle';
 import { useScrollTop } from '../../../hooks/use-scroll-top';
 import { Button } from '@/ui/button';
+import { usePopup } from '@/context/popup-context';
 
 export const Navbar: React.FC = () => {
   const scrolled = useScrollTop();
+  const { openPopup } = usePopup();
 
   return (
     <div className={cn(
@@ -19,7 +21,7 @@ export const Navbar: React.FC = () => {
             <Button variant="ghost" size="sm">
               Log In
             </Button>
-            <Button size="sm">
+            <Button size="sm" onClick={openPopup}>
               Avoir NotionLite
             </Button>
             <ModeToggle />
