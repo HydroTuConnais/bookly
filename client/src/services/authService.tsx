@@ -1,5 +1,5 @@
 import { handleErrors } from "@/components/ErrorHandler";
-import { UserProfileToken } from "@/Models/Users";
+import { UserProfileToken } from "@/models/Users";
 import axios from "axios";
 
 const api = "http://localhost:4000/api";

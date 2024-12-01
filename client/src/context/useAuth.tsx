@@ -1,5 +1,5 @@
 import React from "react";
-import { UserProfile } from "@/Models/Users";
+import { UserProfile } from "@/models/Users";
 import { loginAPI, registerAPI } from "@/services/authService";
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";

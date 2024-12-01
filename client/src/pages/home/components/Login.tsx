@@ -16,12 +16,12 @@ import { toast } from 'react-toastify';
 type Props = {};
 
 type LoginFromsInputs = {
-    userName: string;
+    email: string;
     password: string;
 }
 
 const validation = Yup.object().shape({
-    userName: Yup.string().required('Username is required'),
+    email: Yup.string().required('Username is required'),
     password: Yup.string().required('Password is required'),
 });
 
@@ -33,7 +33,7 @@ const LoginPage = (props: Props) => {
 
     const handleLogin = async (form: LoginFromsInputs) => {
         try {
-            await loginUser(form.userName, form.password);
+            await loginUser(form.email, form.password);
             setErrorMessage(null); // Clear error message on successful login
         } catch (error) {
             setErrorMessage("Invalid username or password");
@@ -65,19 +65,19 @@ const LoginPage = (props: Props) => {
                             {errorMessage && <p className="text-red-500 text-xs mt-1">{errorMessage}</p>}
                             <div>
                                 <label htmlFor="userName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    Username
+                                    Email
                                 </label>
                                 <input
                                     className={cn(
                                         "mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm bg-white dark:bg-[#1F1F1F] dark:text-gray-100",
-                                        { "border-red-500": errors.userName }
+                                        { "border-red-500": errors.email }
                                     )}
                                     type="text"
-                                    placeholder='your Username'
-                                    id="userName"
-                                    {...register('userName')}
+                                    placeholder='your Email'
+                                    id="email"
+                                    {...register('email')}
                                 />
-                                {errors.userName ? <p className="text-red-500 text-xs mt-1">{errors.userName.message}</p> : ""}
+                                {errors.email ? <p className="text-red-500 text-xs mt-1">{errors.email.message}</p> : ""}
                             </div>
                             <div>
                                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
