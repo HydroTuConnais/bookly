@@ -28,3 +28,16 @@ export const registerAPI = async (email: string, userName: string, password: str
         handleErrors(error);
     }
 };
+
+export const checkAPI = async (token: string) => {
+    try {
+        const response = await axios.get(api + "/auth/check", {
+            headers: {
+                Authorization: token
+            }
+        });
+        return response.data;
+    } catch (error) {
+        handleErrors(error);
+    }
+};

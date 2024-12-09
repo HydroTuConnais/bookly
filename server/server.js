@@ -50,6 +50,27 @@ app.post('/api/auth/login', (req, res) => {
     });
 });
 
+app.get('/api/auth/check', (req, res) => {
+    const token = req.headers['authorization'];
+
+    if (!token) {
+        return res.status(401).json({ error: 'No token provided' });
+    }
+
+    jwt.verify(token, env.JWT_SECRET, (err, decoded) => {
+        if (err) {
+            return res.status(401).json({ error: 'Invalid token' });
+        }
+
+        res.json({
+            message: 'Token is valid',
+            data: {
+                email: decoded.email
+            }
+        });
+    });
+});
+
 app.listen(env.SERVER_PORT, () => {
     console.log(`🔧 Server is running on port ${env.SERVER_PORT}`);
 });

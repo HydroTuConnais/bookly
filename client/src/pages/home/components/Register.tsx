@@ -1,11 +1,15 @@
 import React, { useState } from "react";
-import { Button } from '@/ui/button';
+import { useForm } from 'react-hook-form';
+
 import { cn } from '@/lib/utils';
 import * as Yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { usePopup } from '@/context/popup-context';
 import { useAuth } from '@/context/useAuth';
-import { useForm } from 'react-hook-form';
+
+import { Button } from '@/ui/button';
+import { Separator } from '@/ui/separator';
+
 
 type Props = {};
 
@@ -38,6 +42,13 @@ const RegisterPage = (props: Props) => {
           setErrorMessage("Invalid email or password");
         }
     };
+
+    const handleOpenLoginPopup = () => {
+      closePopup();
+      setTimeout(() => {
+          openPopup('login');
+      }, 0);
+  };
 
     return (
         <>
@@ -125,9 +136,10 @@ const RegisterPage = (props: Props) => {
                   Register
                 </Button>
               </form>
+              <Separator className='my-4' />
               <div className='mt-4'>
-                  <Button className="w-full" variant="ghost" onClick={closePopup}>               
-                      Close
+                  <Button className="w-full" variant="ghost" onClick={handleOpenLoginPopup}>               
+                    Already have an account? Sign In
                   </Button>
               </div>
             </div>
