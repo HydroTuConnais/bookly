@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useForm } from 'react-hook-form';
 
 import { cn } from '@/lib/utils';
@@ -31,6 +31,8 @@ const RegisterPage = (props: Props) => {
     const { registerUser } = useAuth();
     const { register, handleSubmit, formState: { errors } } = useForm<RegisterFromsInputs>({ resolver: yupResolver(validation) });
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const popupRef = useRef<HTMLDivElement>(null);
+    const [isMouseDownInside, setIsMouseDownInside] = useState(false);
 
     const { openPopup, closePopup, popupType, isOpen } = usePopup();
 
@@ -49,15 +51,31 @@ const RegisterPage = (props: Props) => {
           openPopup('login');
       }, 0);
   };
+  
+  const handleMouseDown = (event: React.MouseEvent) => {
+        if (popupRef.current && popupRef.current.contains(event.target as Node)) {
+            setIsMouseDownInside(true);
+        } else {
+            setIsMouseDownInside(false);
+        }
+    };
+
+    const handleMouseUp = (event: React.MouseEvent) => {
+        if (!isMouseDownInside) {
+            closePopup();
+        }
+    };
 
     return (
         <>
         {isOpen && popupType === 'register' && (
           <div
             className="fixed inset-0 flex items-center justify-center bg-[#1F1F1F] bg-opacity-50 z-50"
-            onClick={closePopup}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
           >
             <div
+              ref={popupRef}
               className={cn(
                 "w-full max-w-md p-8 bg-white dark:bg-[#1F1F1F] border rounded-lg shadow-lg",
                 { "border-red-500": errorMessage, "border-white dark:border-gray-500": !errorMessage }
@@ -136,7 +154,7 @@ const RegisterPage = (props: Props) => {
                   Register
                 </Button>
               </form>
-              <Separator className='my-4' />
+              <Separator className='my-4 bg-gray-300 dark:bg-gray-600' />
               <div className='mt-4'>
                   <Button className="w-full" variant="ghost" onClick={handleOpenLoginPopup}>               
                     Already have an account? Sign In

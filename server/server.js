@@ -3,6 +3,7 @@ const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+const authMiddleware = require('./authMiddleware'); // Importez le middleware
 
 dotenv.config();
 
@@ -50,25 +51,8 @@ app.post('/api/auth/login', (req, res) => {
     });
 });
 
-app.get('/api/auth/check', (req, res) => {
-    const token = req.headers['authorization'];
-
-    if (!token) {
-        return res.status(401).json({ error: 'No token provided' });
-    }
-
-    jwt.verify(token, env.JWT_SECRET, (err, decoded) => {
-        if (err) {
-            return res.status(401).json({ error: 'Invalid token' });
-        }
-
-        res.json({
-            message: 'Token is valid',
-            data: {
-                email: decoded.email
-            }
-        });
-    });
+app.get('/api/auth/check', authMiddleware, (req, res) => {
+    res.json({ isAuthenticated: true });
 });
 
 app.listen(env.SERVER_PORT, () => {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import * as Yup from 'yup';
@@ -11,7 +11,6 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/ui/button';
 import { Separator } from '@/ui/separator';
 import { toast } from 'react-toastify';
-
 
 type Props = {};
 
@@ -30,6 +29,8 @@ const LoginPage = (props: Props) => {
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFromsInputs>({ resolver: yupResolver(validation) });
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const { openPopup, closePopup, popupType, isOpen } = usePopup();
+    const popupRef = useRef<HTMLDivElement>(null);
+    const [isMouseDownInside, setIsMouseDownInside] = useState(false);
 
     const handleLogin = async (form: LoginFromsInputs) => {
         try {
@@ -47,18 +48,35 @@ const LoginPage = (props: Props) => {
         }, 0);
     };
 
+    const handleMouseDown = (event: React.MouseEvent) => {
+        if (popupRef.current && popupRef.current.contains(event.target as Node)) {
+            setIsMouseDownInside(true);
+        } else {
+            setIsMouseDownInside(false);
+        }
+    };
+
+    const handleMouseUp = (event: React.MouseEvent) => {
+        if (!isMouseDownInside) {
+            closePopup();
+        }
+    };
+
     return (
         <>
             {isOpen && popupType === 'login' && (
                 <div
                     className="fixed inset-0 flex items-center justify-center bg-[#1F1F1F] bg-opacity-50 z-50"
-                    onClick={closePopup}
+                    onMouseDown={handleMouseDown}
+                    onMouseUp={handleMouseUp}
                 >
-                    <div className={cn(
-                        "w-full max-w-md p-8 bg-white dark:bg-[#1F1F1F] border rounded-lg shadow-lg",
-                        { "border-red-500": errorMessage, "border-white dark:border-gray-500": !errorMessage }
-                    )}
-                    onClick={(e) => e.stopPropagation()} // Stop propagation to prevent closing the popup
+                    <div
+                        ref={popupRef}
+                        className={cn(
+                            "w-full max-w-md p-8 bg-white dark:bg-[#1F1F1F] border rounded-lg shadow-lg",
+                            { "border-red-500": errorMessage, "border-white dark:border-gray-500": !errorMessage }
+                        )}
+                        onClick={(e) => e.stopPropagation()} // Stop propagation to prevent closing the popup
                     >
                         <h2 className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-gray-100">Login</h2>
                         <form onSubmit={handleSubmit(handleLogin)} className="space-y-6">
@@ -98,7 +116,7 @@ const LoginPage = (props: Props) => {
                                 Login
                             </Button>
                         </form>
-                        <Separator className='my-4' />
+                        <Separator className='my-4 bg-gray-300 dark:bg-gray-600' />
                         <div className='mt-4'>
                             <Button className="w-full" variant="ghost" onClick={handleOpenRegisterPopup}>
                                 Can't Sign In? Create an account

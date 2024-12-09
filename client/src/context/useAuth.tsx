@@ -1,6 +1,6 @@
 import React from "react";
 import { UserProfile } from "@/models/Users";
-import { loginAPI, registerAPI } from "@/services/authService";
+import { checkAPI, loginAPI, registerAPI } from "@/services/authService";
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -13,6 +13,7 @@ type UserContextType = {
     loginUser: (email: string, password: string) => void;
     logoutUser: () => void;
     isLoggedIn: () => boolean;
+    checkAuth: () => void;
     isAuthenticated: boolean;
     isLoading: boolean;
 };
@@ -103,9 +104,20 @@ export const UserProvider = ({ children }: Props) => {
         navigate("/");
     };
 
+    const checkAuth = () => {
+        checkAPI(localStorage.getItem("token") || "").then((res) => {
+            if (res) {
+                setIsAuthenticated(true);
+            }
+            else {
+                logoutUser();
+            }
+        });
+    };
+
     return (
         <UserContext.Provider
-            value={{ loginUser, user, token, logoutUser, isLoggedIn, registerUser, isAuthenticated, isLoading }}
+            value={{ loginUser, user, token, logoutUser, isLoggedIn, registerUser, checkAuth, isAuthenticated, isLoading }}
         >
             {isReady ? children : null}
         </UserContext.Provider>

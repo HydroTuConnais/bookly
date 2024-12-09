@@ -2,7 +2,7 @@ import React from "react";
 import { UserProvider } from '@/context/useAuth';
 import { useAuth } from "@/context/useAuth";
 import { Navigate } from "react-router-dom";
-import { Navigation } from "@/pages/main/components/navigation";
+import { Navigation } from "./components/navigation";
 
 const Layout = ({ 
     children 
@@ -10,8 +10,8 @@ const Layout = ({
     children: React.ReactNode;
   }) => {
     
-    const { isAuthenticated, isLoading} = useAuth();
-
+    const {checkAuth , isAuthenticated, isLoading} = useAuth();
+    checkAuth();
     console.log(isAuthenticated);
     console.log(isLoading);
     if (isLoading) {
