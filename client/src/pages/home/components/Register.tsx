@@ -30,8 +30,9 @@ const validation = Yup.object().shape({
 const RegisterPage = (props: Props) => {
     const { registerUser } = useAuth();
     const { register, handleSubmit, formState: { errors } } = useForm<RegisterFromsInputs>({ resolver: yupResolver(validation) });
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const popupRef = useRef<HTMLDivElement>(null);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  
     const [isMouseDownInside, setIsMouseDownInside] = useState(false);
 
     const { openPopup, closePopup, popupType, isOpen } = usePopup();
