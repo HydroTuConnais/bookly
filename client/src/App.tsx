@@ -6,12 +6,10 @@ import './index.css';
 
 const App: React.FC = () => {
   return (
-      <Router>
-        <Routes>
-          <Route path="/" element={<MarketingPage />} />
-          <Route path="/dashboard" element={<DocumentsPage />} />
-        </Routes>
-      </Router>
+    <Routes>
+      <Route path="/" element={<MarketingPage />} />
+      <Route path="/dashboard" element={<DocumentsPage />} />
+  </Routes>
   );
 }
 

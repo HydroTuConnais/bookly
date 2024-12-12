@@ -61,7 +61,7 @@ Ce projet est une application de gestion de projets et de documents inspirée de
 
 ---
 
-## 📦 Installation et exécution
+## 📦 Installation et exécution (FRONT)
 
 ### Prérequis :
 - Node.js v16 ou supérieur
@@ -113,6 +113,52 @@ server
 7. Ouvrez votre navigateur à l'adresse suivante :
    ```
    http://localhost:3000
+   ```
+
+---
+
+## 📦 Installation et exécution (BACK)
+
+### Prérequis :
+- Node.js v16 ou supérieur
+- Postgres
+- Prisma CLI
+
+### Étapes :
+1. Installez les dépendances pour le back-end :
+   ```bash
+   cd server
+   npm install
+   ```
+   
+2. Configurez les variables d'environnement :
+   Créez un fichier `.env` dans le dossier `server` avec les clés suivantes :
+   ```
+   SERVER_PORT=5000
+   JWT_SECRET=votre_secret
+   DATABASE_URL="postgresql://(username):(password)@localhost:5432/(database name)"
+   ```
+
+3. Modifiez le schéma Prisma (`prisma/schema.prisma`) pour définir vos modèles de données.
+
+4. Migrate votre base de données :
+   ```bash
+   npx prisma migrate dev --name init
+   ```
+
+5. Mettre a jours votre base de données :
+   ```bash
+   npx prisma migrate dev --name
+   ```
+
+6. Lancez le serveur back-end :
+   ```bash
+   npm run dev
+   ```
+
+7. Pour visualiser la base de donnée simplement :
+   ```bash
+   npx prisma studio
    ```
 
 ---

@@ -4,7 +4,7 @@ import { ThemeProvider } from '@/context/theme-context';
 import Login from './components/Login';
 import RegisterPage from './components/Register';
 import { PopupProvider } from '@/context/popup-context';
-import { UserProvider } from '@/context/useAuth';
+import { AuthProvider } from '@/context/useAuth';
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
@@ -14,7 +14,6 @@ const Layout = ({
   children: React.ReactNode;
 }) => {
   return (
-    <UserProvider>
       <PopupProvider>
         <ThemeProvider>   
           <div className="h-full dark:bg-[#1F1F1F] relative">
@@ -28,7 +27,6 @@ const Layout = ({
         </ThemeProvider>
         <ToastContainer />  
       </PopupProvider>
-    </UserProvider>
   );
 }
 

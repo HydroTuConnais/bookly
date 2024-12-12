@@ -1,9 +1,11 @@
 import { cn } from "@/lib/utils";
-import { ChevronsLeft, MenuIcon } from "lucide-react";
-import React, { ElementRef, useEffect, useRef } from "react";
+import React, { useRef, useState, useEffect, ElementRef } from 'react';
 
+import { ChevronsLeft, MenuIcon, PlusCircle, Search, Settings } from "lucide-react";
 import { useMediaQuery } from "usehooks-ts";
 import { useLocation } from "react-router-dom";
+import { UserItem } from "./user-item";
+import { Item } from "./item";
 
 export const Navigation = () => {  
     const isMobile = useMediaQuery("(max-width: 768px)");    
@@ -12,13 +14,13 @@ export const Navigation = () => {
     const isResizingRef = useRef(false);
     const sidebarref = useRef<ElementRef<"aside">>(null);
     const navbarref = useRef<ElementRef<"div">>(null);
-    const [isReseting, setIsReseting] = React.useState(false);
-    const [isCollapsed, setIsCollapsed] = React.useState(isMobile);
+    const [isReseting, setIsReseting] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(isMobile);
 
     useEffect(() => {
         if(isMobile) {
             collapse();
-        }else {
+        } else {
             resetWidth();
         }
     }, [isMobile]);
@@ -52,7 +54,6 @@ export const Navigation = () => {
         if(sidebarref.current && navbarref.current) {
             sidebarref.current.style.width = `${newWidth}px`;
             navbarref.current.style.setProperty("left", `${newWidth}px`);
-            navbarref.current.style.setProperty("width", `calc(100% - ${newWidth}px)`);
         }
     };
 
@@ -61,15 +62,19 @@ export const Navigation = () => {
         document.removeEventListener("mousemove", handleMouseMove);
         document.removeEventListener("mouseup", handleMouseUp);
     };
-    
+
     const resetWidth = () => {
         if(sidebarref.current && navbarref.current) {
             setIsCollapsed(false);
             setIsReseting(true);
 
             sidebarref.current.style.width = isMobile ? "100%" : "240px";
-            navbarref.current.style.setProperty("left", isMobile ? "100%" : "calc(100% - 240px)");
-            navbarref.current.style.setProperty("width", isMobile ? "0" : "calc(100% - 240px)");
+            navbarref.current.style.setProperty(
+                "width", 
+                isMobile ? "0" : "calc(100% - 240px)");
+            navbarref.current.style.setProperty(
+                "left", 
+                isMobile ? "100%" : "240px");
 
             setTimeout(() => setIsReseting(false), 300);
         }
@@ -81,19 +86,19 @@ export const Navigation = () => {
             setIsReseting(true);
 
             sidebarref.current.style.width = "0";
-            navbarref.current.style.setProperty("left", "0");
             navbarref.current.style.setProperty("width", "100%");
+            navbarref.current.style.setProperty("left", "0");
 
             setTimeout(() => setIsReseting(false), 300);
         }
-    }
+    };
 
     return (
         <>
         <aside
             ref={sidebarref}
             className={cn(
-                "group/sidebar h-screen bg-secondary overflow-y-auto relative flex w-60 flex-col z-[99999]",
+                "group/sidebar h-auto bottom-0 bg-secondary overflow-hidden overflow-y-auto relative flex w-60 flex-col z-[99999]",
                 isReseting && "transition-all ease-in-out duration-300",
                 isMobile && "w-0"
              )}
@@ -105,7 +110,22 @@ export const Navigation = () => {
                 <ChevronsLeft className="h-6 w-6"/>
             </div>
             <div>
-                <p>Action</p>
+                <UserItem />
+                <Item
+                label="Search"
+                icon={Search}
+                onClick={() => {}}
+                />
+                <Item
+                label="Settings"
+                icon={Settings}
+                onClick={() => {}}
+                />
+                <Item 
+                onClick={() => {}}
+                label="New page"
+                icon={PlusCircle}
+                />
             </div>
             <div className="mt-4">
                 <p>Documents</p>
@@ -115,7 +135,7 @@ export const Navigation = () => {
         <div
         ref={navbarref}
         className={cn(
-            "absolute top-0 z-[99999] left-60 w-[calc(100%-240px)]",
+            "fixed top-0 z-[99999] left-60 w-[calc(100%-240px)]",
             isReseting && "transition-all ease-in-out duration-300",
             isMobile && "left-0 w-full"
         )}>

@@ -1,0 +1,252 @@
+{
+	"info": {
+		"_postman_id": "f0d23630-e30e-4329-b975-c2bad8e6e8d9",
+		"name": "Document API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38560261"
+	},
+	"item": [
+		{
+			"name": "Créer un document",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzYWY4NzUwMi0wZDU0LTQ3OGMtODFiMy0zYTY2YTZhMDEzOTMiLCJpYXQiOjE3MzM5MjA2NzMsImV4cCI6MTczMzkyNDI3M30.--UOTfqlqmjWXLY6VgXVuQzGh6lU9C8pvXCgInfYz14",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"title\": \"My Document\",\n  \"userId\": \"3af87502-0d54-478c-81b3-3a66a6a01393\",\n  \"parentDocumentId\": \"d25b5e38-62e6-43a4-827b-647c325677a5\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/documents",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"documents"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Supprimer un document",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzYWY4NzUwMi0wZDU0LTQ3OGMtODFiMy0zYTY2YTZhMDEzOTMiLCJpYXQiOjE3MzM5NDc2NDMsImV4cCI6MTczMzk1MTI0M30.mWSULmBudLATQbTAIPu4XPy-RFvD8L6VLe_8SY-Fib0",
+						"type": "text"
+					},
+					{
+						"key": "UserId",
+						"value": "3af87502-0d54-478c-81b3-3a66a6a01393",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/documents/68095d66-da31-4411-a444-e3abd0777386",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"documents",
+						"68095d66-da31-4411-a444-e3abd0777386"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Archiver un document",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzYWY4NzUwMi0wZDU0LTQ3OGMtODFiMy0zYTY2YTZhMDEzOTMiLCJpYXQiOjE3MzM5NDc2NDMsImV4cCI6MTczMzk1MTI0M30.mWSULmBudLATQbTAIPu4XPy-RFvD8L6VLe_8SY-Fib0",
+						"type": "text"
+					},
+					{
+						"key": "UserId",
+						"value": "3af87502-0d54-478c-81b3-3a66a6a01393",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/documents/00f8c124-623b-4a5c-9310-46d58ba1c7c2/archive",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"documents",
+						"00f8c124-623b-4a5c-9310-46d58ba1c7c2",
+						"archive"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Restaurer un document",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzYWY4NzUwMi0wZDU0LTQ3OGMtODFiMy0zYTY2YTZhMDEzOTMiLCJpYXQiOjE3MzM5NDc2NDMsImV4cCI6MTczMzk1MTI0M30.mWSULmBudLATQbTAIPu4XPy-RFvD8L6VLe_8SY-Fib0",
+						"type": "text"
+					},
+					{
+						"key": "UserId",
+						"value": "3af87502-0d54-478c-81b3-3a66a6a01393",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/documents/db24489c-3298-4666-95b0-0a13fdaa149f/restore",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"documents",
+						"db24489c-3298-4666-95b0-0a13fdaa149f",
+						"restore"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtenir les documents de la sidebar avec parentId",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzYWY4NzUwMi0wZDU0LTQ3OGMtODFiMy0zYTY2YTZhMDEzOTMiLCJpYXQiOjE3MzM5NDc2NDMsImV4cCI6MTczMzk1MTI0M30.mWSULmBudLATQbTAIPu4XPy-RFvD8L6VLe_8SY-Fib0",
+						"type": "text"
+					},
+					{
+						"key": "UserId",
+						"value": "3af87502-0d54-478c-81b3-3a66a6a01393",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/documents/sidebar?parentDocument=<parentDocumentId>",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"documents",
+						"sidebar"
+					],
+					"query": [
+						{
+							"key": "parentDocument",
+							"value": "<parentDocumentId>"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtenir les documents de la sidebar",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzYWY4NzUwMi0wZDU0LTQ3OGMtODFiMy0zYTY2YTZhMDEzOTMiLCJpYXQiOjE3MzM5NDc2NDMsImV4cCI6MTczMzk1MTI0M30.mWSULmBudLATQbTAIPu4XPy-RFvD8L6VLe_8SY-Fib0",
+						"type": "text"
+					},
+					{
+						"key": "UserId",
+						"value": "3af87502-0d54-478c-81b3-3a66a6a01393",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/documents/sidebar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"documents",
+						"sidebar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtenir les documents archivés",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzYWY4NzUwMi0wZDU0LTQ3OGMtODFiMy0zYTY2YTZhMDEzOTMiLCJpYXQiOjE3MzM5MjA2NzMsImV4cCI6MTczMzkyNDI3M30.--UOTfqlqmjWXLY6VgXVuQzGh6lU9C8pvXCgInfYz14",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/documents/trash",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"documents",
+						"trash"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

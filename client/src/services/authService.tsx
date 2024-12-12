@@ -36,7 +36,6 @@ export const checkAPI = async (token: string) => {
                 Authorization: token
             }
         });
-        console.log(response.data);
         return response.data;
     } catch (error) {
         handleErrors(error);
