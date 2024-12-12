@@ -1,18 +1,33 @@
 import express, { Request, Response } from 'express';
 import { DocumentService } from '../service/DocumentService';
+import { AuthService } from '../service/AuthService';
+import { ErrorClass } from '../utils/Error';
 
 export const DocumentController = {
   async createDocument(req: Request, res: Response) {
     const { title, parentDocumentId, userId } = req.body;
-    if (!title || !userId) {
-      return res.status(400).json({ error: 'Titre et utilisateur requis' });
-    }
 
     try {
       const document = await DocumentService.createDocument(title, parentDocumentId, userId);
       res.status(201).json(document);
-    } catch (error) {
-      res.status(500).json({ error: 'Erreur lors de la création du document' });
+
+    } 
+    catch (error: ErrorClass | any) {
+      res.status(error.status).json({ error: error.message });
+    }
+  },
+
+  async updateDocument(req: Request, res: Response) {
+    const id = req.params.id;
+    const { title, content } = req.body;
+    const userId = req.headers.userid as string;
+
+    try {
+      await DocumentService.updateDocument(id, title, userId, content);
+      res.status(202).json({ success: true });
+    }
+    catch (error: ErrorClass | any) {
+      res.status(error.status).json({ error: error.message });
     }
   },
 
@@ -22,9 +37,10 @@ export const DocumentController = {
 
     try {
       await DocumentService.archiveDocument(id, userId);
-      res.json({ success: true });
-    } catch (error) {
-      res.status(500).json({ error: (error as any).message });
+      res.status(200).json({ success: true });
+    }
+    catch (error: ErrorClass | any) {
+      res.status(error.status).json({ error: error.message });
     }
   },
 
@@ -34,9 +50,10 @@ export const DocumentController = {
 
     try {
       await DocumentService.restoreDocument(id, userId);
-      res.json({ success: true });
-    } catch (error) {
-      res.status(500).json({ error: (error as any).message });
+      res.status(200).json({ success: true });
+    } 
+    catch (error: ErrorClass | any) {
+      res.status(error.status).json({ error: error.message });
     }
   },
 
@@ -46,9 +63,10 @@ export const DocumentController = {
 
     try {
       await DocumentService.deleteDocument(id, userId);
-      res.json({ success: true });
-    } catch (error) {
-      res.status(500).json({ error: (error as any).message });
+      res.status(200).json({ success: true });
+    } 
+    catch (error: ErrorClass | any) {
+      res.status(error.status).json({ error: error.message });
     }
   },
 
@@ -58,9 +76,10 @@ export const DocumentController = {
 
     try {
       const documents = await DocumentService.getSidebarDocuments(userId, parentDocumentId);
-      res.json(documents);
-    } catch (error) {
-      res.status(500).json({ error: 'Erreur lors de la récupération des documents' });
+      res.status(200).json(documents);
+    } 
+    catch (error: ErrorClass | any) {
+      res.status(error.status).json({ error: error.message });
     }
   },
 
@@ -69,9 +88,10 @@ export const DocumentController = {
 
     try {
       const documents = await DocumentService.getArchivedDocuments(userId);
-      res.json(documents);
-    } catch (error) {
-      res.status(500).json({ error: 'Erreur lors de la récupération des documents archivés' });
+      res.status(200).json(documents);
+    } 
+    catch (error: ErrorClass | any) {
+      res.status(error.status).json({ error: error.message });
     }
   },
 };

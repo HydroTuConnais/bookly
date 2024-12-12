@@ -1,13 +1,13 @@
-import { PrismaClient } from '@prisma/client';
-
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 export const DocumentRepository = {
   async createDocument(data: any) {
     return await prisma.document.create({ data });
+      
   },
 
-  async findDocumentById(id: string) {
+  async findDocumentById(id: string | null) {
     return await prisma.document.findUnique({ where: { id } });
   },
 
