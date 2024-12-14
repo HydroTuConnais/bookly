@@ -18,12 +18,49 @@ export const DocumentRepository = {
     });
   },
 
+  async findSharedUserIds(userId: string, documentId: string) {
+    const document = await prisma.document.findUnique({
+        where: { id: documentId },
+        include: { sharedUsers: true }
+      });
+
+      if (!document || !document.sharedUsers) {
+        throw new Error('Document or shared users not found');
+    }
+
+    const userIds = document.sharedUsers.map((user: { id: string }) => user.id);
+
+    if (!userIds.includes(userId)) {
+      throw new Error('Shared users not found');
+    }
+    
+    return userIds[0];
+  },
+
   async updateDocument(id: string, data: any) {
     return await prisma.document.update({ where: { id }, data });
   },
 
   async deleteDocument(id: string) {
     return await prisma.document.delete({ where: { id } });
+  },
+
+  async addSharedUser(documentId: string, userId: string) {
+    return await prisma.document.update({
+      where: { id: documentId },
+      data: {
+        users: {
+          connect: { id: userId }
+        }
+      }
+    });
+  },
+
+  async findSharedDocuments(userId: string) {
+    return await prisma.document.findMany({
+      where: { sharedDocument: { some: { id: userId } } },
+      orderBy: { createdAt: 'desc' },
+    });
   },
 
   async findArchivedDocuments(userId: string) {
@@ -36,4 +73,9 @@ export const DocumentRepository = {
   async findChildDocuments(userId: string, parentDocumentId: string) {
     return await prisma.document.findMany({ where: { userId, parentDocumentId } });
   },
+
+  async findUserIdByEmail(email: string) {
+    const user = await prisma.user.findUnique({ where: { email } });
+    return user?.id || null;
+  }
 };

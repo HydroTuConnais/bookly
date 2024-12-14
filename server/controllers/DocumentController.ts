@@ -17,6 +17,19 @@ export const DocumentController = {
     }
   },
 
+  async getDocument(req: Request, res: Response) {
+    const id = req.params.id;
+    const userId = req.headers.userid as string;
+
+    try {
+      const document = await DocumentService.getDocument(id, userId);
+      res.status(200).json(document);
+    } 
+    catch (error: ErrorClass | any) {
+      res.status(error.status).json({ error: error.message });
+    }
+  },
+
   async updateDocument(req: Request, res: Response) {
     const id = req.params.id;
     const { title, content } = req.body;
@@ -94,4 +107,33 @@ export const DocumentController = {
       res.status(error.status).json({ error: error.message });
     }
   },
+
+  async shareDocument(req: Request, res: Response) {
+    const userId = req.headers.userid as string;
+    const documentId = req.params.id;
+    const { sharedEmail } = req.body;
+
+    try {
+      const documents = await DocumentService.shareDocument(documentId, userId, sharedEmail);
+      res.status(200).json(documents);
+    }
+    catch (error: ErrorClass | any) {
+      res.status(error.status).json({ error: error.message });
+    }
+  },
+
+  async getSharedDocuments(req: Request, res: Response) {
+    console.log("TEST")
+    const userId = req.headers.userid as string;
+    console.log("TEST1");
+    console.log(userId);
+    try {
+      const documents = await DocumentService.getSharedDocuments(userId);
+      console.log("TEST2");
+      res.status(200).json(documents);
+    }
+    catch (error: ErrorClass | any) {
+      res.status(error.status).json({ error: error.message });
+    }
+  }
 };

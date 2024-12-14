@@ -21,7 +21,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   documents Document[]
-
+  sharedDocuments Document[] @relation("SharedDocuments")
 }
 
 model Document {
@@ -34,10 +34,12 @@ model Document {
   coverImage      String?
   icon            String?
   isPublished     Boolean @default(false)
+  urlPublished    String? @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user            User        @relation(fields: [userId], references: [id])
+  ownerUser       User        @relation(fields: [userId], references: [id])
+  sharedUsers     User[]      @relation("SharedDocuments")
   parentDocument  Document? @relation("ParentDocument", fields: [parentDocumentId], references: [id])
   children        Document[] @relation("ParentDocument")
 

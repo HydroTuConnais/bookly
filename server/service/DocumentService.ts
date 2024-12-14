@@ -29,13 +29,46 @@ export const DocumentService = {
       throw new ErrorClass(404,'Error creating document'); }
   },
 
-  async updateDocument(id: string, title: string, userId: string, content: string) {
-    const document = await DocumentRepository.findDocumentById(id);
-    if (!document || document.userId !== userId) {
-      throw new ErrorClass(401,'Unauthorized or Not Found');
-    }
+  async getDocument(id: string, userId: string) {
+      const document = await DocumentRepository.findDocumentById(id);
+        if (!document) {
+          throw new ErrorClass(401,'Document not Found');
+        }
+        
+        console.log(document.userId, userId);
+        if(document.userId !== userId){
+          try {
+            const sharedIds = await DocumentRepository.findSharedUserIds(userId, id);
 
-    try { await DocumentRepository.updateDocument(id, { title, content }); } 
+            if (sharedIds != userId) {
+              throw new ErrorClass(401,'Unauthorized or Not Found');
+            }
+  
+            return document;
+          }
+          catch (error) {
+            throw new ErrorClass(401,'shardIds not found');
+          }
+        }
+
+        if(document.userId == userId){
+          return document;
+        }
+  },
+
+  async updateDocument(id: string, title: string, userId: string, content: string) {
+    try {
+      if (!title || !userId) {
+        throw new ErrorClass(400,'Title and userId are required');
+      }
+      
+      const document = await DocumentRepository.findDocumentById(id);
+      if (!document || document.userId !== userId) {
+        throw new ErrorClass(401,'Unauthorized or Not Found');
+      }
+
+     await DocumentRepository.updateDocument(id, { title, content }); 
+    } 
     catch (error) {
       throw new ErrorClass(404,'Error updating document');
     } 
@@ -142,4 +175,41 @@ export const DocumentService = {
       throw new ErrorClass(500,'Error getting archived documents');
     }
   },
+
+  async shareDocument(documentId: string, userId: string, sharedEmail: string) {
+    if (!documentId || !userId) {
+      throw new ErrorClass(400,'Title and userId are required');
+    }
+
+    if(!sharedEmail) {
+      throw new ErrorClass(400,'Shared email is required');
+    }
+    
+    const document = await DocumentRepository.findDocumentById(documentId);
+    if (!document || document.userId !== userId) {
+      throw new ErrorClass(401,'Unauthorized or Not Found');
+    }
+
+    const sharedUserId = await DocumentRepository.findUserIdByEmail(sharedEmail);
+    if (!sharedUserId) {
+      throw new ErrorClass(404,'Shared user not found');
+    }
+
+    try {
+      await DocumentRepository.addSharedUser(documentId, sharedUserId);
+    }
+    catch (error) {
+      throw new ErrorClass(500,'Error sharing document');
+    }
+  },
+
+  async getSharedDocuments(userId: string) {
+    console.log("TESTSERVICE");
+    try {
+      return await DocumentRepository.findSharedDocuments(userId); 
+    }
+    catch (error) {
+      throw new ErrorClass(500,'Error getting shared documents');
+    }
+  }
 };
