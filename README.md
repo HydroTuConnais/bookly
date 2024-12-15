@@ -216,6 +216,110 @@ server
 <br>
 <br>
 
+## MCD Diagram
+
+![MCD Diagram](https://lucid.app/publicSegments/view/0bc5ec68-4ea6-4086-b0db-4ecc48fda31a/image.png)
+
+---
+
+
+# Modèle Logique de Données (MLD)
+
+---
+
+
+### Table `User`
+| Nom de colonne  | Type        | Contraintes               |
+|------------------|-------------|---------------------------|
+| `id`            | `UUID`      | PK, Généré par défaut     |
+| `email`         | `String`    | Unique, Non NULL          |
+| `name`          | `String`    | Optionnel                 |
+| `password`      | `String`    | Non NULL                  |
+| `createdAt`     | `DateTime`  | Défaut : `now()`          |
+| `updatedAt`     | `DateTime`  | Mis à jour automatiquement |
+
+#### Relations :
+- **1:N** avec `Document` (via `documents`).
+- **N:N** avec `Document` pour les documents partagés (via `sharedDocuments` et la relation nommée `"SharedDocuments"`).
+
+---
+
+### Table `Document`
+| Nom de colonne       | Type        | Contraintes                |
+|-----------------------|-------------|----------------------------|
+| `id`                 | `UUID`      | PK, Généré par défaut      |
+| `title`              | `String`    | Non NULL                   |
+| `userId`             | `UUID`      | FK vers `User(id)`         |
+| `isArchived`         | `Boolean`   | Défaut : `false`           |
+| `parentDocumentId`   | `UUID`      | FK vers `Document(id)` (relation récursive) |
+| `content`            | `String`    | Optionnel                  |
+| `coverImage`         | `String`    | Optionnel                  |
+| `icon`               | `String`    | Optionnel                  |
+| `isPublished`        | `Boolean`   | Défaut : `false`           |
+| `urlPublished`       | `String`    | Unique, Optionnel          |
+| `createdAt`          | `DateTime`  | Défaut : `now()`           |
+| `updatedAt`          | `DateTime`  | Mis à jour automatiquement |
+
+#### Relations :
+- **N:1** avec `User` (via `ownerUser`).
+- **N:N** avec `User` pour les documents partagés (via `sharedUsers` et la relation nommée `"SharedDocuments"`).
+- **1:N** avec elle-même pour les documents enfants (via `parentDocument` et `children`).
+
+#### Index :
+- `idx_documents_by_user` : sur `userId`.
+- `idx_documents_by_user_parent` : sur `userId, parentDocumentId`.
+
+---
+
+## Relations entre Tables
+
+- **User** (1) ↔ (N) **Document** : Un utilisateur peut posséder plusieurs documents.
+- **User** (N) ↔ (N) **Document** (via `sharedDocuments`) : Les documents peuvent être partagés entre plusieurs utilisateurs.
+- **Document** (1) ↔ (N) **Document** : Relation parent-enfant pour structurer les documents.
+
+---
+
+### Looping MLD
+
+#### **User**
+```plaintext
+User = (
+    id UUID, 
+    email VARCHAR(255), 
+    name VARCHAR(255), 
+    password VARCHAR(255), 
+    createdAt TIMESTAMP, 
+    updatedAt TIMESTAMP
+);
+
+Document = (
+    id UUID, 
+    title VARCHAR(255), 
+    userId UUID, 
+    isArchived BOOLEAN, 
+    parentDocumentId UUID, 
+    content TEXT, 
+    coverImage VARCHAR(255), 
+    icon VARCHAR(255), 
+    isPublished BOOLEAN, 
+    urlPublished VARCHAR(255), 
+    createdAt TIMESTAMP, 
+    updatedAt TIMESTAMP
+);
+
+
+SharedDocuments = (
+    userId UUID, 
+    documentId UUID
+);
+
+Lien_1 = (#id [User], #userId [Document]);
+Lien_2 = (#id [Document], #parentDocumentId [Document]);
+Lien_3 = (#userId [SharedDocuments], #id [User]);
+Lien_4 = (#documentId [SharedDocuments], #id [Document]);
+
+```
+
 ## 🤝 Contribution
 
 Les contributions sont les bienvenues !  
