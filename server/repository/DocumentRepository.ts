@@ -11,7 +11,9 @@ export const DocumentRepository = {
     return await prisma.document.findUnique({ where: { id } });
   },
 
+
   async findDocumentsByParent(userId: string, parentDocumentId: string | null, isArchived: boolean) {
+    console.log(userId, parentDocumentId, isArchived);
     return await prisma.document.findMany({
       where: { userId, parentDocumentId, isArchived },
       orderBy: { createdAt: 'desc' },
@@ -49,7 +51,7 @@ export const DocumentRepository = {
     return await prisma.document.update({
       where: { id: documentId },
       data: {
-        users: {
+        sharedUsers: {
           connect: { id: userId }
         }
       }
@@ -58,7 +60,13 @@ export const DocumentRepository = {
 
   async findSharedDocuments(userId: string) {
     return await prisma.document.findMany({
-      where: { sharedDocument: { some: { id: userId } } },
+      where: {
+      sharedUsers: {
+        some: {
+        id: userId
+        }
+      }
+      },
       orderBy: { createdAt: 'desc' },
     });
   },

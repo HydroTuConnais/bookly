@@ -25,8 +25,9 @@ export const DocumentService = {
         isPublished: false 
       }); 
     }
-    catch (error) {
-      throw new ErrorClass(404,'Error creating document'); }
+    catch (error: ErrorClass | any) {
+      throw new ErrorClass(error.status,error.message);
+    } 
   },
 
   async getDocument(id: string, userId: string) {
@@ -35,7 +36,6 @@ export const DocumentService = {
           throw new ErrorClass(401,'Document not Found');
         }
         
-        console.log(document.userId, userId);
         if(document.userId !== userId){
           try {
             const sharedIds = await DocumentRepository.findSharedUserIds(userId, id);
@@ -58,8 +58,8 @@ export const DocumentService = {
 
   async updateDocument(id: string, title: string, userId: string, content: string) {
     try {
-      if (!title || !userId) {
-        throw new ErrorClass(400,'Title and userId are required');
+      if (!userId) {
+        throw new ErrorClass(400,'userId are required');
       }
       
       const document = await DocumentRepository.findDocumentById(id);
@@ -69,8 +69,8 @@ export const DocumentService = {
 
      await DocumentRepository.updateDocument(id, { title, content }); 
     } 
-    catch (error) {
-      throw new ErrorClass(404,'Error updating document');
+    catch (error: ErrorClass | any) {
+      throw new ErrorClass(error.status,error.message);
     } 
   },
 
@@ -138,9 +138,9 @@ export const DocumentService = {
     try {
       await recursiveRestore(id); 
     }
-    catch (error) {
-      throw new ErrorClass(500,'Error recusive restore document');
-    }    
+    catch (error: ErrorClass | any) {
+      throw new ErrorClass(error.status,error.message);
+    }   
   },
 
 
@@ -196,7 +196,7 @@ export const DocumentService = {
     }
 
     try {
-      await DocumentRepository.addSharedUser(documentId, sharedUserId);
+      return await DocumentRepository.addSharedUser(documentId, sharedUserId);
     }
     catch (error) {
       throw new ErrorClass(500,'Error sharing document');

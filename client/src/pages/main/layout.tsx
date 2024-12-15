@@ -2,7 +2,6 @@ import React from "react";
 import { AuthProvider, useAuth } from '@/context/useAuth';
 import { Navigate } from "react-router-dom";
 import { Navigation } from "./components/navigation";
-import { Toaster } from "sonner";
 
 const Layout = ({ 
     children 

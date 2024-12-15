@@ -5,7 +5,8 @@ import { ErrorClass } from '../utils/Error';
 
 export const DocumentController = {
   async createDocument(req: Request, res: Response) {
-    const { title, parentDocumentId, userId } = req.body;
+    const { title, parentDocumentId } = req.body;
+    const userId = req.headers.userid as string;
 
     try {
       const document = await DocumentService.createDocument(title, parentDocumentId, userId);
@@ -112,6 +113,12 @@ export const DocumentController = {
     const userId = req.headers.userid as string;
     const documentId = req.params.id;
     const { sharedEmail } = req.body;
+
+    console.log("TEST");
+    console.log(userId);
+    console.log(documentId);
+    console.log(sharedEmail);
+    
 
     try {
       const documents = await DocumentService.shareDocument(documentId, userId, sharedEmail);
