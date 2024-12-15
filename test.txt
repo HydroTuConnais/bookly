@@ -1,5 +1,0 @@
-USER 1 : 60ed4aa6-4f3e-45b1-8058-de2bc3a7b81a
-DOCUMENT [ 
-    2e9a21ab-f277-4e43-a58a-b366f28aadc5,
-    
-]
