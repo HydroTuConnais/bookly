@@ -4,7 +4,6 @@ import { ThemeProvider } from '@/context/theme-context';
 import Login from './components/Login';
 import RegisterPage from './components/Register';
 import { PopupProvider } from '@/context/popup-context';
-import { AuthProvider } from '@/context/useAuth';
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 

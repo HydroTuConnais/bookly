@@ -35,9 +35,9 @@ export const AuthService = {
     }
   },
 
-  async findUserId(id: string) {
+  async findUserEmail(email: string) {
     try {
-      return await AuthRepository.findUser(id);
+      return await AuthRepository.findUserByEmail(email);
     }
     catch (error) {
       throw new ErrorClass(404,'User not found');

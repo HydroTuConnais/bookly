@@ -7,6 +7,10 @@ export const AuthRepository = {
     return await prisma.user.findUnique({ where: { email } });
   },
 
+  async findUserById(id: string) {
+    return await prisma.user.findUnique({ where: { id } });
+  },
+
   async createUser(data: any) {
     return await prisma.user.create({ data });
   },
@@ -14,8 +18,4 @@ export const AuthRepository = {
   async checkDoublon(email: string) {
     return await prisma.user.findUnique({ where: { email } });
   },
-
-  async findUser(id: string) {
-    return await prisma.user.findUnique({ where: { id } });
-  }
 };

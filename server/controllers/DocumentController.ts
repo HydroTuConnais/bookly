@@ -8,11 +8,13 @@ export const DocumentController = {
     const { title, parentDocumentId } = req.body;
     const userId = req.headers.userid as string;
 
+    console.log(title, parentDocumentId, userId);
+
     try {
       const document = await DocumentService.createDocument(title, parentDocumentId, userId);
       res.status(201).json(document);
 
-    } 
+    }
     catch (error: ErrorClass | any) {
       res.status(error.status).json({ error: error.message });
     }
@@ -25,7 +27,7 @@ export const DocumentController = {
     try {
       const document = await DocumentService.getDocument(id, userId);
       res.status(200).json(document);
-    } 
+    }
     catch (error: ErrorClass | any) {
       res.status(error.status).json({ error: error.message });
     }
@@ -65,7 +67,7 @@ export const DocumentController = {
     try {
       await DocumentService.restoreDocument(id, userId);
       res.status(200).json({ success: true });
-    } 
+    }
     catch (error: ErrorClass | any) {
       res.status(error.status).json({ error: error.message });
     }
@@ -78,7 +80,7 @@ export const DocumentController = {
     try {
       await DocumentService.deleteDocument(id, userId);
       res.status(200).json({ success: true });
-    } 
+    }
     catch (error: ErrorClass | any) {
       res.status(error.status).json({ error: error.message });
     }
@@ -88,10 +90,14 @@ export const DocumentController = {
     const parentDocumentId = req.query.parentDocument as string | null;
     const userId = req.headers.userid as string;
 
+    console.log("CONTROLLER")
+    console.log(parentDocumentId, userId);
+
     try {
       const documents = await DocumentService.getSidebarDocuments(userId, parentDocumentId);
+      console.log(documents);
       res.status(200).json(documents);
-    } 
+    }
     catch (error: ErrorClass | any) {
       res.status(error.status).json({ error: error.message });
     }
@@ -103,7 +109,7 @@ export const DocumentController = {
     try {
       const documents = await DocumentService.getArchivedDocuments(userId);
       res.status(200).json(documents);
-    } 
+    }
     catch (error: ErrorClass | any) {
       res.status(error.status).json({ error: error.message });
     }
@@ -113,12 +119,6 @@ export const DocumentController = {
     const userId = req.headers.userid as string;
     const documentId = req.params.id;
     const { sharedEmail } = req.body;
-
-    console.log("TEST");
-    console.log(userId);
-    console.log(documentId);
-    console.log(sharedEmail);
-    
 
     try {
       const documents = await DocumentService.shareDocument(documentId, userId, sharedEmail);
@@ -130,13 +130,10 @@ export const DocumentController = {
   },
 
   async getSharedDocuments(req: Request, res: Response) {
-    console.log("TEST")
     const userId = req.headers.userid as string;
-    console.log("TEST1");
-    console.log(userId);
+
     try {
       const documents = await DocumentService.getSharedDocuments(userId);
-      console.log("TEST2");
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {

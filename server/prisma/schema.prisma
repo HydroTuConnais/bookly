@@ -14,34 +14,35 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  documents Document[]
+  id              String     @id @default(uuid())
+  email           String     @unique
+  name            String?
+  password        String
+  imageProfile    String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  documents       Document[]
   sharedDocuments Document[] @relation("SharedDocuments")
 }
 
 model Document {
-  id              String      @id @default(uuid())
-  title           String
-  userId          String  
-  isArchived      Boolean @default(false)
+  id               String   @id @default(uuid())
+  title            String
+  userId           String
+  isArchived       Boolean  @default(false)
   parentDocumentId String?
-  content         String?
-  coverImage      String?
-  icon            String?
-  isPublished     Boolean @default(false)
-  urlPublished    String? @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  content          String?
+  coverImage       String?
+  icon             String?
+  isPublished      Boolean  @default(false)
+  urlPublished     String?  @unique
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
-  ownerUser       User        @relation(fields: [userId], references: [id])
-  sharedUsers     User[]      @relation("SharedDocuments")
-  parentDocument  Document? @relation("ParentDocument", fields: [parentDocumentId], references: [id])
-  children        Document[] @relation("ParentDocument")
+  ownerUser      User       @relation(fields: [userId], references: [id])
+  sharedUsers    User[]     @relation("SharedDocuments")
+  parentDocument Document?  @relation("ParentDocument", fields: [parentDocumentId], references: [id])
+  children       Document[] @relation("ParentDocument")
 
   @@index([userId], name: "idx_documents_by_user")
   @@index([userId, parentDocumentId], name: "idx_documents_by_user_parent")

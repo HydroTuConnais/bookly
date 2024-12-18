@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { loginAPI, registerAPI, checkAPI } from "@/services/authService";
 
 interface UserProfile {
-    userName: string;
+    id: string;
     email: string;
+    name: string;
     imageUrl?: string;
 }
 
@@ -19,18 +20,10 @@ interface AuthContextType {
     registerUser: (email: string, userName: string, password: string) => Promise<void>;
     isLoggedIn: () => boolean;
     logoutUser: () => void;
-    checkAuth: () => void;
+    checkAuth: (token: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error("useAuth must be used within an AuthProvider");
-    }
-    return context;
-};
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<UserProfile | null>(null);
@@ -40,15 +33,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const user = localStorage.getItem("user");
         const token = localStorage.getItem("token");
-        if (user && token) {
-            setUser(JSON.parse(user));
-            setToken(token);
-            axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-            setIsAuthenticated(true);
+        if (token) {
+            checkAuth(token);
+        } else {
+            setIsLoading(false);
         }
-        setIsLoading(false);
     }, []);
 
     const registerUser = async (email: string, userName: string, password: string) => {
@@ -56,15 +46,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         try {
             const res = await registerAPI(email, userName, password);
             if (res) {
-                const { token, userName, email: userEmail } = res.data.data;
-                const userObj: UserProfile = { userName, email: userEmail };
-                localStorage.setItem("token", token);
-                localStorage.setItem("user", JSON.stringify(userObj));
+                const { token, user } = res.data;
                 setToken(token);
-                setUser(userObj);
+                setUser(user);
                 setIsAuthenticated(true);
                 toast.success("User registered successfully");
-                navigate("/dashboard");
+                navigate("/documents");
             }
         } catch (error) {
             console.error("Registration error:", error);
@@ -77,17 +64,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const loginUser = async (email: string, password: string) => {
         setIsLoading(true);
         try {
+            console.log("-----------------login-----------------");
             const res = await loginAPI(email, password);
             if (res) {
-                const { token, userName, email } = res.data.data;
-                const userObj: UserProfile = { userName, email };
-                localStorage.setItem("token", token);
-                localStorage.setItem("user", JSON.stringify(userObj));
+                const { token, user } = res.data;
                 setToken(token);
-                setUser(userObj);
+                setUser(user);
+                localStorage.setItem("token", token);
                 setIsAuthenticated(true);
                 toast.success("User logged in successfully");
-                navigate("/dashboard");
+                navigate("/documents");
             }
         } catch (error) {
             console.error("Login error:", error);
@@ -102,20 +88,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const logoutUser = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
         setUser(null);
         setToken(null);
         setIsAuthenticated(false);
         navigate("/");
     };
 
-    const checkAuth = () => {
-        checkAPI(localStorage.getItem("token") || "").then((res: any) => {
+    const checkAuth = async (token: string) => {
+        await checkAPI(token || "").then((res: any) => {
             if (res) {
+                setUser(res.user);
+                setToken(res.token);
+                console.log("User is authenticated");
                 setIsAuthenticated(true);
+                setIsLoading(false);
             } else {
                 logoutUser();
+                console.log("User is not authenticated");
             }
         });
     };
@@ -125,4 +114,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             {children}
         </AuthContext.Provider>
     );
+};
+
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error("useAuth must be used within an AuthProvider");
+    }
+    return context;
 };

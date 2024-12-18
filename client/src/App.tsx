@@ -4,12 +4,24 @@ import MarketingPage from './pages/home/page';
 import DocumentsPage from './pages/main/routes/dashboard/page';
 import './index.css';
 
+import { AuthProvider } from './context/useAuth';
+import { DocumentProvider } from './context/useDocuments';
+import { Toaster } from 'sonner';
+import { AnimationProvider } from './context/useAnimation';
+
 const App: React.FC = () => {
   return (
-    <Routes>
-      <Route path="/" element={<MarketingPage />} />
-      <Route path="/dashboard" element={<DocumentsPage />} />
-  </Routes>
+    <AuthProvider>
+      <DocumentProvider>
+        <AnimationProvider>
+          <Toaster />
+          <Routes>
+            <Route path="/" element={<MarketingPage />} />
+            <Route path="/documents" element={<DocumentsPage />} />
+          </Routes>
+        </AnimationProvider>
+      </DocumentProvider>
+    </AuthProvider>
   );
 }
 

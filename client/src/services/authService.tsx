@@ -2,7 +2,8 @@ import { handleErrors } from "@/components/ErrorHandler";
 import { UserProfileToken } from "@/models/Users";
 import axios from "axios";
 
-const api = "http://localhost:4000/api";
+
+const api = "http://localhost:4000";
 
 export const loginAPI = async (email: string, password: string) => {
     try {
@@ -33,7 +34,7 @@ export const checkAPI = async (token: string) => {
     try {
         const response = await axios.get(api + "/auth/check", {
             headers: {
-                Authorization: token
+                Authorization: "Bearer " + token
             }
         });
         return response.data;

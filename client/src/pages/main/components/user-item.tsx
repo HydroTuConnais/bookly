@@ -18,7 +18,7 @@ import { Button } from "@/ui/button";
 import { useAuth } from "@/context/useAuth";
 
 export const UserItem = () => {
-    const user = JSON.parse(localStorage.getItem("user") || 'Invité(e)');
+    const user = useAuth().user;
     const { logoutUser } = useAuth();
 
     return (
@@ -30,7 +30,7 @@ export const UserItem = () => {
                             <AvatarImage src={user?.imageUrl || "avatar-default.png"} alt="Avatar" />
                         </Avatar>
                         <span className="text-start font-medium line-clamp-1">
-                            {user?.userName}&apos;s Notion Lite
+                            {user?.name}&apos;s Notion Lite
                         </span>
                     </div>
                     <ChevronsLeftRight className="rotate-90 ml-2 text-muted-foreground h-4 w-4"/>
@@ -54,7 +54,7 @@ export const UserItem = () => {
                         </div>
                         <div className="space-y-1">
                             <p className="text-sm line-clamp-1">
-                                {user?.userName}&apos;s Notion Lite
+                                {user?.name}&apos;s Notion Lite
                             </p>
                             <p className="text-xs text-muted-foreground">
                                 {user?.email}

@@ -1,7 +1,7 @@
+import React, { useState } from "react";
 import { useDocuments } from "@/context/useDocuments";
 import { cn } from "@/lib/utils";
 import { ChevronsRight, ChevronDown, ChevronRight, LucideIcon, Plus } from "lucide-react";
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -16,9 +16,9 @@ interface ItemProps {
     label: string;
     onClick: () => void;
     icon: React.ElementType;
-};
+}
 
-export const Item = ({
+export const ItemHead = ({
     id,
     label,
     onClick,
@@ -29,11 +29,10 @@ export const Item = ({
     level = 0,
     onExpand,
     expanded,
-
-
 }: ItemProps) => {
     const { createDocument } = useDocuments();
     const navigate = useNavigate();
+    const [isHovered, setIsHovered] = useState(false);
 
     const handleExpand = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.stopPropagation();
@@ -61,59 +60,72 @@ export const Item = ({
         });
     };
 
-
     const CheveronIcon = expanded ? ChevronDown : ChevronRight;
 
     return (
         <div
-            onClick={onClick}
-            role="button"
-            style={{
-                paddingLeft: level ? `${(level * 12) + 12}px` : "12px"
-            }}
-            className={cn(
+            onClick= { onClick }
+    role = "button"
+    style = {{
+        paddingLeft: level ? `${(level * 12) + 12}px` : "12px"
+    }
+}
+className = {
+    cn(
                 "group min-h-[27px] text-sm py-1 pr-3 w-full hover:bg-primary/5 flex items-center text-muted-foreground font-medium",
-                active && "bg-primary/5 text-primary"
+        active && "bg-primary/5 text-primary"
             )}
+onMouseEnter = {() => setIsHovered(true)}
+onMouseLeave = {() => setIsHovered(false)}
         >
-            {!!id && (
-                <div
+    {!!id && (
+        <div
                     role="button"
-                    className="h-full rounded-sm hover:bg-neutral-300 dark:bg-neutral-600 mr-1"
-                    onClick={handleExpand}
-                >
-                    <CheveronIcon
-                        className="h-4 w-4 shrink-0 text-muted-foreground"
-                    />
-                </div>
+className = {
+    cn(
+                        "h-full rounded-sm mr-1 transition-opacity ease-in-out duration-200",
+                        !isHovered? "opacity-100" : "opacity-0"
+    )
+}
+onClick = { handleExpand }
+    >
+    <CheveronIcon className="h-4 w-4 shrink-0 text-muted-foreground" />
+        </div>
             )}
 
-            {documentIcon ? (
-                <div className="shrink-0 h-[18px]">
-                    {documentIcon}
-                </div>
-            ) : (
-                <Icon className="shrink-0 h-[18px] mr-2 text-muted-foreground" />
-            )}
-            <span className="truncate">
-                {label}
-            </span>
-            {isSearch && (
-                <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
-                    <span className="text-xs">⊞</span>+ C
-                </kbd>
-            )}
-            {!!id && (
-                <div className="ml-auto flex items-center gap-x-2">
-                    <div
-                        role="button"
-                        onClick={onCreate}
-                        className="opacity-0 group-hover:opacity-100 h-full ml-auto rounded-sm hover:bg-neutral-300 dark:bg-neutral-600"
-                    >
-                        <Plus className="h-4 w-4 text-muted-foreground" />
-                    </div>
-                </div>
-            )}
+{
+    documentIcon ? (
+        <div className= "shrink-0 h-[18px]" >
+        { documentIcon }
         </div>
-    )
+            ) : (
+        <Icon className= {
+            cn("shrink-0 h-[18px] mr-2 text-muted-foreground",
+                    !isHovered? "opacity-100" : "opacity-0")
+        } />
+            )
+}
+<span className="truncate" > { label } </span>
+{
+    isSearch && (
+        <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100" >
+            <span className="text-xs" >⊞</span>+ C
+                </kbd>
+            )
+}
+{
+    !!id && (
+        <div className="ml-auto flex items-center gap-x-2" >
+            <div
+                        role="button"
+    onClick = { onCreate }
+    className = "opacity-0 group-hover:opacity-100 h-full ml-auto rounded-sm hover:bg-neutral-300 dark:bg-neutral-600"
+        >
+        <Plus className="h-4 w-4 text-muted-foreground" />
+            </div>
+            </div>
+            )
+}
+</div>
+    );
 };

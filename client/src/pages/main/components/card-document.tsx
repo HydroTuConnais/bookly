@@ -42,7 +42,7 @@ export const CardDocument: React.FC<CardDocumentProps> = ({ imageUrl }) => {
                             <AvatarImage src={user?.imageUrl || "avatar-default.png"} alt="Avatar" />
                         </Avatar>
                         <span className="text-start ml-2 font-medium ">
-                            {user?.userName}&apos;s
+                            {user?.name}&apos;s
                         </span>
                     </div>
                     <div className="flex items-center mt-4">

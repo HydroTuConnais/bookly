@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 export const DocumentRepository = {
   async createDocument(data: any) {
     return await prisma.document.create({ data });
-      
+
   },
 
   async findDocumentById(id: string | null) {
@@ -13,7 +13,9 @@ export const DocumentRepository = {
 
 
   async findDocumentsByParent(userId: string, parentDocumentId: string | null, isArchived: boolean) {
-    console.log(userId, parentDocumentId, isArchived);
+    console.log("REPOSITORY");
+    console.log(parentDocumentId);
+    console.log(typeof (parentDocumentId));
     return await prisma.document.findMany({
       where: { userId, parentDocumentId, isArchived },
       orderBy: { createdAt: 'desc' },
@@ -22,12 +24,12 @@ export const DocumentRepository = {
 
   async findSharedUserIds(userId: string, documentId: string) {
     const document = await prisma.document.findUnique({
-        where: { id: documentId },
-        include: { sharedUsers: true }
-      });
+      where: { id: documentId },
+      include: { sharedUsers: true }
+    });
 
-      if (!document || !document.sharedUsers) {
-        throw new Error('Document or shared users not found');
+    if (!document || !document.sharedUsers) {
+      throw new Error('Document or shared users not found');
     }
 
     const userIds = document.sharedUsers.map((user: { id: string }) => user.id);
@@ -35,7 +37,7 @@ export const DocumentRepository = {
     if (!userIds.includes(userId)) {
       throw new Error('Shared users not found');
     }
-    
+
     return userIds[0];
   },
 
@@ -61,11 +63,11 @@ export const DocumentRepository = {
   async findSharedDocuments(userId: string) {
     return await prisma.document.findMany({
       where: {
-      sharedUsers: {
-        some: {
-        id: userId
+        sharedUsers: {
+          some: {
+            id: userId
+          }
         }
-      }
       },
       orderBy: { createdAt: 'desc' },
     });
