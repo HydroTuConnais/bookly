@@ -8,20 +8,23 @@ import { AuthProvider } from './components/context/useAuth';
 import { DocumentProvider } from './components/context/useDocuments';
 import { Toaster } from 'sonner';
 import { AnimationProvider } from './components/context/useAnimation';
+import { ThemeProvider } from './components/context/theme-context';
 
 const App: React.FC = () => {
   return (
-    <AuthProvider>
-      <DocumentProvider>
-        <AnimationProvider>
-          <Toaster />
-          <Routes>
-            <Route path="/" element={<MarketingPage />} />
-            <Route path="/documents" element={<DocumentsPage />} />
-          </Routes>
-        </AnimationProvider>
-      </DocumentProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <DocumentProvider>
+          <AnimationProvider>
+            <Toaster />
+            <Routes>
+              <Route path="/" element={<MarketingPage />} />
+              <Route path="/documents" element={<DocumentsPage />} />
+            </Routes>
+          </AnimationProvider>
+        </DocumentProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

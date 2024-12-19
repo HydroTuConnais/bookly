@@ -3,7 +3,7 @@ import { useDocuments } from "@/components/context/useDocuments";
 import { cn } from "@/lib/utils";
 import { DropdownMenu, DropdownMenuSeparator, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ChevronsRight, ChevronDown, ChevronRight, LucideIcon, Plus, MoreHorizontal, Trash } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -18,6 +18,7 @@ interface ItemProps {
     label: string;
     onClick?: () => void;
     icon: React.ElementType;
+    childCount?: number;
 };
 
 export const Item = ({
@@ -31,12 +32,15 @@ export const Item = ({
     level = 0,
     onExpand,
     expanded,
+    childCount = 0
 
 
 }: ItemProps) => {
     const { user } = useAuth();
-    const { createDocument, archiveDocument} = useDocuments();
+    const { createDocument, archiveDocument } = useDocuments();
     const navigate = useNavigate();
+
+    const [isHovered, setIsHovered] = useState(false);
 
     const handleExpand = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.stopPropagation();
@@ -66,15 +70,16 @@ export const Item = ({
 
     const onArchive = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.stopPropagation();
-        if(!id) return;
-        
+        if (!id) return;
+
         const promise = archiveDocument({ id }).then
-        ((documentId) => {
-            console.log(documentId);
-        })
-        .catch((error) => {
-            console.error("Error archiving document:", error
-        )}); 
+            ((documentId) => {
+                console.log(documentId);
+            })
+            .catch((error) => {
+                console.error("Error archiving document:", error
+                )
+            });
 
         toast.promise(promise, {
             loading: "Archiving document...",
@@ -97,25 +102,43 @@ export const Item = ({
                 "group min-h-[27px] text-sm py-1 pr-3 w-full hover:bg-primary/5 flex items-center text-muted-foreground font-medium",
                 active && "bg-primary/5 text-primary"
             )}
+            onMouseEnter={() => {
+                setIsHovered(true);
+                //console.log('childCount:', childCount);
+            }}
+            onMouseLeave={() => {
+                setIsHovered(false);
+            }}
         >
             {!!id && (
-                <div
-                    role="button"
-                    className="h-full rounded-sm hover:bg-neutral-300 dark:bg-neutral-600 mr-1"
-                    onClick={handleExpand}
-                >
-                    <CheveronIcon
-                        className="h-4 w-4 shrink-0 text-muted-foreground"
-                    />
+                // Cheveron expand
+                <div>
+                    {isHovered && childCount > 0 ? (
+                        <div
+                            role="button"
+                            className="h-full rounded-sm p-[0.2rem] hover:bg-neutral-300 dark:bg-neutral-600 mr-1"
+                            onClick={handleExpand}
+                        >
+                            <CheveronIcon
+                                className="shrink-0 w-4 h-[18px] text-muted-foreground"
+                            />
+                        </div>
+                    ) : (
+                        documentIcon ? (
+                            <div className="shrink-0 h-[18px]">
+                                {documentIcon}
+                            </div>
+                        ) : (
+                            <Icon className="shrink-0 h-[18px] mr-2 text-muted-foreground" />
+                        )
+                    )}
                 </div>
             )}
 
-            {documentIcon ? (
-                <div className="shrink-0 h-[18px]">
-                    {documentIcon}
+            {!id && (
+                <div>
+                    <Icon className="shrink-0 h-[18px] mr-2 text-muted-foreground" />
                 </div>
-            ) : (
-                <Icon className="shrink-0 h-[18px] mr-2 text-muted-foreground" />
             )}
             <span className="truncate">
                 {label}
@@ -128,22 +151,23 @@ export const Item = ({
             {!!id && (
                 <div className="ml-auto flex items-center gap-x-2">
                     <DropdownMenu>
-                        <DropdownMenuTrigger 
-                        onClick={(e) => e.stopPropagation()}
-                        asChild
+                        <DropdownMenuTrigger
+                            onClick={(e) => e.stopPropagation()}
+                            asChild
                         >
-                        <div
-                        role="button"
-                        className="opacity-0 group-hover:opacity-100 h-full rounded-sm hover:bg-neutral-300 dark:bg-neutral-600"
-                        >
-                            <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
-                        </div>
+                            <div
+                                role="button"
+                                className="opacity-0 group-hover:opacity-100 h-full rounded-sm hover:bg-neutral-300 dark:bg-neutral-600"
+                            >
+                                <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+                            </div>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
-                        className="w-40"
-                        align="start"
-                        side="right"
-                        forceMount
+                            className="w-40"
+                            align="start"
+                            side="right"
+                            forceMount
+                            onClick={(e) => e.stopPropagation()}
                         >
                             <DropdownMenuItem onClick={onArchive}>
                                 <Trash className="h-4 w-4 mr-2" />

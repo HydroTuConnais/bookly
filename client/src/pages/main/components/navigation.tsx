@@ -9,10 +9,12 @@ import { UserItem } from "./user-item";
 import { Item } from "./item";
 
 import { ChevronsLeft, MenuIcon, PlusCircle, Search, Settings, Trash } from "lucide-react";
-import { Popover, PopoverTrigger, PopoverContent} from '@/components/ui/popover';
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { TrashBox } from './trash-box';
+
+import "../style/navigation.css";
 
 
 export const Navigation = () => {
@@ -167,26 +169,28 @@ export const Navigation = () => {
                         icon={PlusCircle}
                     />
                 </div>
-                <div className="mt-4">
-                    <DocumentList parendDocumentId={"null"} />
-                    <Item 
-                    onClick={handleCreate}
-                    icon={PlusCircle}
-                    label="Add a page"
-                     />
-                     <Popover>
+                <div className="mt-4 mb-4">
+                    <Popover>
+                        <h1 className='w-full flex text-[0.8rem] justify-start ml-4 text-muted-foreground'>Tools</h1>
                         <PopoverTrigger
-                        className="w-full mt-4"
+                            className="w-full mt-[0.25rem] mb-4"
                         >
-                            <Item label="Trash" icon={Trash} />
+                            <Item label="Archived" icon={Trash} />
                         </PopoverTrigger>
-                        <PopoverContent 
-                        className="p-0 w-72" 
-                        side={isMobile ? "bottom" : "right"}
+                        <PopoverContent
+                            className="p-0 w-72"
+                            side={isMobile ? "bottom" : "right"}
                         >
                             <TrashBox />
                         </PopoverContent>
-                     </Popover>
+                    </Popover>
+                    <h1 className='w-full flex text-[0.8rem] justify-start ml-4 text-muted-foreground'>Documents</h1>
+                    <DocumentList parendDocumentId={"null"} />
+                    <Item
+                        onClick={handleCreate}
+                        icon={PlusCircle}
+                        label="Add a page"
+                    />
                 </div>
                 <div onMouseDown={handleMouseDown} onClick={resetWidth} className="opacity-0 group-hover/sidebar:opacity-100 transition cursor-ew-resize absolute h-full w-1 bg-primary/10 right-0 top-0" />
             </aside>

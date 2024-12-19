@@ -8,8 +8,6 @@ export const DocumentController = {
     const { title, parentDocumentId } = req.body;
     const userId = req.headers.userid as string;
 
-    console.log(title, parentDocumentId, userId);
-
     try {
       const document = await DocumentService.createDocument(title, parentDocumentId, userId);
       res.status(201).json(document);
@@ -89,9 +87,6 @@ export const DocumentController = {
   async getSidebarDocuments(req: Request, res: Response) {
     const parentDocumentId = req.query.parentDocument as string | null;
     const userId = req.headers.userid as string;
-
-    console.log("CONTROLLER")
-    console.log(parentDocumentId, userId);
 
     try {
       const documents = await DocumentService.getSidebarDocuments(userId, parentDocumentId);

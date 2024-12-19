@@ -22,7 +22,6 @@ export const AuthController = {
     const { email, password } = req.body;
     try {
       const { user, token } = await AuthService.loginUser(email, password);
-      console.log(user);
       res.status(200).json({ token, user });
 
     }

@@ -13,12 +13,10 @@ export const DocumentRepository = {
 
 
   async findDocumentsByParent(userId: string, parentDocumentId: string | null, isArchived: boolean) {
-    console.log("REPOSITORY");
-    console.log(parentDocumentId);
-    console.log(typeof (parentDocumentId));
     return await prisma.document.findMany({
       where: { userId, parentDocumentId, isArchived },
       orderBy: { createdAt: 'asc' },
+      include: { _count: { select: { children: true } } }
     });
   },
 

@@ -35,6 +35,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
         getSidebarDocuments({ parentDocumentId: parendDocumentId })
             .then((data) => {
                 setDocumentsList(data);
+                data.forEach(doc => console.log(doc._count));
             })
             .catch((error) => {
                 console.error("Error fetching documents:", error);
@@ -79,6 +80,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                             level={level}
                             onExpand={() => onExpand(document.id)}
                             expanded={expanded[document.id]}
+                            childCount={document._count.children}
                         />
                         {expanded[document.id] && (
                             <DocumentList

@@ -14,8 +14,6 @@ export const DocumentService = {
       parentDocumentId = null;
     }
 
-    console.log(typeof (parentDocumentId));
-    console.log(parentDocumentId);
     if (parentDocumentId || parentDocumentId != null) {
       const parentDocumentExists = await DocumentService.parentDocumentExists(parentDocumentId);
       if (!parentDocumentExists) {
@@ -166,9 +164,6 @@ export const DocumentService = {
   },
 
   async getSidebarDocuments(userId: string, parentDocumentId: string | null) {
-
-    console.log("SERVICE")
-    console.log(parentDocumentId)
 
     if (parentDocumentId === "null") {
       parentDocumentId = null;
