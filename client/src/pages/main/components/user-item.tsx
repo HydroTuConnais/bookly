@@ -3,7 +3,7 @@ import React from "react"
 import {
     Avatar,
     AvatarImage
-} from "@/ui/avatar"
+} from "@/components/ui/avatar"
 
 import {
     DropdownMenu,
@@ -12,10 +12,10 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger
-} from "@/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu"
 import { ChevronsLeftRight} from "lucide-react";
-import { Button } from "@/ui/button";
-import { useAuth } from "@/context/useAuth";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/components/context/useAuth";
 
 export const UserItem = () => {
     const user = useAuth().user;

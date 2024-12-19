@@ -1,4 +1,4 @@
-import { useDocuments } from "@/context/useDocuments";
+import { useDocuments } from "@/components/context/useDocuments";
 import { cn } from "@/lib/utils";
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -60,7 +60,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                 }}
                 className={cn(
                     "hidden text-sm font-medium text-muted-foreground/80",
-                    expanded && "last: block",
+                    expanded && "last:block",
                     level === 0 && "hidden",
                 )}
             >

@@ -18,7 +18,7 @@ export const DocumentRepository = {
     console.log(typeof (parentDocumentId));
     return await prisma.document.findMany({
       where: { userId, parentDocumentId, isArchived },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: 'asc' },
     });
   },
 

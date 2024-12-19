@@ -1,9 +1,9 @@
 import React from "react";
-import { AuthProvider, useAuth } from '@/context/useAuth';
-import { DocumentProvider, useDocuments } from '@/context/useDocuments';
+import { AuthProvider, useAuth } from '@/components/context/useAuth';
+import { DocumentProvider, useDocuments } from '@/components/context/useDocuments';
 import { Navigate } from "react-router-dom";
 import { Navigation } from "./components/navigation";
-import { AnimationProvider, useAnimation } from "@/context/useAnimation";
+import { AnimationProvider, useAnimation } from "@/components/context/useAnimation";
 import { Preloader } from "./components/preloader";
 
 import "./style/home.css";

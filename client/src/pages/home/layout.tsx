@@ -1,9 +1,9 @@
 import React from 'react';
 import { Navbar } from './components/Navbar';
-import { ThemeProvider } from '@/context/theme-context';
+import { ThemeProvider } from '@/components/context/theme-context';
 import Login from './components/Login';
 import RegisterPage from './components/Register';
-import { PopupProvider } from '@/context/popup-context';
+import { PopupProvider } from '@/components/context/popup-context';
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 

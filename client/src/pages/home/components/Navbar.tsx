@@ -4,8 +4,8 @@ import { cn } from '../../../lib/utils';
 
 import { ModeToggle } from '../../../components/mode-toggle';
 import { useScrollTop } from '../../../hooks/use-scroll-top';
-import { Button } from '@/ui/button';
-import { usePopup } from '@/context/popup-context';
+import { Button } from '@/components/ui/button';
+import { usePopup } from '@/components/context/popup-context';
 
 export const Navbar: React.FC = () => {
   const scrolled = useScrollTop();

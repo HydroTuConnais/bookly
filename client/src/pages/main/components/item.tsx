@@ -1,6 +1,8 @@
-import { useDocuments } from "@/context/useDocuments";
+import { useAuth } from "@/components/context/useAuth";
+import { useDocuments } from "@/components/context/useDocuments";
 import { cn } from "@/lib/utils";
-import { ChevronsRight, ChevronDown, ChevronRight, LucideIcon, Plus } from "lucide-react";
+import { DropdownMenu, DropdownMenuSeparator, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { ChevronsRight, ChevronDown, ChevronRight, LucideIcon, Plus, MoreHorizontal, Trash } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -14,7 +16,7 @@ interface ItemProps {
     level?: number;
     onExpand?: () => void;
     label: string;
-    onClick: () => void;
+    onClick?: () => void;
     icon: React.ElementType;
 };
 
@@ -32,7 +34,8 @@ export const Item = ({
 
 
 }: ItemProps) => {
-    const { createDocument } = useDocuments();
+    const { user } = useAuth();
+    const { createDocument, archiveDocument} = useDocuments();
     const navigate = useNavigate();
 
     const handleExpand = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -60,6 +63,25 @@ export const Item = ({
             error: "Error creating document"
         });
     };
+
+    const onArchive = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        event.stopPropagation();
+        if(!id) return;
+        
+        const promise = archiveDocument({ id }).then
+        ((documentId) => {
+            console.log(documentId);
+        })
+        .catch((error) => {
+            console.error("Error archiving document:", error
+        )}); 
+
+        toast.promise(promise, {
+            loading: "Archiving document...",
+            success: "Document archived",
+            error: "Error archiving document"
+        });
+    }
 
 
     const CheveronIcon = expanded ? ChevronDown : ChevronRight;
@@ -105,6 +127,34 @@ export const Item = ({
             )}
             {!!id && (
                 <div className="ml-auto flex items-center gap-x-2">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger 
+                        onClick={(e) => e.stopPropagation()}
+                        asChild
+                        >
+                        <div
+                        role="button"
+                        className="opacity-0 group-hover:opacity-100 h-full rounded-sm hover:bg-neutral-300 dark:bg-neutral-600"
+                        >
+                            <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+                        </div>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                        className="w-40"
+                        align="start"
+                        side="right"
+                        forceMount
+                        >
+                            <DropdownMenuItem onClick={onArchive}>
+                                <Trash className="h-4 w-4 mr-2" />
+                                Delete
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <div className="text-xs text-muted-foreground p-2">
+                                Last edited by: {user?.name}
+                            </div>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                     <div
                         role="button"
                         onClick={onCreate}

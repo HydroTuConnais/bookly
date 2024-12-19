@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useAuth } from '@/context/useAuth';
+import { useAuth } from '@/components/context/useAuth';
 import { useForm } from 'react-hook-form';
-import { usePopup } from '@/context/popup-context';
+import { usePopup } from '@/components/context/popup-context';
 
 import { cn } from '@/lib/utils';
-import { Button } from '@/ui/button';
-import { Separator } from '@/ui/separator';
-import { toast } from 'react-toastify';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { toast } from 'sonner';
 
 type Props = {};
 

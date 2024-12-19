@@ -32,9 +32,18 @@ export const DocumentService = {
         }
     },
 
-    async deleteDocument({ token, id }: { token: string, id: string }) {
+    async getArchivedDocuments({ token }: { token: string }) {
         try {
-            const data = await fetchData({ method: "DELETE", endpoint: `/documents/${id}/content`, token });
+            const data = await fetchData({ method: "GET", endpoint: "/documents/trash", token });
+            return data;
+        } catch (error) {
+            handleErrors(error);
+        }
+    },
+
+    async deleteDocument({ token, userid, id }: { token: string, userid: string, id: string | null }) {
+        try {
+            const data = await fetchData({ method: "DELETE", endpoint: `/documents/${id}/content`, header: { UserId: userid }, token });
             return data;
         } catch (error) {
             handleErrors(error);
@@ -45,15 +54,6 @@ export const DocumentService = {
         try {
             const data = await fetchData({ method: "GET", endpoint: "/sidebar", params: { parentDocument: parentDocumentId }, header: { UserId: userid }, token });
             console.log("service sidebar", data);
-            return data;
-        } catch (error) {
-            handleErrors(error);
-        }
-    },
-
-    async getArchivedDocuments({ token }: { token: string }) {
-        try {
-            const data = await fetchData({ method: "GET", endpoint: "/documents/trash", token });
             return data;
         } catch (error) {
             handleErrors(error);
@@ -78,18 +78,18 @@ export const DocumentService = {
         }
     },
 
-    async archiveDocument({ token, id }: { token: string, id: string }) {
+    async archiveDocument({ token, userid, id  }: { token: string, userid: string, id: string }) {
         try {
-            const data = await fetchData({ method: "POST", endpoint: `/documents/${id}/archive`, token });
+            const data = await fetchData({ method: "POST", endpoint: `/documents/${id}/archive`, header: { UserId: userid }, token });
             return data;
         } catch (error) {
             handleErrors(error);
         }
     },
 
-    async restoreDocument({ token, id }: { token: string, id: string }) {
+    async restoreDocument({ token, userid, id, }: { token: string, userid: string, id: string }) {
         try {
-            const data = await fetchData({ method: "POST", endpoint: `/documents/${id}/restore`, token });
+            const data = await fetchData({ method: "POST", endpoint: `/documents/${id}/restore`, header: { UserId: userid }, token });
             return data;
         } catch (error) {
             handleErrors(error);

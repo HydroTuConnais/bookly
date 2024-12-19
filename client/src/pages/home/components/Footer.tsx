@@ -1,4 +1,4 @@
-import { Button } from "@/ui/button";
+import { Button } from "@/components/ui/button";
 import { Logo } from "./Logo";
 import React from "react";
 

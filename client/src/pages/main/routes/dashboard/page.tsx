@@ -1,11 +1,11 @@
 import Layout from "../../layout";
 import React, { useEffect, useState } from "react";
-import { Button } from "@/ui/button";
+import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { CardDocument } from "../../components/card-document";
 import { CardAdd } from "../../components/card-add";
-import { useAuth } from "@/context/useAuth";
-import { useDocuments } from "@/context/useDocuments";
+import { useAuth } from "@/components/context/useAuth";
+import { useDocuments } from "@/components/context/useDocuments";
 import { toast } from "sonner";
 
 import { Navigation } from "../../components/navigation";

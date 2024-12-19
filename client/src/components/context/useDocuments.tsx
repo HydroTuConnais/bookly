@@ -19,9 +19,9 @@ interface DocumentContextProps {
     createDocument: (params: { title: string, parentDocumentId: string | null }) => Promise<void>;
     getDocument: (params: { id: string }) => Promise<void>;
     updateDocument: (params: { id: string, title: string, content: string }) => Promise<void>;
-    deleteDocument: (params: { id: string }) => Promise<void>;
+    deleteDocument: (params: { documentId: string }) => Promise<void>;
     getSidebarDocuments: (params: { parentDocumentId: string | null }) => Promise<any[]>;
-    getArchivedDocuments: () => Promise<void>;
+    getArchivedDocuments: () => Promise<any[]>;
     shareDocument: (params: { id: string, sharedEmail: string }) => Promise<void>;
     archiveDocument: (params: { id: string }) => Promise<void>;
     restoreDocument: (params: { id: string }) => Promise<void>;
@@ -58,7 +58,7 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
             try {
                 const document = await DocumentService.createDocument({ token, userid: user.id, title, parentDocumentId });
                 console.log(document);
-                setDocuments(prevDocs => [document, ...prevDocs]);
+                setDocuments(prevDocs => [...prevDocs, document]);
                 return document;
             } catch (err: any) {
                 setError('Failed to create document');
@@ -100,17 +100,15 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
         }
     };
 
-    const deleteDocument = async ({ id }: { id: string }) => {
+    const deleteDocument = async ({ documentId }: { documentId: string }) => {
         if (token && user) {
-            setLoading(true);
             setError(null); // Reset error state
             try {
-                await DocumentService.deleteDocument({ token: token, id: id });
+                const documents = await DocumentService.deleteDocument({ token, userid: user.id, id: documentId });
+                return documents;
             } catch (err: any) {
                 setError('Failed to delete document');
                 console.error(err);
-            } finally {
-                setLoading(false);
             }
         }
     };
@@ -125,8 +123,6 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
                 setError('Failed to fetch sidebar documents');
                 console.error(err);
                 return [];
-            } finally {
-                //setLoading(false);
             }
         }
         return [];
@@ -134,15 +130,14 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
 
     const getArchivedDocuments = async () => {
         if (token && user) {
-            setLoading(true);
             setError(null); // Reset error state
             try {
-                const archivedDocuments = await DocumentService.getArchivedDocuments({ token: token });
+                const archivedDocuments = await DocumentService.getArchivedDocuments({ token: token});
+                
+                return archivedDocuments;
             } catch (err: any) {
                 setError('Failed to fetch archived documents');
                 console.error(err);
-            } finally {
-                setLoading(false);
             }
         }
     };
@@ -164,30 +159,28 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
 
     const archiveDocument = async ({ id }: { id: string }) => {
         if (token && user) {
-            setLoading(true);
             setError(null); // Reset error state
             try {
-                await DocumentService.archiveDocument({ token: token, id: id });
+                const document = await DocumentService.archiveDocument({ token: token, userid: user.id, id: id });
+                setDocuments(prevDocs => prevDocs.map(doc => doc.id === id ? { ...doc, archived: true } : doc));
+                return document;
             } catch (err: any) {
                 setError('Failed to archive document');
                 console.error(err);
-            } finally {
-                setLoading(false);
             }
         }
     };
 
     const restoreDocument = async ({ id }: { id: string }) => {
         if (token && user) {
-            setLoading(true);
             setError(null); // Reset error state
             try {
-                await DocumentService.restoreDocument({ token: token, id: id });
+                const document = await DocumentService.restoreDocument({ token: token, userid: user.id, id: id });
+                setDocuments(prevDocs => prevDocs.map(doc => doc.id === id ? { ...doc, archived: false } : doc));
+                return document;
             } catch (err: any) {
                 setError('Failed to restore document');
                 console.error(err);
-            } finally {
-                setLoading(false);
             }
         }
     };

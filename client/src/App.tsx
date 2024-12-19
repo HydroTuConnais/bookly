@@ -4,10 +4,10 @@ import MarketingPage from './pages/home/page';
 import DocumentsPage from './pages/main/routes/dashboard/page';
 import './index.css';
 
-import { AuthProvider } from './context/useAuth';
-import { DocumentProvider } from './context/useDocuments';
+import { AuthProvider } from './components/context/useAuth';
+import { DocumentProvider } from './components/context/useDocuments';
 import { Toaster } from 'sonner';
-import { AnimationProvider } from './context/useAnimation';
+import { AnimationProvider } from './components/context/useAnimation';
 
 const App: React.FC = () => {
   return (

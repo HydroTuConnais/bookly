@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button } from '../../../ui/button';
+import { Button } from '../../../components/ui/button';
 import { ArrowRight } from 'lucide-react';
-import { usePopup } from '@/context/popup-context';
+import { usePopup } from '@/components/context/popup-context';
 
 export const Heading: React.FC = () => {
   const { openPopup } = usePopup();

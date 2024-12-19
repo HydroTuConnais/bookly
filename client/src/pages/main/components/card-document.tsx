@@ -1,6 +1,6 @@
-import { useAuth } from "@/context/useAuth";
-import { Avatar, AvatarImage } from "@/ui/avatar";
-import { Separator } from "@/ui/separator";
+import { useAuth } from "@/components/context/useAuth";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
 import React from "react";
 
 interface CardDocumentProps {

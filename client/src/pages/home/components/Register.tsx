@@ -4,11 +4,11 @@ import { useForm } from 'react-hook-form';
 import { cn } from '@/lib/utils';
 import * as Yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
-import { usePopup } from '@/context/popup-context';
-import { useAuth } from '@/context/useAuth';
+import { usePopup } from '@/components/context/popup-context';
+import { useAuth } from '@/components/context/useAuth';
 
-import { Button } from '@/ui/button';
-import { Separator } from '@/ui/separator';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 
 
 type Props = {};

@@ -1,14 +1,18 @@
-import { cn } from "@/lib/utils";
 import React, { useRef, useState, useEffect, ElementRef } from 'react';
 
-import { ChevronsLeft, MenuIcon, PlusCircle, Search, Settings } from "lucide-react";
 import { useMediaQuery } from "usehooks-ts";
 import { useLocation } from "react-router-dom";
-import { useDocuments } from "@/context/useDocuments";
+import { useDocuments } from "@/components/context/useDocuments";
+
+import { DocumentList } from "./document-list";
 import { UserItem } from "./user-item";
 import { Item } from "./item";
+
+import { ChevronsLeft, MenuIcon, PlusCircle, Search, Settings, Trash } from "lucide-react";
+import { Popover, PopoverTrigger, PopoverContent} from '@/components/ui/popover';
 import { toast } from "sonner";
-import { DocumentList } from "./document-list";
+import { cn } from "@/lib/utils";
+import { TrashBox } from './trash-box';
 
 
 export const Navigation = () => {
@@ -165,6 +169,24 @@ export const Navigation = () => {
                 </div>
                 <div className="mt-4">
                     <DocumentList parendDocumentId={"null"} />
+                    <Item 
+                    onClick={handleCreate}
+                    icon={PlusCircle}
+                    label="Add a page"
+                     />
+                     <Popover>
+                        <PopoverTrigger
+                        className="w-full mt-4"
+                        >
+                            <Item label="Trash" icon={Trash} />
+                        </PopoverTrigger>
+                        <PopoverContent 
+                        className="p-0 w-72" 
+                        side={isMobile ? "bottom" : "right"}
+                        >
+                            <TrashBox />
+                        </PopoverContent>
+                     </Popover>
                 </div>
                 <div onMouseDown={handleMouseDown} onClick={resetWidth} className="opacity-0 group-hover/sidebar:opacity-100 transition cursor-ew-resize absolute h-full w-1 bg-primary/10 right-0 top-0" />
             </aside>
