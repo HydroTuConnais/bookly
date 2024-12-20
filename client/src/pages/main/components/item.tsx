@@ -2,17 +2,19 @@ import { useAuth } from "@/components/context/useAuth";
 import { useDocuments } from "@/components/context/useDocuments";
 import { cn } from "@/lib/utils";
 import { DropdownMenu, DropdownMenuSeparator, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { ChevronsRight, ChevronDown, ChevronRight, LucideIcon, Plus, MoreHorizontal, Trash } from "lucide-react";
+import { ChevronsRight, ChevronDown, ChevronRight, LucideIcon, Plus, MoreHorizontal, Trash, Stars, Star, StarOff } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 interface ItemProps {
+    category?: string;
     id?: string;
     documentIcon?: string;
     active?: boolean;
     expanded?: boolean;
     isSearch?: boolean;
+    isFavorite?: boolean;
     level?: number;
     onExpand?: () => void;
     label: string;
@@ -22,6 +24,7 @@ interface ItemProps {
 };
 
 export const Item = ({
+    category,
     id,
     label,
     onClick,
@@ -29,6 +32,7 @@ export const Item = ({
     active,
     documentIcon,
     isSearch,
+    isFavorite,
     level = 0,
     onExpand,
     expanded,
@@ -37,7 +41,7 @@ export const Item = ({
 
 }: ItemProps) => {
     const { user } = useAuth();
-    const { createDocument, archiveDocument } = useDocuments();
+    const { createDocument, archiveDocument, favoriteDocument, unfavoriteDocument } = useDocuments();
     const navigate = useNavigate();
 
     const [isHovered, setIsHovered] = useState(false);
@@ -47,8 +51,18 @@ export const Item = ({
         onExpand?.();
     };
 
+    // Verifie la category de la sidebar
+    const [isDocumentCategory, setIsDocumentCategory] = useState(false);
+
+    useEffect(() => {
+        if (category === 'document') {
+            setIsDocumentCategory(true);
+        } else {
+            setIsDocumentCategory(false);
+        }
+    }, [category]);
+
     const onCreate = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        console.log(id);
         event.stopPropagation();
         if (!id) return;
         const promise = createDocument({ title: "New Document", parentDocumentId: id })
@@ -56,7 +70,7 @@ export const Item = ({
                 if (!expanded) {
                     onExpand?.();
                 }
-                console.log(documentId);
+                // console.log(documentId);
 
                 //navigate(`/documents/${documentId}`);
             });
@@ -74,7 +88,7 @@ export const Item = ({
 
         const promise = archiveDocument({ id }).then
             ((documentId) => {
-                console.log(documentId);
+                // console.log(documentId);
             })
             .catch((error) => {
                 console.error("Error archiving document:", error
@@ -85,6 +99,46 @@ export const Item = ({
             loading: "Archiving document...",
             success: "Document archived",
             error: "Error archiving document"
+        });
+    }
+
+    const onFavorite = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        event.stopPropagation();
+        if (!id) return;
+
+        const promise = favoriteDocument({ documentId: id }).then
+            ((documentId) => {
+                // console.log(documentId);
+            })
+            .catch((error) => {
+                console.error("Error archiving document:", error
+                )
+            });
+
+        toast.promise(promise, {
+            loading: "Set bookmark...",
+            success: "Bookmark was set",
+            error: "Error set bookmark document"
+        });
+    }
+
+    const unFavorite = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        event.stopPropagation();
+        if (!id) return;
+
+        const promise = unfavoriteDocument({ documentId: id }).then
+            ((documentId) => {
+                // console.log(documentId);
+            })
+            .catch((error) => {
+                console.error("Error archiving document:", error
+                )
+            });
+
+        toast.promise(promise, {
+            loading: "Unset bookmark...",
+            success: "Bookmark was unset",
+            error: "Error unset bookmark document"
         });
     }
 
@@ -163,16 +217,38 @@ export const Item = ({
                             </div>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
-                            className="w-40"
+                            className="w-60"
                             align="start"
                             side="right"
                             forceMount
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <DropdownMenuItem onClick={onArchive}>
-                                <Trash className="h-4 w-4 mr-2" />
-                                Delete
-                            </DropdownMenuItem>
+
+                            {/*Favorite List */}
+                            {isFavorite && (
+                                <DropdownMenuItem onClick={unFavorite}>
+                                    <StarOff className="h-4 w-4 mr-1" />
+                                    Remove to favorites
+                                </DropdownMenuItem>
+                            )}
+
+                            {/*Document List */}
+                            {!isFavorite && (
+                                <DropdownMenuItem onClick={onFavorite}>
+                                    <Star className="h-4 w-4 mr-1" />
+                                    Add to favorites
+                                </DropdownMenuItem>
+                            )}
+
+                            {isDocumentCategory && (
+                                <>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem onClick={onArchive}>
+                                        <Trash className="h-4 w-4 mr-" />
+                                        Delete
+                                    </DropdownMenuItem>
+                                </>
+                            )}
                             <DropdownMenuSeparator />
                             <div className="text-xs text-muted-foreground p-2">
                                 Last edited by: {user?.name}

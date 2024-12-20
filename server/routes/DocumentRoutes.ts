@@ -4,17 +4,21 @@ import { authenticate } from '../service/AuthService';
 
 const router = express.Router();
 
-router.post('/documents', authenticate, DocumentController.createDocument);
 
 router.get('/documents/:id/content', authenticate, DocumentController.getDocument);
+router.post('/documents', authenticate, DocumentController.createDocument);
 router.put('/documents/:id/content', authenticate, DocumentController.updateDocument);
 router.delete('/documents/:id/content', authenticate, DocumentController.deleteDocument);
 
-router.get('/sidebar', authenticate, DocumentController.getSidebarDocuments);
+router.get('/documents/sidebar', authenticate, DocumentController.getSidebarDocuments);
 
+router.get('/documents/trash', authenticate, DocumentController.getArchivedDocuments);
 router.post('/documents/:id/archive', authenticate, DocumentController.archiveDocument);
 router.post('/documents/:id/restore', authenticate, DocumentController.restoreDocument);
-router.get('/documents/trash', authenticate, DocumentController.getArchivedDocuments);
+
+router.post('/documents/:id/favorite', authenticate, DocumentController.favoriteDocument);
+router.post('/documents/:id/unfavorite', authenticate, DocumentController.unfavoriteDocument);
+router.get('/documents/favorite', authenticate, DocumentController.getfavoriteDocuments);
 
 router.post('/documents/:id/shared', authenticate, DocumentController.shareDocument);
 router.get('/documents/shared', authenticate, DocumentController.getSharedDocuments);

@@ -5,7 +5,7 @@ import AuthRoutes from './routes/AuthRoutes';
 const app = express();
 
 app.use(express.json());
-app.use("/api" , DocumentRoutes);
+app.use("/api", DocumentRoutes);
 app.use(AuthRoutes);
 
 

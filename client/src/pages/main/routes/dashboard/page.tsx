@@ -28,7 +28,7 @@ const DocumentsPage = () => {
             title: "new become page Document",
             parentDocumentId: null
         }).then((data) => {
-            console.log(data);
+            // console.log(data);
         }).catch((error) => {
             console.error("Error creating document:", error);
         });

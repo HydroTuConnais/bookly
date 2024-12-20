@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { TrashBox } from './trash-box';
 
 import "../style/navigation.css";
+import { FavoriteList } from './favorite-list';
 
 
 export const Navigation = () => {
@@ -28,17 +29,9 @@ export const Navigation = () => {
     const [isCollapsed, setIsCollapsed] = useState(isMobile);
 
     const {
-        getDocuments,
         createDocument,
-        getDocument,
-        updateDocument,
-        deleteDocument,
-        getSidebarDocuments,
-        getArchivedDocuments,
-        shareDocument,
-        archiveDocument,
-        restoreDocument,
     } = useDocuments();
+
 
     useEffect(() => {
         if (isMobile) {
@@ -169,28 +162,39 @@ export const Navigation = () => {
                         icon={PlusCircle}
                     />
                 </div>
-                <div className="mt-4 mb-4">
-                    <Popover>
-                        <h1 className='w-full flex text-[0.8rem] justify-start ml-4 text-muted-foreground'>Tools</h1>
-                        <PopoverTrigger
-                            className="w-full mt-[0.25rem] mb-4"
-                        >
-                            <Item label="Archived" icon={Trash} />
-                        </PopoverTrigger>
-                        <PopoverContent
-                            className="p-0 w-72"
-                            side={isMobile ? "bottom" : "right"}
-                        >
-                            <TrashBox />
-                        </PopoverContent>
-                    </Popover>
-                    <h1 className='w-full flex text-[0.8rem] justify-start ml-4 text-muted-foreground'>Documents</h1>
-                    <DocumentList parendDocumentId={"null"} />
-                    <Item
-                        onClick={handleCreate}
-                        icon={PlusCircle}
-                        label="Add a page"
-                    />
+                <div className="mt-4 mb-4 flex flex-col gap-1 ">
+                    {!isMobile && (
+                        <div>
+                            <h1 className='w-full flex text-[0.8rem] pt-4 justify-start ml-4 text-muted-foreground'>Favorites</h1>
+                            <FavoriteList parentFavoriteId={"null"} />
+                        </div>
+                    )}
+
+                    <div>
+                        <h1 className='w-full flex text-[0.8rem] pt-4 justify-start ml-4 text-muted-foreground'>Documents</h1>
+                        <DocumentList parendDocumentId={"null"} />
+                        <Item
+                            onClick={handleCreate}
+                            icon={PlusCircle}
+                            label="Add a page"
+                        />
+                    </div>
+                    <div>
+                        <Popover>
+                            <h1 className='w-full flex text-[0.8rem] justify-start ml-4 mt-4 text-muted-foreground'>Tools</h1>
+                            <PopoverTrigger
+                                className="w-full mt-[0.25rem] mb-4"
+                            >
+                                <Item label="Archived" icon={Trash} />
+                            </PopoverTrigger>
+                            <PopoverContent
+                                className="p-0 w-72"
+                                side={isMobile ? "bottom" : "right"}
+                            >
+                                <TrashBox />
+                            </PopoverContent>
+                        </Popover>
+                    </div>
                 </div>
                 <div onMouseDown={handleMouseDown} onClick={resetWidth} className="opacity-0 group-hover/sidebar:opacity-100 transition cursor-ew-resize absolute h-full w-1 bg-primary/10 right-0 top-0" />
             </aside>

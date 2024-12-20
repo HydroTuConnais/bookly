@@ -13,7 +13,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
-import { ChevronsLeftRight} from "lucide-react";
+import { ChevronsLeftRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/context/useAuth";
 
@@ -33,14 +33,14 @@ export const UserItem = () => {
                             {user?.name}&apos;s Notion Lite
                         </span>
                     </div>
-                    <ChevronsLeftRight className="rotate-90 ml-2 text-muted-foreground h-4 w-4"/>
+                    <ChevronsLeftRight className="rotate-90 ml-2 text-muted-foreground h-4 w-4" />
                 </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent
-            className="w-80"
-            align="start"
-            alignOffset={11}
-            forceMount
+                className="w-80"
+                align="start"
+                alignOffset={11}
+                forceMount
             >
                 <div className="flex flex-col space-y-4 p-2">
                     <p className="text-xs font-medium leading-none text-muted-foreground">

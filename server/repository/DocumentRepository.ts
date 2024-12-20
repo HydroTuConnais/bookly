@@ -2,11 +2,6 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 export const DocumentRepository = {
-  async createDocument(data: any) {
-    return await prisma.document.create({ data });
-
-  },
-
   async findDocumentById(id: string | null) {
     return await prisma.document.findUnique({ where: { id } });
   },
@@ -39,6 +34,18 @@ export const DocumentRepository = {
     return userIds[0];
   },
 
+  async findUserIdByEmail(email: string) {
+    const user = await prisma.user.findUnique({ where: { email } });
+    return user?.id || null;
+  },
+
+  /*--------------------------------------------------------------*/
+
+  async createDocument(data: any) {
+    return await prisma.document.create({ data });
+
+  },
+
   async updateDocument(id: string, data: any) {
     return await prisma.document.update({ where: { id }, data });
   },
@@ -46,6 +53,47 @@ export const DocumentRepository = {
   async deleteDocument(id: string) {
     return await prisma.document.delete({ where: { id } });
   },
+
+  /*--------------------------------------------------------------*/
+
+  async findChildDocuments(userId: string, parentDocumentId: string) {
+    return await prisma.document.findMany({ where: { userId, parentDocumentId } });
+  },
+
+  /*--------------------------------------------------------------*/
+
+  async findArchivedDocuments(userId: string) {
+    return await prisma.document.findMany({
+      where: { userId, isArchived: true },
+      orderBy: { createdAt: 'desc' },
+    });
+  },
+
+  /*--------------------------------------------------------------*/
+
+  async favoriteDocument(id: string, userId: string) {
+    return await prisma.document.update({
+      where: { id },
+      data: { isFavorite: true, isArchived: false }
+    });
+  },
+
+  async unfavoriteDocument(id: string, userId: string) {
+    return await prisma.document.update({
+      where: { id },
+      data: { isFavorite: false }
+    });
+  },
+
+  async findFavoriteByParent(userId: string, parentDocumentId: string | null) {
+    return await prisma.document.findMany({
+      where: { userId, parentDocumentId, isFavorite: true },
+      orderBy: { createdAt: 'asc' },
+      include: { _count: { select: { children: true } } }
+    });
+  },
+
+  /*--------------------------------------------------------------*/
 
   async addSharedUser(documentId: string, userId: string) {
     return await prisma.document.update({
@@ -70,20 +118,4 @@ export const DocumentRepository = {
       orderBy: { createdAt: 'desc' },
     });
   },
-
-  async findArchivedDocuments(userId: string) {
-    return await prisma.document.findMany({
-      where: { userId, isArchived: true },
-      orderBy: { createdAt: 'desc' },
-    });
-  },
-
-  async findChildDocuments(userId: string, parentDocumentId: string) {
-    return await prisma.document.findMany({ where: { userId, parentDocumentId } });
-  },
-
-  async findUserIdByEmail(email: string) {
-    const user = await prisma.user.findUnique({ where: { email } });
-    return user?.id || null;
-  }
 };
