@@ -8,7 +8,7 @@ import { DocumentList } from "./document-list";
 import { UserItem } from "./user-item";
 import { Item } from "./item";
 
-import { ChevronsLeft, MenuIcon, PlusCircle, Search, Settings, Trash } from "lucide-react";
+import { ChevronsLeft, ChevronsRight, MenuIcon, PlusCircle, Search, Settings, Trash } from "lucide-react";
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -30,8 +30,20 @@ export const Navigation = () => {
 
     const {
         createDocument,
+        haveFavorites,
+        setHaveFavorites,
+        favoriteDocument,
+        unfavoriteDocument,
+        getSidebarCountFavoriteDocuments
     } = useDocuments();
 
+    useEffect(() => {
+        getSidebarCountFavoriteDocuments().then((data) => {
+            setHaveFavorites(data > 0);
+        }).catch((error) => {
+            console.error("Error fetching documents:", error);
+        });
+    }, [favoriteDocument, unfavoriteDocument]);
 
     useEffect(() => {
         if (isMobile) {
@@ -138,12 +150,12 @@ export const Navigation = () => {
                 )}
             >
                 <div onClick={collapse} role="button" className={cn(
-                    "h-6 w-6 text-muted-foreground rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600 absolute top-3 right-2 opacity-0 group-hover/sidebar:opacity-100 transition",
+                    "h-6 w-6 text-muted-foreground rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600 absolute top-5 right-2 opacity-0 group-hover/sidebar:opacity-100 transition",
                     isMobile && "opacity-100"
                 )}>
                     <ChevronsLeft className="h-6 w-6" />
                 </div>
-                <div>
+                <div className="flex flex-col p-4 px-[8px] items-center">
                     <UserItem />
                     <Item
                         label="Search"
@@ -162,16 +174,16 @@ export const Navigation = () => {
                         icon={PlusCircle}
                     />
                 </div>
-                <div className="mt-4 mb-4 flex flex-col gap-1 ">
-                    {!isMobile && (
+                <div className="m-4 mx-2 flex flex-col gap-1 ">
+                    {haveFavorites && (
                         <div>
                             <h1 className='w-full flex text-[0.8rem] pt-4 justify-start ml-4 text-muted-foreground'>Favorites</h1>
-                            <FavoriteList parentFavoriteId={"null"} />
+                            <FavoriteList parentFavoriteId={"null"} isChild={false} />
                         </div>
                     )}
 
                     <div>
-                        <h1 className='w-full flex text-[0.8rem] pt-4 justify-start ml-4 text-muted-foreground'>Documents</h1>
+                        <h1 className='w-full flex text-[0.8rem] pt-4 mb-1 justify-start ml-4 text-muted-foreground'>Documents</h1>
                         <DocumentList parendDocumentId={"null"} />
                         <Item
                             onClick={handleCreate}
@@ -188,8 +200,10 @@ export const Navigation = () => {
                                 <Item label="Archived" icon={Trash} />
                             </PopoverTrigger>
                             <PopoverContent
-                                className="p-0 w-72"
+                                className="p-2 w-72"
+                                style={{ boxShadow: "rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.2) 0px 3px 6px, rgba(15, 15, 15, 0.4) 0px 9px 24px"}}
                                 side={isMobile ? "bottom" : "right"}
+                                align='start'
                             >
                                 <TrashBox />
                             </PopoverContent>
@@ -201,12 +215,12 @@ export const Navigation = () => {
             <div
                 ref={navbarref}
                 className={cn(
-                    "fixed top-0 z-[99999] left-60 w-[calc(100%-240px)]",
+                    "fixed top-3 z-[99999] left-60 w-[calc(100%-240px)]",
                     isReseting && "transition-all ease-in-out duration-300",
                     isMobile && "left-0 w-full"
                 )}>
-                <nav className="bg-transparent px-3 py-2 w-full">
-                    {isCollapsed && <MenuIcon onClick={resetWidth} role="button" className="h-6 w-6 text-muted-foreground" />}
+                <nav className={cn(isCollapsed ? "h-6 w-6 text-muted-foreground rounded-sm hover:bg-neutral-200 dark:hover:bg-neutral-600 mx-3 my-2" : "hidden")}>
+                    {isCollapsed && <MenuIcon onClick={resetWidth} role="button" className="h-6 w-6 text-muted-foreground"/>}
                 </nav>
             </div>
         </>

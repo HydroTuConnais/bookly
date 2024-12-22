@@ -85,14 +85,30 @@ export const DocumentRepository = {
     });
   },
 
-  async findFavoriteByParent(userId: string, parentDocumentId: string | null) {
+  async findFavoriteByParent(userId: string) {
+    console.log("forparent")
     return await prisma.document.findMany({
-      where: { userId, parentDocumentId, isFavorite: true },
+      where: { userId, isFavorite: true, isArchived: false },
       orderBy: { createdAt: 'asc' },
       include: { _count: { select: { children: true } } }
     });
   },
 
+  async findFavoriteForChild(userId: string, parentDocumentId: string | null) {
+    console.log("forchild")
+    return await prisma.document.findMany({
+      where: { userId, parentDocumentId, isArchived: false },
+      orderBy: { createdAt: 'asc' },
+      include: { _count: { select: { children: true } } }
+    });
+  },
+
+  async countFavorite(userId: string) {
+    return await prisma.document.count({
+      where: { userId, isFavorite: true, isArchived: false }
+    });
+  },
+  
   /*--------------------------------------------------------------*/
 
   async addSharedUser(documentId: string, userId: string) {

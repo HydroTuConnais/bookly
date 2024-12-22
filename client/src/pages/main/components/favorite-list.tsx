@@ -9,11 +9,13 @@ interface FavoriteListProps {
     parentFavoriteId: string | null;
     level?: number;
     data?: string[];
+    isChild: boolean;
 }
 
 export const FavoriteList: React.FC<FavoriteListProps> = ({
     parentFavoriteId,
     level = 0,
+    isChild = false
 }: FavoriteListProps) => {
     const params = useParams();
     const [expanded, setExpanded] = React.useState<Record<string, boolean>>({});
@@ -32,8 +34,11 @@ export const FavoriteList: React.FC<FavoriteListProps> = ({
 
 
     useEffect(() => {
-        getSidebarFavoriteDocuments({ parentFavoriteId })
+        console.log("useEffect");
+        console.log("parentFavoriteId", parentFavoriteId);
+        getSidebarFavoriteDocuments({ parentFavoriteId, isChild})
             .then((documents) => {
+                console.log("setFavoriteList", documents);
                 setFavoriteList(documents);
             })
             .catch((error) => {
@@ -53,6 +58,13 @@ export const FavoriteList: React.FC<FavoriteListProps> = ({
 
     return (
         <>
+            <div className="hidden last:block text-xs text-center text-muted-foreground pb-2">
+                <div className="animate-pulse group flex items-center h-[30px] w-full py-[5px] px-[8px]">
+                    <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded mr-1"></div>
+                    <span className="m-1 w-full h-4 bg-neutral-200 dark:bg-neutral-700 rounded"></span>
+                    <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-10"></div>
+                </div>
+            </div>
             {
                 favoriteList.map((document) => (
                     <div key={document.id}>
@@ -74,6 +86,7 @@ export const FavoriteList: React.FC<FavoriteListProps> = ({
                             <FavoriteList
                                 parentFavoriteId={document.id}
                                 level={level + 1}
+                                isChild={true}
                             />
                         )}
                     </div>

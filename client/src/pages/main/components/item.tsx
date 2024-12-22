@@ -41,7 +41,7 @@ export const Item = ({
 
 }: ItemProps) => {
     const { user } = useAuth();
-    const { createDocument, archiveDocument, favoriteDocument, unfavoriteDocument } = useDocuments();
+    const { createDocument, archiveDocument,favorites, favoriteDocument, unfavoriteDocument } = useDocuments();
     const navigate = useNavigate();
 
     const [isHovered, setIsHovered] = useState(false);
@@ -153,7 +153,7 @@ export const Item = ({
                 paddingLeft: level ? `${(level * 12) + 12}px` : "12px"
             }}
             className={cn(
-                "group min-h-[27px] text-sm py-1 pr-3 w-full hover:bg-primary/5 flex items-center text-muted-foreground font-medium",
+                "group flex items-center h-[30px] w-full text-[14px] py-[5px] px-[8px] hover:bg-neutral-200 hover:dark:bg-neutral-700 hover:rounded-md text-muted-foreground font-medium",
                 active && "bg-primary/5 text-primary"
             )}
             onMouseEnter={() => {
@@ -166,24 +166,26 @@ export const Item = ({
         >
             {!!id && (
                 // Cheveron expand
-                <div>
+                <div className="flex flex-col gap-4">
                     {isHovered && childCount > 0 ? (
                         <div
                             role="button"
-                            className="h-full rounded-sm p-[0.2rem] hover:bg-neutral-300 dark:bg-neutral-600 mr-1"
+                            className="w-[24.4px] select-none p-[0.2rem] hover:bg-primary/5 rounded-md transition-colors duration-200 flex items-center justify-center"
                             onClick={handleExpand}
                         >
                             <CheveronIcon
-                                className="shrink-0 w-4 h-[18px] text-muted-foreground"
+                                className="shrink-0 w-4 h-4 text-muted-foreground"
                             />
                         </div>
                     ) : (
                         documentIcon ? (
-                            <div className="shrink-0 h-[18px]">
-                                {documentIcon}
+                            <div className="w-[24.4px] select-none p-[0.2rem] hover:bg-primary/5 rounded-md transition-colors duration-200 flex items-center justify-center">
+                                <div className="shrink-0 w-5 h-5 text-muted-foreground">
+                                    {documentIcon}
+                                </div>
                             </div>
                         ) : (
-                            <Icon className="shrink-0 h-[18px] mr-2 text-muted-foreground" />
+                            <Icon />
                         )
                     )}
                 </div>
@@ -191,10 +193,10 @@ export const Item = ({
 
             {!id && (
                 <div>
-                    <Icon className="shrink-0 h-[18px] mr-2 text-muted-foreground" />
+                    <Icon className="shrink-0 h-4 mr-2 text-muted-foreground" />
                 </div>
             )}
-            <span className="truncate">
+            <span className="m-1 truncate">
                 {label}
             </span>
             {isSearch && (
@@ -203,7 +205,7 @@ export const Item = ({
                 </kbd>
             )}
             {!!id && (
-                <div className="ml-auto flex items-center gap-x-2">
+                <div className="flex w-0 group-hover:w-auto ml-auto justify-end items-center gap-x-1">
                     <DropdownMenu>
                         <DropdownMenuTrigger
                             onClick={(e) => e.stopPropagation()}
@@ -211,24 +213,24 @@ export const Item = ({
                         >
                             <div
                                 role="button"
-                                className="opacity-0 group-hover:opacity-100 h-full rounded-sm hover:bg-neutral-300 dark:bg-neutral-600"
+                                className="w-[24.4px] p-[0.2rem] opacity-0 group-hover:opacity-100 rounded-sm hover:bg-primary/5"
                             >
-                                <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+                                <MoreHorizontal className="h-4 w-4" />
                             </div>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
                             className="w-60"
                             align="start"
                             side="right"
+                            style={{ boxShadow: "rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.2) 0px 3px 6px, rgba(15, 15, 15, 0.4) 0px 9px 24px"}}
                             forceMount
                             onClick={(e) => e.stopPropagation()}
                         >
-
                             {/*Favorite List */}
                             {isFavorite && (
                                 <DropdownMenuItem onClick={unFavorite}>
                                     <StarOff className="h-4 w-4 mr-1" />
-                                    Remove to favorites
+                                    Remove from favorites
                                 </DropdownMenuItem>
                             )}
 
@@ -244,7 +246,7 @@ export const Item = ({
                                 <>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem onClick={onArchive}>
-                                        <Trash className="h-4 w-4 mr-" />
+                                        <Trash className="h-4 w-4 mr-1" />
                                         Delete
                                     </DropdownMenuItem>
                                 </>
@@ -258,7 +260,7 @@ export const Item = ({
                     <div
                         role="button"
                         onClick={onCreate}
-                        className="opacity-0 group-hover:opacity-100 h-full ml-auto rounded-sm hover:bg-neutral-300 dark:bg-neutral-600"
+                        className="w-[24.4px] p-[0.2rem] opacity-0 group-hover:opacity-100 rounded-sm hover:bg-primary/5"
                     >
                         <Plus className="h-4 w-4 text-muted-foreground" />
                     </div>

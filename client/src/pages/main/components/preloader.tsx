@@ -6,7 +6,7 @@ export const Preloader = () => {
         <div className="preloader z-[9999]">
             <div className="texts-container gap-2">
                 <span>Welcome to,</span>
-                <span>Notion Lite</span>
+                <span>Bookly</span>
             </div>
         </div>
     );

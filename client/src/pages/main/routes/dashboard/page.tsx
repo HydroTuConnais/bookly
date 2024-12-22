@@ -57,7 +57,7 @@ const DocumentsPage = () => {
                             alt="Empty"
                         />
                         <h2 className="text-lg font-medium">
-                            Bienvenue {user?.name}&apos;s Notion Lite
+                            Bienvenue {user?.name}&apos;s Bookly
                         </h2>
                         <Button onClick={handleCreate}>
                             <PlusCircle className="h-4 w-4 mr-2" />

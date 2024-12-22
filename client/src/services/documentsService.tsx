@@ -96,11 +96,21 @@ export const DocumentService = {
         }
     },
 
-    async getSidebarFavoriteDocuments({ token, userid, parentFavoriteId }: { token: string, userid: string, parentFavoriteId: string | null }) {
+    async getSidebarFavoriteDocuments({ token, userid, parentFavoriteId, isChild}: { token: string, userid: string, parentFavoriteId: string | null, isChild: boolean }) {
         try {
-            const data = await fetchData({ method: "GET", endpoint: "/documents/favorite", params: { parentFavorite: parentFavoriteId }, header: { UserId: userid }, token });
+            const data = await fetchData({ method: "GET", endpoint: "/documents/favorite", params: { parentFavorite: parentFavoriteId, forChild: isChild}, header: { UserId: userid}, token });
             return data;
         } catch (error) {
+            handleErrors(error);
+        }
+    },
+
+    async getSidebarCountFavoriteDocuments({ token, userid }: { token: string, userid: string }) {
+        try {
+            const data = await fetchData({ method: "GET", endpoint: "/documents/favorite/count", header: { UserId: userid }, token });
+            return data;
+        }
+        catch (error) {
             handleErrors(error);
         }
     },

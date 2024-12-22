@@ -27,7 +27,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
     };
 
     const [documentsList, setDocumentsList] = useState<any[]>([]);
-    const { documents, getSidebarDocuments } = useDocuments();
+    const { documents, getSidebarDocuments, favorites} = useDocuments();
 
 
 
@@ -40,7 +40,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                 console.error("Error fetching documents:", error);
             });
 
-    }, [documents, parendDocumentId]);
+    }, [documents, parendDocumentId, favorites]);
 
     const onRedirect = (documentId: string) => {
         navigate(`/documents/${documentId}`);
@@ -54,18 +54,13 @@ export const DocumentList: React.FC<DocumentListProps> = ({
 
     return (
         <>
-            <p
-                style={{
-                    paddingLeft: level ? `${(level * 12) + 25}px` : undefined
-                }}
-                className={cn(
-                    "hidden text-sm font-medium text-muted-foreground/80",
-                    expanded && "last:block",
-                    level === 0 && "hidden",
-                )}
-            >
-                No pages inside
-            </p>
+            <div className="hidden last:block text-xs text-center text-muted-foreground pb-2">
+                <div className="animate-pulse group flex items-center h-[30px] w-full py-[5px] px-[8px]">
+                    <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded mr-1"></div>
+                    <span className="m-1 w-full h-4 bg-neutral-200 dark:bg-neutral-700 rounded"></span>
+                    <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-10"></div>
+                </div>
+            </div>
             {
                 documentsList.map((document) => (
                     <div key={document.id}>

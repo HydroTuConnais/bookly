@@ -19,7 +19,7 @@ export const Navbar: React.FC = () => {
       <div className="md:ml-auto md:justify-end justify-between w-full flex items-center gap-x-2">
         <>
           <Button size="sm" onClick={() => openPopup('login')}>
-            Avoir NotionLite
+            Avoir Bookly
           </Button>
           <ModeToggle />
         </>

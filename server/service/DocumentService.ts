@@ -190,7 +190,7 @@ export const DocumentService = {
     }
 
     try {
-      await DocumentRepository.favoriteDocument(id, userId);
+      return await DocumentRepository.favoriteDocument(id, userId);
     }
     catch (error) {
       throw new ErrorClass(500, 'Error process favoriting document');
@@ -204,24 +204,34 @@ export const DocumentService = {
     }
 
     try {
-      await DocumentRepository.unfavoriteDocument(id, userId);
+      return await DocumentRepository.unfavoriteDocument(id, userId);
     }
     catch (error) {
       throw new ErrorClass(500, 'Error process unfavoriting document');
     }
   },
 
-  async getfavoriteDocuments(userId: string, parentFavoriteId: string | null) {
+  async getfavoriteDocuments(userId: string, parentFavoriteId: string | null , forChild: boolean) {
 
     if (parentFavoriteId === "null") {
       parentFavoriteId = null;
     }
 
     try {
-      return await DocumentRepository.findFavoriteByParent(userId, parentFavoriteId);
+      if(forChild) return await DocumentRepository.findFavoriteForChild(userId, parentFavoriteId);
+      else return await DocumentRepository.findFavoriteByParent(userId);
     }
     catch (error) {
       throw new ErrorClass(500, 'Error process getting favorite documents');
+    }
+  },
+
+  async getNumberOfFavoriteDocuments(userId: string) {
+    try {
+      return await DocumentRepository.countFavorite(userId);
+    }
+    catch (error) {
+      throw new ErrorClass(500, 'Error process getting number of favorite documents');
     }
   },
 

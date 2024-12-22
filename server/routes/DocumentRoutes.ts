@@ -19,6 +19,7 @@ router.post('/documents/:id/restore', authenticate, DocumentController.restoreDo
 router.post('/documents/:id/favorite', authenticate, DocumentController.favoriteDocument);
 router.post('/documents/:id/unfavorite', authenticate, DocumentController.unfavoriteDocument);
 router.get('/documents/favorite', authenticate, DocumentController.getfavoriteDocuments);
+router.get('/documents/favorite/count', authenticate, DocumentController.getcountFavoriteDocuments);
 
 router.post('/documents/:id/shared', authenticate, DocumentController.shareDocument);
 router.get('/documents/shared', authenticate, DocumentController.getSharedDocuments);

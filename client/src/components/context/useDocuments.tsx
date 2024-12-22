@@ -31,7 +31,8 @@ interface DocumentContextProps {
     archiveDocument: (params: { id: string }) => Promise<void>;
     restoreDocument: (params: { id: string }) => Promise<void>;
 
-    getSidebarFavoriteDocuments: (params: { parentFavoriteId: string | null }) => Promise<any[]>;
+    getSidebarFavoriteDocuments: (params: { parentFavoriteId: string | null, isChild: boolean }) => Promise<any[]>;
+    getSidebarCountFavoriteDocuments : () => Promise<number>;
 
     favoriteDocument: (params: { documentId: string }) => Promise<void>;
     unfavoriteDocument: (params: { documentId: string }) => Promise<void>;
@@ -90,7 +91,6 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
             setError(null);
             try {
                 const document = await DocumentService.getDocument({ token: token, id: id });
-                console.log('Fetched document:', document);
             } catch (err: any) {
                 setError('Failed to fetch document');
                 console.error(err);
@@ -191,12 +191,25 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
 
     /*--------------------------------------------------------------*/
 
-    const getSidebarFavoriteDocuments = async ({ parentFavoriteId }: { parentFavoriteId: string | null }) => {
+    const getSidebarFavoriteDocuments = async ({ parentFavoriteId, isChild}: { parentFavoriteId: string | null, isChild: boolean}) => {
+        console.log("getSidebarFavoriteDocuments", parentFavoriteId);
         if (token && user) {
             setError(null); // Reset error state
             try {
-                const favoriteDocuments = await DocumentService.getSidebarFavoriteDocuments({ token, userid: user.id, parentFavoriteId });
-                console.log('Favorite documents:', favoriteDocuments);
+                const favoriteDocuments = await DocumentService.getSidebarFavoriteDocuments({ token, userid: user.id, parentFavoriteId, isChild});
+                return favoriteDocuments;
+            } catch (err: any) {
+                setError('Failed to fetch favorite documents');
+                console.error(err);
+            }
+        }
+    };
+
+    const getSidebarCountFavoriteDocuments = async () => {
+        if (token && user) {
+            setError(null); // Reset error state
+            try {
+                const favoriteDocuments = await DocumentService.getSidebarCountFavoriteDocuments({ token, userid: user.id });
                 return favoriteDocuments;
             } catch (err: any) {
                 setError('Failed to fetch favorite documents');
@@ -272,6 +285,7 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
                 archiveDocument,
                 restoreDocument,
                 getSidebarFavoriteDocuments,
+                getSidebarCountFavoriteDocuments,
                 favoriteDocument,
                 unfavoriteDocument
             }}
