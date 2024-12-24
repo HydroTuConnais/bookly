@@ -94,7 +94,7 @@ export const TrashBox = () => {
                     </div>
                 ) : (
                     <p className="hidden last:block text-xs text-center text-muted-foreground pb-2">
-                        No document
+                        No document here
                     </p>
                 )}
                 {filteredDocuments.map((document) => (
