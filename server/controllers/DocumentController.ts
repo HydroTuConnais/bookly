@@ -4,20 +4,6 @@ import { AuthService } from '../service/AuthService';
 import { ErrorClass } from '../utils/Error';
 
 export const DocumentController = {
-
-  async getDocument(req: Request, res: Response) {
-    const id = req.params.id;
-    const userId = req.headers.userid as string;
-
-    try {
-      const document = await DocumentService.getDocument(id, userId);
-      res.status(200).json(document);
-    }
-    catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
-    }
-  },
-
   async createDocument(req: Request, res: Response) {
     const { title, parentDocumentId } = req.body;
     const userId = req.headers.userid as string;
@@ -26,6 +12,19 @@ export const DocumentController = {
       const document = await DocumentService.createDocument(title, parentDocumentId, userId);
       res.status(201).json(document);
 
+    }
+    catch (error: ErrorClass | any) {
+      res.status(error.status).json({ error: error.message });
+    }
+  },
+
+  async getDocument(req: Request, res: Response) {
+    const id = req.params.id;
+    const userId = req.headers.userid as string;
+
+    try {
+      const document = await DocumentService.getDocument(id, userId);
+      res.status(200).json(document);
     }
     catch (error: ErrorClass | any) {
       res.status(error.status).json({ error: error.message });
@@ -45,36 +44,6 @@ export const DocumentController = {
       res.status(error.status).json({ error: error.message });
     }
   },
-
-  async deleteDocument(req: Request, res: Response) {
-    const id = req.params.id;
-    const userId = req.headers.userid as string;
-
-    try {
-      await DocumentService.deleteDocument(id, userId);
-      res.status(200).json({ success: true });
-    }
-    catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
-    }
-  },
-
-  /*--------------------------------------------------------------*/
-
-  async getSidebarDocuments(req: Request, res: Response) {
-    const parentDocumentId = req.query.parentDocument as string | null;
-    const userId = req.headers.userid as string;
-
-    try {
-      const documents = await DocumentService.getSidebarDocuments(userId, parentDocumentId);
-      res.status(200).json(documents);
-    }
-    catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
-    }
-  },
-
-  /*--------------------------------------------------------------*/
 
   async archiveDocument(req: Request, res: Response) {
     const id = req.params.id;
@@ -102,6 +71,33 @@ export const DocumentController = {
     }
   },
 
+  async deleteDocument(req: Request, res: Response) {
+    const id = req.params.id;
+    const userId = req.headers.userid as string;
+
+    try {
+      await DocumentService.deleteDocument(id, userId);
+      res.status(200).json({ success: true });
+    }
+    catch (error: ErrorClass | any) {
+      res.status(error.status).json({ error: error.message });
+    }
+  },
+
+  async getSidebarDocuments(req: Request, res: Response) {
+    const parentDocumentId = req.query.parentDocument as string | null;
+    const userId = req.headers.userid as string;
+
+    try {
+      const documents = await DocumentService.getSidebarDocuments(userId, parentDocumentId);
+      console.log(documents);
+      res.status(200).json(documents);
+    }
+    catch (error: ErrorClass | any) {
+      res.status(error.status).json({ error: error.message });
+    }
+  },
+
   async getArchivedDocuments(req: Request, res: Response) {
     const userId = req.headers.userid as string;
 
@@ -113,70 +109,6 @@ export const DocumentController = {
       res.status(error.status).json({ error: error.message });
     }
   },
-
-  /*--------------------------------------------------------------*/
-
-  async favoriteDocument(req: Request, res: Response) {
-    const id = req.params.id;
-    const userId = req.headers.userid as string;
-
-    try {
-      const documents = await DocumentService.favoriteDocument(id, userId);
-      res.status(200).json(documents);
-    }
-    catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
-    }
-  },
-
-  async unfavoriteDocument(req: Request, res: Response) {
-    const id = req.params.id;
-    const userId = req.headers.userid as string;
-
-    try {
-      const documents = await DocumentService.unfavoriteDocument(id, userId);
-      res.status(200).json(documents);
-    }
-    catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
-    }
-  },
-
-  async getfavoriteDocuments(req: Request, res: Response) {
-    const parentFavoriteId = req.query.parentFavorite as string | null;
-    console.log("type", typeof(req.query.forChild));
-    console.log("forChildReq", req.query.forChild);
-    const forChild = req.query.forChild === 'true';
-    console.log("forChild", forChild);
-
-    const userId = req.headers.userid as string;
-
-    console.log("parentFavoriteId", parentFavoriteId);
-    console.log("forChild", forChild);
-    
-    try {
-      const documents = await DocumentService.getfavoriteDocuments(userId, parentFavoriteId, forChild);
-      console.log(documents);
-      res.status(200).json(documents);
-    }
-    catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
-    }
-  },
-
-  async getcountFavoriteDocuments(req: Request, res: Response) {
-    const userId = req.headers.userid as string;
-
-    try {
-      const count = await DocumentService.getNumberOfFavoriteDocuments(userId);
-      res.status(200).json(count);
-    }
-    catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
-    }
-  },
-
-  /*--------------------------------------------------------------*/
 
   async shareDocument(req: Request, res: Response) {
     const userId = req.headers.userid as string;
