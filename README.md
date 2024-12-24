@@ -71,8 +71,8 @@ Ce projet est une application de gestion de projets et de documents inspirée de
 ### Étapes :
 1. Clonez le dépôt :
    ```bash
-   git clone https://github.com/username/notionlite.git
-   cd notionlite
+   git clone https://gitlab.com/hydro-dev/bookly.git bookly
+   cd bookly
    ```
 
 2. Installez les dépendances pour le front-end :
@@ -83,7 +83,7 @@ Ce projet est une application de gestion de projets et de documents inspirée de
 
 3. Installez les dépendances pour le back-end :
    ```bash
-   cd ../server
+   cd server
    npm install
    ```
 
