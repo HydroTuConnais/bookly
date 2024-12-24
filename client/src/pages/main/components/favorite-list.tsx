@@ -5,48 +5,52 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Item } from "./item";
 import { BookTextIcon } from "./icon/file-icon";
 
-interface DocumentListProps {
-    parendDocumentId: string | null;
+interface FavoriteListProps {
+    parentFavoriteId: string | null;
     level?: number;
     data?: string[];
+    isChild: boolean;
 }
 
-export const DocumentList: React.FC<DocumentListProps> = ({
-    parendDocumentId,
+export const FavoriteList: React.FC<FavoriteListProps> = ({
+    parentFavoriteId,
     level = 0,
-}: DocumentListProps) => {
+    isChild = false
+}: FavoriteListProps) => {
     const params = useParams();
     const [expanded, setExpanded] = React.useState<Record<string, boolean>>({});
     const navigate = useNavigate();
 
     const onExpand = (documentId: string) => {
+        console.log("onExpand", documentId);
         setExpanded(prevExpanded => ({
             ...prevExpanded,
             [documentId]: !prevExpanded[documentId]
         }));
     };
 
-    const [documentsList, setDocumentsList] = useState<any[]>([]);
-    const { documents, getSidebarDocuments, favorites} = useDocuments();
-
+    const [favoriteList, setFavoriteList] = useState<any[]>([]);
+    const { favorites, getSidebarFavoriteDocuments } = useDocuments();
 
 
     useEffect(() => {
-        getSidebarDocuments({ parentDocumentId: parendDocumentId })
-            .then((data) => {
-                setDocumentsList(data);
+        console.log("useEffect");
+        console.log("parentFavoriteId", parentFavoriteId);
+        getSidebarFavoriteDocuments({ parentFavoriteId, isChild})
+            .then((documents) => {
+                console.log("setFavoriteList", documents);
+                setFavoriteList(documents);
             })
             .catch((error) => {
                 console.error("Error fetching documents:", error);
             });
-
-    }, [documents, parendDocumentId, favorites]);
+    }, [favorites, parentFavoriteId]);
 
     const onRedirect = (documentId: string) => {
         navigate(`/documents/${documentId}`);
     };
 
-    if (documentsList === undefined) {
+    if (favoriteList === undefined) {
         <>
             <div>Loading...</div>
         </>
@@ -62,10 +66,10 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                 </div>
             </div>
             {
-                documentsList.map((document) => (
+                favoriteList.map((document) => (
                     <div key={document.id}>
                         <Item
-                            category="document"
+                            category="favorite"
                             id={document.id}
                             onClick={() => onRedirect(document.id)}
                             label={document.title}
@@ -79,9 +83,10 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                             isFavorite={document.isFavorite}
                         />
                         {expanded[document.id] && (
-                            <DocumentList
-                                parendDocumentId={document.id}
+                            <FavoriteList
+                                parentFavoriteId={document.id}
                                 level={level + 1}
+                                isChild={true}
                             />
                         )}
                     </div>

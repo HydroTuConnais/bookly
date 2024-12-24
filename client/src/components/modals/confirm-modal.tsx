@@ -40,7 +40,7 @@ export const ConfirmModal = ({
           {children}
         </AlertDialogTrigger>
         <AlertDialogContent>
-          <AlertDialogHeader className="dark:text-white">
+          <AlertDialogHeader>
             <AlertDialogTitle>
               Are you sure you want to delete?
             </AlertDialogTitle>
