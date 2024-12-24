@@ -1,4 +1,4 @@
-# Bookly - React + Express + JWT
+# NotionLite - React + Express + JWT
 
 Ce projet est une application de gestion de projets et de documents inspirée de Notion. Elle utilise **React** pour le front-end, **Express** pour le back-end, et **JWT (JSON Web Tokens)** pour la gestion de l'authentification.
 

@@ -33,7 +33,7 @@ const AlertDialogContent = forwardRef<React.ElementRef<typeof AlertDialogPrimiti
       <AlertDialogPrimitive.Content
         ref={ref}
         className={cn(
-          "fixed top-1/2 left-1/2 z-[99999] w-full max-w-md -translate-x-1/2 -translate-y-1/2 bg-neutral-200 dark:bg-neutral-800 p-6 shadow-md rounded-lg transition-transform duration-200 data-[state=open]:scale-100 data-[state=closed]:scale-95",
+          "fixed top-1/2 left-1/2 z-[99999] w-full max-w-md -translate-x-1/2 -translate-y-1/2 bg-white p-6 shadow-md rounded-lg transition-transform duration-200 data-[state=open]:scale-100 data-[state=closed]:scale-95",
           className
         )}
         {...props}
@@ -81,7 +81,7 @@ const AlertDialogDescription = forwardRef<React.ElementRef<typeof AlertDialogPri
   ({ className, ...props }, ref) => (
     <AlertDialogPrimitive.Description
       ref={ref}
-      className={cn("text-sm text-muted-foreground", className)}
+      className={cn("text-sm text-gray-600", className)}
       {...props}
     />
   )
@@ -106,9 +106,8 @@ const AlertDialogCancel = forwardRef<React.ElementRef<typeof AlertDialogPrimitiv
     <AlertDialogPrimitive.Cancel
       ref={ref}
       className={cn(
-        buttonVariants({ variant: "ghost" }),
+        buttonVariants({ variant: "outline" }),
         "mt-3 sm:mt-0",
-        "hover:bg-neutral-300 dark:hover:bg-neutral-700",
         className
       )}
       {...props}

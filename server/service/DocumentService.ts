@@ -4,33 +4,6 @@ import { ErrorClass } from '../utils/Error';
 
 
 export const DocumentService = {
-
-  async getDocument(id: string, userId: string) {
-    const document = await DocumentRepository.findDocumentById(id);
-    if (!document) {
-      throw new ErrorClass(401, 'Document not Found');
-    }
-
-    if (document.userId !== userId) {
-      try {
-        const sharedIds = await DocumentRepository.findSharedUserIds(userId, id);
-
-        if (sharedIds != userId) {
-          throw new ErrorClass(401, 'Unauthorized or Not Found');
-        }
-
-        return document;
-      }
-      catch (error) {
-        throw new ErrorClass(401, 'shardIds not found');
-      }
-    }
-
-    if (document.userId == userId) {
-      return document;
-    }
-  },
-
   async createDocument(title: string, parentDocumentId: string | null, userId: string) {
 
     if (!title || !userId) {
@@ -58,7 +31,33 @@ export const DocumentService = {
       });
     }
     catch (error) {
-      throw new ErrorClass(404, 'Error process creating document');
+      throw new ErrorClass(404, 'Error creating document');
+    }
+  },
+
+  async getDocument(id: string, userId: string) {
+    const document = await DocumentRepository.findDocumentById(id);
+    if (!document) {
+      throw new ErrorClass(401, 'Document not Found');
+    }
+
+    if (document.userId !== userId) {
+      try {
+        const sharedIds = await DocumentRepository.findSharedUserIds(userId, id);
+
+        if (sharedIds != userId) {
+          throw new ErrorClass(401, 'Unauthorized or Not Found');
+        }
+
+        return document;
+      }
+      catch (error) {
+        throw new ErrorClass(401, 'shardIds not found');
+      }
+    }
+
+    if (document.userId == userId) {
+      return document;
     }
   },
 
@@ -76,41 +75,18 @@ export const DocumentService = {
       await DocumentRepository.updateDocument(id, { title, content });
     }
     catch (error) {
-      throw new ErrorClass(404, 'Error process updating document');
+      throw new ErrorClass(404, 'Error updating document');
     }
   },
 
-  async deleteDocument(id: string, userId: string) {
-    const document = await DocumentRepository.findDocumentById(id);
-    if (!document || document.userId !== userId) {
-      throw new ErrorClass(401, 'Unauthorized or Not Found');
-    }
-
+  async parentDocumentExists(parentDocumentId: string | null) {
     try {
-      await DocumentRepository.deleteDocument(id);
+      return await DocumentRepository.findDocumentById(parentDocumentId);
     }
     catch (error) {
-      throw new ErrorClass(500, 'Error process deleting document');
+      throw new ErrorClass(404, 'Error finding parent document');
     }
   },
-
-  /*--------------------------------------------------------------*/
-
-  async getSidebarDocuments(userId: string, parentDocumentId: string | null) {
-
-    if (parentDocumentId === "null") {
-      parentDocumentId = null;
-    }
-
-    try {
-      return await DocumentRepository.findDocumentsByParent(userId, parentDocumentId, false);
-    }
-    catch (error) {
-      throw new ErrorClass(500, 'Error process getting sidebar documents');
-    }
-  },
-
-  /*--------------------------------------------------------------*/
 
   async archiveDocument(id: string, userId: string) {
     const document = await DocumentRepository.findDocumentById(id);
@@ -130,7 +106,7 @@ export const DocumentService = {
       await DocumentRepository.updateDocument(id, { isArchived: true });
     }
     catch (error) {
-      throw new ErrorClass(500, 'Error process finding parent document');
+      throw new ErrorClass(500, 'Error finding parent document');
     }
 
 
@@ -138,7 +114,7 @@ export const DocumentService = {
       await recursiveArchive(id);
     }
     catch (error) {
-      throw new ErrorClass(500, 'Error process recusive archiving document');
+      throw new ErrorClass(500, 'Error recusive archiving document');
     }
   },
 
@@ -160,7 +136,7 @@ export const DocumentService = {
       await DocumentRepository.updateDocument(id, { isArchived: false });
     }
     catch (error) {
-      throw new ErrorClass(500, 'Error process restore document');
+      throw new ErrorClass(500, 'Error restore document');
     }
 
 
@@ -168,7 +144,36 @@ export const DocumentService = {
       await recursiveRestore(id);
     }
     catch (error) {
-      throw new ErrorClass(500, 'Error process recusive restore document');
+      throw new ErrorClass(500, 'Error recusive restore document');
+    }
+  },
+
+
+  async deleteDocument(id: string, userId: string) {
+    const document = await DocumentRepository.findDocumentById(id);
+    if (!document || document.userId !== userId) {
+      throw new ErrorClass(401, 'Unauthorized or Not Found');
+    }
+
+    try {
+      await DocumentRepository.deleteDocument(id);
+    }
+    catch (error) {
+      throw new ErrorClass(500, 'Error deleting document');
+    }
+  },
+
+  async getSidebarDocuments(userId: string, parentDocumentId: string | null) {
+
+    if (parentDocumentId === "null") {
+      parentDocumentId = null;
+    }
+
+    try {
+      return await DocumentRepository.findDocumentsByParent(userId, parentDocumentId, false);
+    }
+    catch (error) {
+      throw new ErrorClass(500, 'Error getting sidebar documents');
     }
   },
 
@@ -177,65 +182,9 @@ export const DocumentService = {
       return await DocumentRepository.findArchivedDocuments(userId);
     }
     catch (error) {
-      throw new ErrorClass(500, 'Error process getting archived documents');
+      throw new ErrorClass(500, 'Error getting archived documents');
     }
   },
-
-  /*--------------------------------------------------------------*/
-
-  async favoriteDocument(id: string, userId: string) {
-    const document = await DocumentRepository.findDocumentById(id);
-    if (!document || document.userId !== userId) {
-      throw new ErrorClass(401, 'Unauthorized or Not Found');
-    }
-
-    try {
-      return await DocumentRepository.favoriteDocument(id, userId);
-    }
-    catch (error) {
-      throw new ErrorClass(500, 'Error process favoriting document');
-    }
-  },
-
-  async unfavoriteDocument(id: string, userId: string) {
-    const document = await DocumentRepository.findDocumentById(id);
-    if (!document || document.userId !== userId) {
-      throw new ErrorClass(401, 'Unauthorized or Not Found');
-    }
-
-    try {
-      return await DocumentRepository.unfavoriteDocument(id, userId);
-    }
-    catch (error) {
-      throw new ErrorClass(500, 'Error process unfavoriting document');
-    }
-  },
-
-  async getfavoriteDocuments(userId: string, parentFavoriteId: string | null , forChild: boolean) {
-
-    if (parentFavoriteId === "null") {
-      parentFavoriteId = null;
-    }
-
-    try {
-      if(forChild) return await DocumentRepository.findFavoriteForChild(userId, parentFavoriteId);
-      else return await DocumentRepository.findFavoriteByParent(userId);
-    }
-    catch (error) {
-      throw new ErrorClass(500, 'Error process getting favorite documents');
-    }
-  },
-
-  async getNumberOfFavoriteDocuments(userId: string) {
-    try {
-      return await DocumentRepository.countFavorite(userId);
-    }
-    catch (error) {
-      throw new ErrorClass(500, 'Error process getting number of favorite documents');
-    }
-  },
-
-  /*--------------------------------------------------------------*/
 
   async shareDocument(documentId: string, userId: string, sharedEmail: string) {
     if (!documentId || !userId) {
@@ -260,7 +209,7 @@ export const DocumentService = {
       await DocumentRepository.addSharedUser(documentId, sharedUserId);
     }
     catch (error) {
-      throw new ErrorClass(500, 'Error process sharing document');
+      throw new ErrorClass(500, 'Error sharing document');
     }
   },
 
@@ -269,18 +218,7 @@ export const DocumentService = {
       return await DocumentRepository.findSharedDocuments(userId);
     }
     catch (error) {
-      throw new ErrorClass(500, 'Error process getting shared documents');
+      throw new ErrorClass(500, 'Error getting shared documents');
     }
-  },
-
-  /*--------------------------------------------------------------*/
-
-  async parentDocumentExists(parentDocumentId: string | null) {
-    try {
-      return await DocumentRepository.findDocumentById(parentDocumentId);
-    }
-    catch (error) {
-      throw new ErrorClass(404, 'Error process finding parent document');
-    }
-  },
+  }
 };

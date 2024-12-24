@@ -1,6 +1,6 @@
 import { useDocuments } from "@/components/context/useDocuments";
 import { cn } from "@/lib/utils";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Item } from "./item";
 import { BookTextIcon } from "./icon/file-icon";
@@ -20,27 +20,28 @@ export const DocumentList: React.FC<DocumentListProps> = ({
     const navigate = useNavigate();
 
     const onExpand = (documentId: string) => {
+        console.log("onExpand", documentId);
         setExpanded(prevExpanded => ({
             ...prevExpanded,
             [documentId]: !prevExpanded[documentId]
         }));
     };
 
-    const [documentsList, setDocumentsList] = useState<any[]>([]);
-    const { documents, getSidebarDocuments, favorites} = useDocuments();
-
-
+    const [documentsList, setDocumentsList] = React.useState<any[]>([]);
+    const { documents, getSidebarDocuments } = useDocuments();
 
     useEffect(() => {
+
         getSidebarDocuments({ parentDocumentId: parendDocumentId })
             .then((data) => {
                 setDocumentsList(data);
+                data.forEach(doc => console.log(doc._count));
             })
             .catch((error) => {
                 console.error("Error fetching documents:", error);
             });
 
-    }, [documents, parendDocumentId, favorites]);
+    }, [documents, parendDocumentId]);
 
     const onRedirect = (documentId: string) => {
         navigate(`/documents/${documentId}`);
@@ -54,18 +55,22 @@ export const DocumentList: React.FC<DocumentListProps> = ({
 
     return (
         <>
-            <div className="hidden last:block text-xs text-center text-muted-foreground pb-2">
-                <div className="animate-pulse group flex items-center h-[30px] w-full py-[5px] px-[8px]">
-                    <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded mr-1"></div>
-                    <span className="m-1 w-full h-4 bg-neutral-200 dark:bg-neutral-700 rounded"></span>
-                    <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-10"></div>
-                </div>
-            </div>
+            <p
+                style={{
+                    paddingLeft: level ? `${(level * 12) + 25}px` : undefined
+                }}
+                className={cn(
+                    "hidden text-sm font-medium text-muted-foreground/80",
+                    expanded && "last:block",
+                    level === 0 && "hidden",
+                )}
+            >
+                No pages inside
+            </p>
             {
                 documentsList.map((document) => (
                     <div key={document.id}>
                         <Item
-                            category="document"
                             id={document.id}
                             onClick={() => onRedirect(document.id)}
                             label={document.title}
@@ -76,7 +81,6 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                             onExpand={() => onExpand(document.id)}
                             expanded={expanded[document.id]}
                             childCount={document._count.children}
-                            isFavorite={document.isFavorite}
                         />
                         {expanded[document.id] && (
                             <DocumentList

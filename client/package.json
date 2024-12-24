@@ -1,5 +1,5 @@
 {
-  "name": "bookly-react",
+  "name": "notionlite-react",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -28,7 +28,7 @@
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.459.0",
     "motion": "^11.15.0",
-    "bookly-react": "file:",
+    "notionlite-react": "file:",
     "os": "^0.1.2",
     "path": "^0.12.7",
     "path-browserify": "^1.0.1",
