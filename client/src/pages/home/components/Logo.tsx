@@ -5,20 +5,20 @@ export const Logo: React.FC = () => {
   return (
     <Link to="/" className="hidden md:flex items-center gap-x-2">
       <img
-        src="/logo.png"
+        src="/logo.svg"
         width="40"
         height="40"
         alt="Logo"
         className="dark:hidden"
       />
       <img
-        src="/logo-black.png"
+        src="/logo-black.svg"
         width="40"
         height="40"
         alt="Logo"
         className="hidden dark:block"
       />
-      <p className="font-semibold">Bookly</p>
+      <p className="font-semibold">NotionLite</p>
     </Link>
   );
 }

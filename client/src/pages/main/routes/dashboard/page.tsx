@@ -28,7 +28,7 @@ const DocumentsPage = () => {
             title: "new become page Document",
             parentDocumentId: null
         }).then((data) => {
-            // console.log(data);
+            console.log(data);
         }).catch((error) => {
             console.error("Error creating document:", error);
         });
@@ -57,7 +57,7 @@ const DocumentsPage = () => {
                             alt="Empty"
                         />
                         <h2 className="text-lg font-medium">
-                            Bienvenue {user?.name}&apos;s Bookly
+                            Bienvenue {user?.name}&apos;s Notion Lite
                         </h2>
                         <Button onClick={handleCreate}>
                             <PlusCircle className="h-4 w-4 mr-2" />

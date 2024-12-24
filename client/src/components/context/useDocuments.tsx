@@ -13,10 +13,6 @@ interface Document {
 interface DocumentContextProps {
     documents: any[];
     setDocuments: any;
-    favorites: any[];
-    setFavorites: any;
-    haveFavorites: boolean;
-    setHaveFavorites: (value: boolean) => void;
     loading: boolean;
     error: string | null;
     getDocuments: (params: { documentId: string }) => Promise<void>;
@@ -24,20 +20,11 @@ interface DocumentContextProps {
     getDocument: (params: { id: string }) => Promise<void>;
     updateDocument: (params: { id: string, title: string, content: string }) => Promise<void>;
     deleteDocument: (params: { documentId: string }) => Promise<void>;
-
     getSidebarDocuments: (params: { parentDocumentId: string | null }) => Promise<any[]>;
-
     getArchivedDocuments: () => Promise<any[]>;
+    shareDocument: (params: { id: string, sharedEmail: string }) => Promise<void>;
     archiveDocument: (params: { id: string }) => Promise<void>;
     restoreDocument: (params: { id: string }) => Promise<void>;
-
-    getSidebarFavoriteDocuments: (params: { parentFavoriteId: string | null, isChild: boolean }) => Promise<any[]>;
-    getSidebarCountFavoriteDocuments : () => Promise<number>;
-
-    favoriteDocument: (params: { documentId: string }) => Promise<void>;
-    unfavoriteDocument: (params: { documentId: string }) => Promise<void>;
-
-    shareDocument: (params: { id: string, sharedEmail: string }) => Promise<void>;
     //getSharedDocuments: () => Promise<void>;
 }
 
@@ -46,9 +33,6 @@ const DocumentContext = createContext<DocumentContextProps | undefined>(undefine
 export const DocumentProvider = ({ children }: { children: React.ReactNode }) => {
     const { token, user } = useAuth();
     const [documents, setDocuments] = React.useState<any[]>([]);
-    const [favorites, setFavorites] = React.useState<any[]>([]);
-    const [haveFavorites, setHaveFavorites] = useState(false);
-
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -91,6 +75,7 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
             setError(null);
             try {
                 const document = await DocumentService.getDocument({ token: token, id: id });
+                console.log('Fetched document:', document);
             } catch (err: any) {
                 setError('Failed to fetch document');
                 console.error(err);
@@ -128,8 +113,6 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
         }
     };
 
-    /*--------------------------------------------------------------*/
-
     const getSidebarDocuments = async ({ parentDocumentId }: { parentDocumentId: string | null }) => {
         if (token && user) {
             setError(null); // Reset error state
@@ -145,18 +128,31 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
         return [];
     };
 
-    /*--------------------------------------------------------------*/
-
     const getArchivedDocuments = async () => {
         if (token && user) {
             setError(null); // Reset error state
             try {
-                const archivedDocuments = await DocumentService.getArchivedDocuments({ token: token });
-
+                const archivedDocuments = await DocumentService.getArchivedDocuments({ token: token});
+                
                 return archivedDocuments;
             } catch (err: any) {
                 setError('Failed to fetch archived documents');
                 console.error(err);
+            }
+        }
+    };
+
+    const shareDocument = async ({ id, sharedEmail }: { id: string, sharedEmail: string }) => {
+        if (token && user) {
+            setLoading(true);
+            setError(null); // Reset error state
+            try {
+                const sharedDocument = await DocumentService.shareDocument({ token: token, id: id, sharedEmail: sharedEmail });
+            } catch (err: any) {
+                setError('Failed to share document');
+                console.error(err);
+            } finally {
+                setLoading(false);
             }
         }
     };
@@ -189,89 +185,14 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
         }
     };
 
-    /*--------------------------------------------------------------*/
-
-    const getSidebarFavoriteDocuments = async ({ parentFavoriteId, isChild}: { parentFavoriteId: string | null, isChild: boolean}) => {
-        console.log("getSidebarFavoriteDocuments", parentFavoriteId);
-        if (token && user) {
-            setError(null); // Reset error state
-            try {
-                const favoriteDocuments = await DocumentService.getSidebarFavoriteDocuments({ token, userid: user.id, parentFavoriteId, isChild});
-                return favoriteDocuments;
-            } catch (err: any) {
-                setError('Failed to fetch favorite documents');
-                console.error(err);
-            }
-        }
-    };
-
-    const getSidebarCountFavoriteDocuments = async () => {
-        if (token && user) {
-            setError(null); // Reset error state
-            try {
-                const favoriteDocuments = await DocumentService.getSidebarCountFavoriteDocuments({ token, userid: user.id });
-                return favoriteDocuments;
-            } catch (err: any) {
-                setError('Failed to fetch favorite documents');
-                console.error(err);
-            }
-        }
-    };
-
-    const favoriteDocument = async ({ documentId }: { documentId: string }) => {
-        if (token && user) {
-            setError(null); // Reset error state
-            try {
-                const document = await DocumentService.favoriteDocument({ token, userid: user.id, id: documentId });
-                setFavorites(prevDocs => prevDocs.map(doc => doc.id === documentId ? { ...doc, favorite: true } : doc));
-                return document;
-            } catch (err: any) {
-                setError('Failed to favorite document');
-                console.error(err);
-            }
-        }
-    };
-
-    const unfavoriteDocument = async ({ documentId }: { documentId: string }) => {
-        if (token && user) {
-            setError(null); // Reset error state
-            try {
-                const document = await DocumentService.unfavoriteDocument({ token, userid: user.id, id: documentId });
-                setFavorites(prevDocs => prevDocs.map(doc => doc.id === documentId ? { ...doc, favorite: false } : doc));
-                return document;
-            } catch (err: any) {
-                setError('Failed to unfavorite document');
-                console.error(err);
-            }
-        }
-    };
-
-    /*--------------------------------------------------------------*/
-
-    const shareDocument = async ({ id, sharedEmail }: { id: string, sharedEmail: string }) => {
-        if (token && user) {
-            setLoading(true);
-            setError(null); // Reset error state
-            try {
-                const sharedDocument = await DocumentService.shareDocument({ token: token, id: id, sharedEmail: sharedEmail });
-            } catch (err: any) {
-                setError('Failed to share document');
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        }
-    };
+    useEffect(() => {
+    }, [token]);
 
     return (
         <DocumentContext.Provider
             value={{
                 documents,
                 setDocuments,
-                favorites,
-                setFavorites,
-                haveFavorites,
-                setHaveFavorites,
                 loading,
                 error,
                 getDocuments,
@@ -284,10 +205,6 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
                 shareDocument,
                 archiveDocument,
                 restoreDocument,
-                getSidebarFavoriteDocuments,
-                getSidebarCountFavoriteDocuments,
-                favoriteDocument,
-                unfavoriteDocument
             }}
         >
             {children}
