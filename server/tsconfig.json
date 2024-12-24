@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
-        "module": "NodeNext",
+        "module": "commonjs",
+        "target": "ES6",
         "sourceMap": true,
         "allowJs": true,
         "skipLibCheck": true,
@@ -9,10 +10,7 @@
         "incremental": true,
         "outDir": "dist",
         "strict": true,
-        "lib": [
-            "esnext"
-        ],
         "esModuleInterop": true,
-        "baseUrl": "."
+        "baseUrl": ".",
     }
 }

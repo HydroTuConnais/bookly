@@ -1,4 +1,4 @@
-# NotionLite - React + Express + JWT
+# Bookly - React + Express + JWT
 
 Ce projet est une application de gestion de projets et de documents inspirée de Notion. Elle utilise **React** pour le front-end, **Express** pour le back-end, et **JWT (JSON Web Tokens)** pour la gestion de l'authentification.
 
@@ -71,7 +71,7 @@ Ce projet est une application de gestion de projets et de documents inspirée de
 ### Étapes :
 1. Clonez le dépôt :
    ```bash
-   git clone https://gitlab.com/hydro-dev/bookly.git bookly
+   git clone https://github.com/username/bookly.git bookly
    cd bookly
    ```
 
@@ -83,7 +83,7 @@ Ce projet est une application de gestion de projets et de documents inspirée de
 
 3. Installez les dépendances pour le back-end :
    ```bash
-   cd server
+   cd ../server
    npm install
    ```
 

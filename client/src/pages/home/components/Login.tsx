@@ -87,7 +87,7 @@ const LoginPage = (props: Props) => {
                                 </label>
                                 <input
                                     className={cn(
-                                        "mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm bg-white dark:bg-[#1F1F1F] dark:text-gray-100",
+                                        "mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus-within:shadow-[inset_0_0_0_1px_#2383e291,0_0_0_2px_#2383e259] sm:text-sm bg-white dark:bg-[#1F1F1F] dark:text-gray-100",
                                         { "border-red-500": errors.email }
                                     )}
                                     type="text"
@@ -102,7 +102,8 @@ const LoginPage = (props: Props) => {
                                     Password
                                 </label>
                                 <input
-                                    className={cn("mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm bg-white dark:bg-[#1F1F1F] dark:text-gray-100",
+                                    className={cn(
+                                        "mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus-within:shadow-[inset_0_0_0_1px_#2383e291,0_0_0_2px_#2383e259] sm:text-sm bg-white dark:bg-[#1F1F1F] dark:text-gray-100",
                                         { "border-red-500": errors.password }
                                     )}
                                     type="password"

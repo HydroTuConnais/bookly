@@ -79,30 +79,22 @@ export const TrashBox = () => {
                 <Input
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="h-7 px-2 focus-visible:ring-transparent bg-secondary"
+                    className="h-7 px-2 border bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 focus-within:shadow-[inset_0_0_0_1px_#2383e291,0_0_0_2px_#2383e259]"
                     placeholder="Filter by page title..."
                 />
             </div>
             <div className="mt-2 px-1 pb-1">
                 {isLoading ? (
                     <div className="hidden last:block text-xs text-center text-muted-foreground pb-2">
-                        <div className="animate-pulse text-sm rounded-sm w-full flex items-center justify-between">
-                            <div className="flex items-center justify-center truncate">
-                                <div className="text-center pl-2 h-4 bg-gray-300 rounded dark:bg-gray-600 w-screen"></div>
-                            </div>
-                            <div className="flex items-center">
-                                <div className="rounded-sm p-2">
-                                    <div className="h-4 w-4 bg-gray-300 rounded dark:bg-gray-700"></div>
-                                </div>
-                                <div className="rounded-sm p-2">
-                                    <div className="h-4 w-4 bg-gray-300 rounded dark:bg-gray-700"></div>
-                                </div>
-                            </div>
+                        <div className="animate-pulse group flex items-center h-[30px] w-full py-[5px] px-[5px]">
+                            <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded mr-1"></div>
+                            <span className="m-1 w-full h-4 bg-neutral-200 dark:bg-neutral-700 rounded"></span>
+                            <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-10"></div>
                         </div>
                     </div>
                 ) : (
                     <p className="hidden last:block text-xs text-center text-muted-foreground pb-2">
-                        No document here
+                        No document
                     </p>
                 )}
                 {filteredDocuments.map((document) => (
@@ -118,7 +110,7 @@ export const TrashBox = () => {
                                 onClick={(e) => e.stopPropagation()}
                                 className="h-4 w-4 focus-visible:ring-transparent bg-secondary"
                             /> */}
-                            <span className="text-center w-full pl-2">
+                            <span className="text-center text-muted-foreground w-full pl-2">
                                 {document.title}
                             </span>
                         </div>
@@ -126,7 +118,7 @@ export const TrashBox = () => {
                             <div
                                 onClick={(e) => onRestore(e, document.id)}
                                 role="button"
-                                className="rounded-sm p-2 hover:bg-neutral-200"
+                                className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
                             >
                                 <Undo className="h-4 w-4 text-muted-foreground" />
                             </div>
@@ -134,7 +126,7 @@ export const TrashBox = () => {
                                 <div
                                     role="button"
                                     onClick={(e) => e.stopPropagation()}
-                                    className="rounded-sm p-2 hover:bg-neutral-200"
+                                    className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
                                 >
                                     <Trash className="h-4 w-4 text-muted-foreground" />
                                 </div>
