@@ -7,7 +7,7 @@ export const DocumentService = {
     async createDocument({ token, userid, title, parentDocumentId }: { token: string, userid: string, title: string, parentDocumentId: string | null }) {
         try {
             const data = await fetchData({ method: "POST", endpoint: "/documents", body: { title, parentDocumentId }, header: { UserId: userid }, token });
-            // console.log(data);
+            console.log(data);
             return data;
         } catch (error) {
             handleErrors(error);
@@ -52,8 +52,8 @@ export const DocumentService = {
 
     async getSidebarDocuments({ token, userid, parentDocumentId }: { token: string, userid: string, parentDocumentId: string | null }) {
         try {
-            const data = await fetchData({ method: "GET", endpoint: "/documents/sidebar", params: { parentDocument: parentDocumentId }, header: { UserId: userid }, token });
-            // console.log("service sidebar", data);
+            const data = await fetchData({ method: "GET", endpoint: "/sidebar", params: { parentDocument: parentDocumentId }, header: { UserId: userid }, token });
+            console.log("service sidebar", data);
             return data;
         } catch (error) {
             handleErrors(error);
@@ -78,7 +78,7 @@ export const DocumentService = {
         }
     },
 
-    async archiveDocument({ token, userid, id }: { token: string, userid: string, id: string }) {
+    async archiveDocument({ token, userid, id  }: { token: string, userid: string, id: string }) {
         try {
             const data = await fetchData({ method: "POST", endpoint: `/documents/${id}/archive`, header: { UserId: userid }, token });
             return data;
@@ -90,43 +90,6 @@ export const DocumentService = {
     async restoreDocument({ token, userid, id, }: { token: string, userid: string, id: string }) {
         try {
             const data = await fetchData({ method: "POST", endpoint: `/documents/${id}/restore`, header: { UserId: userid }, token });
-            return data;
-        } catch (error) {
-            handleErrors(error);
-        }
-    },
-
-    async getSidebarFavoriteDocuments({ token, userid, parentFavoriteId, isChild}: { token: string, userid: string, parentFavoriteId: string | null, isChild: boolean }) {
-        try {
-            const data = await fetchData({ method: "GET", endpoint: "/documents/favorite", params: { parentFavorite: parentFavoriteId, forChild: isChild}, header: { UserId: userid}, token });
-            return data;
-        } catch (error) {
-            handleErrors(error);
-        }
-    },
-
-    async getSidebarCountFavoriteDocuments({ token, userid }: { token: string, userid: string }) {
-        try {
-            const data = await fetchData({ method: "GET", endpoint: "/documents/favorite/count", header: { UserId: userid }, token });
-            return data;
-        }
-        catch (error) {
-            handleErrors(error);
-        }
-    },
-
-    async favoriteDocument({ token, id, userid }: { token: string, id: string, userid: string }) {
-        try {
-            const data = await fetchData({ method: "POST", endpoint: `/documents/${id}/favorite`, header: { UserId: userid }, token });
-            return data;
-        } catch (error) {
-            handleErrors(error);
-        }
-    },
-
-    async unfavoriteDocument({ token, id, userid }: { token: string, userid: string, id: string }) {
-        try {
-            const data = await fetchData({ method: "POST", endpoint: `/documents/${id}/unfavorite`, header: { UserId: userid }, token });
             return data;
         } catch (error) {
             handleErrors(error);
@@ -160,7 +123,7 @@ export const fetchData = async ({ method, endpoint, params, body, header, token 
             params: params,
         });
 
-        // console.log("FETCHDATA", response.data)
+        console.log("FETCHDATA", response.data)
         return response.data;
     } catch (error) {
         handleErrors(error);
