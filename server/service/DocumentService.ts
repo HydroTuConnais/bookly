@@ -283,4 +283,15 @@ export const DocumentService = {
       throw new ErrorClass(404, 'Error process finding parent document');
     }
   },
+
+  /*--------------------------------------------------------------*/
+
+  async searchDocuments(userId: string, query: string) {
+    try {
+      return await DocumentRepository.searchDocuments(userId, query);
+    }
+    catch (error) {
+      throw new ErrorClass(500, 'Error process searching documents');
+    }
+  }
 };

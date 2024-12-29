@@ -24,4 +24,6 @@ router.get('/documents/favorite/count', authenticate, DocumentController.getcoun
 router.post('/documents/:id/shared', authenticate, DocumentController.shareDocument);
 router.get('/documents/shared', authenticate, DocumentController.getSharedDocuments);
 
+router.get('/documents/search', authenticate, DocumentController.searchDocuments);
+
 export default router;

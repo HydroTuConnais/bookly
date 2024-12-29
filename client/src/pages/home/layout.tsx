@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navbar } from './components/Navbar';
-import { ThemeProvider } from '@/components/context/theme-context';
+import { ThemeProvider } from '@/components/context/useTheme';
 import Login from './components/Login';
 import RegisterPage from './components/Register';
 import { PopupProvider } from '@/components/context/popup-context';

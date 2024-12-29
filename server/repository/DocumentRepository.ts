@@ -134,4 +134,26 @@ export const DocumentRepository = {
       orderBy: { createdAt: 'desc' },
     });
   },
+
+  /*--------------------------------------------------------------*/
+
+  async searchDocuments(userId: string, query: string | null) {
+    const searchCondition = query
+      ? {
+          OR: [
+            { title: { contains: query, mode: 'insensitive' } },
+            { content: { contains: query, mode: 'insensitive' } }
+          ]
+        }
+      : {};
+
+    return await prisma.document.findMany({
+      where: {
+        ...searchCondition,
+        isArchived: false,
+        userId
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+  },
 };

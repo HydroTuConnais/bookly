@@ -132,6 +132,15 @@ export const DocumentService = {
             handleErrors(error);
         }
     },
+
+    async searchDocuments({ token, userid, search }: { token: string, userid: string, search: string }) {
+        try {
+            const data = await fetchData({ method: "GET", endpoint: "/documents/search", params: { search }, header: { UserId: userid }, token });
+            return data;
+        } catch (error) {
+            handleErrors(error);
+        }
+    },
 }
 
 export const fetchData = async ({ method, endpoint, params, body, header, token }: { method: string, token: string, endpoint: string, header?: any, params?: any, body?: any }) => {

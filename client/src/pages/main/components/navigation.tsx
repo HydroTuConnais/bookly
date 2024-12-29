@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, ElementRef } from 'react';
 
 import { useMediaQuery } from "usehooks-ts";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useDocuments } from "@/components/context/useDocuments";
 
 import { DocumentList } from "./document-list";
@@ -16,9 +16,14 @@ import { TrashBox } from './trash-box';
 
 import "../style/navigation.css";
 import { FavoriteList } from './favorite-list';
-
+import { useSearch } from '@/hooks/use-search';
+import { useSettings } from '@/hooks/use-options';
+import { Navbar } from './navbar';
 
 export const Navigation = () => {
+    const search = useSearch();
+    const settings = useSettings();
+    const params = useParams();
     const isMobile = useMediaQuery("(max-width: 768px)");
     const { pathname } = useLocation();
 
@@ -161,18 +166,18 @@ export const Navigation = () => {
                         label="Search"
                         icon={Search}
                         isSearch
-                        onClick={() => { }}
+                        onClick={search.onOpen}
                     />
                     <Item
                         label="Settings"
                         icon={Settings}
-                        onClick={() => { }}
+                        onClick={settings.onOpen}
                     />
-                    <Item
+                    {/* <Item
                         onClick={handleCreate}
                         label="New page"
                         icon={PlusCircle}
-                    />
+                    /> */}
                 </div>
                 <div className="m-4 mx-2 flex flex-col gap-1 ">
                     {haveFavorites && (
@@ -219,9 +224,16 @@ export const Navigation = () => {
                     isReseting && "transition-all ease-in-out duration-300",
                     isMobile && "left-0 w-full"
                 )}>
-                <nav className={cn(isCollapsed ? "h-6 w-6 text-muted-foreground rounded-sm hover:bg-neutral-200 dark:hover:bg-neutral-600 mx-3 my-2" : "hidden")}>
-                    {isCollapsed && <MenuIcon onClick={resetWidth} role="button" className="h-6 w-6 text-muted-foreground"/>}
-                </nav>
+                { !!params.documentId ? (
+                    <Navbar 
+                    isCollapsed={isCollapsed}
+                    onResetWidth={resetWidth}
+                    />
+                ) : (
+                    <nav className={cn(isCollapsed ? "h-6 w-6 text-muted-foreground rounded-sm hover:bg-neutral-200 dark:hover:bg-neutral-600 mx-3 my-2" : "hidden")}>
+                        {isCollapsed && <MenuIcon onClick={resetWidth} role="button" className="h-6 w-6 text-muted-foreground"/>}
+                    </nav>
+                )}    
             </div>
         </>
     );

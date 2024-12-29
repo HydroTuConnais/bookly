@@ -39,6 +39,7 @@ interface DocumentContextProps {
 
     shareDocument: (params: { id: string, sharedEmail: string }) => Promise<void>;
     //getSharedDocuments: () => Promise<void>;
+    searchDocuments: (searchTerm: string) => Promise<any[]>;
 }
 
 const DocumentContext = createContext<DocumentContextProps | undefined>(undefined);
@@ -263,6 +264,21 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
         }
     };
 
+    /*--------------------------------------------------------------*/
+
+    const searchDocuments = async (searchTerm: string) => {
+        if (token && user) {
+            setError(null); // Reset error state
+            try {
+                const documents = await DocumentService.searchDocuments({ token: token, userid: user.id, search: searchTerm });
+                return documents;
+            } catch (err: any) {
+                setError('Failed to search documents');
+                console.error(err);
+            }
+        }
+    };
+
     return (
         <DocumentContext.Provider
             value={{
@@ -287,7 +303,8 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
                 getSidebarFavoriteDocuments,
                 getSidebarCountFavoriteDocuments,
                 favoriteDocument,
-                unfavoriteDocument
+                unfavoriteDocument,
+                searchDocuments
             }}
         >
             {children}

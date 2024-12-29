@@ -202,5 +202,23 @@ export const DocumentController = {
     catch (error: ErrorClass | any) {
       res.status(error.status).json({ error: error.message });
     }
+  },
+
+  /*--------------------------------------------------------------*/
+
+  async searchDocuments(req: Request, res: Response) {
+    const userId = req.headers.userid as string;
+    const query = req.query.query as string;
+
+    console.log("query", query);
+
+    try {
+      const documents = await DocumentService.searchDocuments(userId, query);
+      console.log(documents);
+      res.status(200).json(documents);
+    }
+    catch (error: ErrorClass | any) {
+      res.status(error.status).json({ error: error.message });
+    }
   }
 };
