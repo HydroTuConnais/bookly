@@ -30,6 +30,7 @@ model Document {
   title            String
   userId           String
   isArchived       Boolean  @default(false)
+  archivedId       String?  
   isFavorite       Boolean  @default(false)
   parentDocumentId String?
   content          String?

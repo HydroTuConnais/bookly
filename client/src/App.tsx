@@ -10,6 +10,7 @@ import { DocumentProvider } from './components/context/useDocuments';
 import { Toaster } from 'sonner';
 import { AnimationProvider } from './components/context/useAnimation';
 import { ThemeProvider } from './components/context/useTheme';
+import NotFoundPage from './pages/NotFoundPage';
 
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App: React.FC = () => {
                   <Route path="/" element={<MarketingPage />} />
                   <Route path="/documents" element={<DocumentsPage />} />
                   <Route path="/documents/:documentId" element={<DocumentsPage />} />
+                  <Route path="*" element={<NotFoundPage />} />
                 </Routes>
               </QueryClientProvider>
           </AnimationProvider>

@@ -19,7 +19,7 @@ const Layout = ({
 }: {
     children: React.ReactNode;
 }) => {
-    const { isAuthenticated, isLoading } = useAuth();
+    const { checkAuth, isLoading } = useAuth();
     const { loading } = useDocuments();
 
     if (isLoading || loading) {
@@ -28,7 +28,7 @@ const Layout = ({
             </div>
         );
     }
-    if (!isAuthenticated) {
+    if (!checkAuth) {
         return <Navigate to="/" />;
     }
 

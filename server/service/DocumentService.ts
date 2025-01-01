@@ -1,6 +1,7 @@
-import { it } from 'node:test';
 import { DocumentRepository } from '../repository/DocumentRepository';
 import { ErrorClass } from '../utils/Error';
+
+import { v4 as uuidv4 } from 'uuid';
 
 
 export const DocumentService = {
@@ -103,7 +104,7 @@ export const DocumentService = {
     }
 
     try {
-      return await DocumentRepository.findDocumentsByParent(userId, parentDocumentId, false);
+      return await DocumentRepository.findDocumentsByParent(userId, parentDocumentId);
     }
     catch (error) {
       throw new ErrorClass(500, 'Error process getting sidebar documents');
@@ -117,28 +118,29 @@ export const DocumentService = {
     if (!document || document.userId !== userId) {
       throw new ErrorClass(401, 'Unauthorized or Not Found');
     }
-
-    const recursiveArchive = async (documentId: string) => {
+  
+    const recursiveArchive = async (documentId: string, archiveId: string) => {
       const children = await DocumentRepository.findChildDocuments(userId, documentId);
       for (const child of children) {
-        await DocumentRepository.updateDocument(child.id, { isArchived: true });
-        await recursiveArchive(child.id);
+        if (!child.archivedId) { // Vérifie si l'enfant n'a pas déjà un archiveId
+          await DocumentRepository.updateDocument(child.id, { isArchived: true, archivedId : archiveId + 'c' });
+          await recursiveArchive(child.id, archiveId);
+        }
       }
     };
-
+  
+    const archiveId = uuidv4();
+  
     try {
-      await DocumentRepository.updateDocument(id, { isArchived: true });
-    }
-    catch (error) {
+      await DocumentRepository.updateDocument(id, { isArchived: true, archivedId : archiveId + 'p' });
+    } catch (error) {
       throw new ErrorClass(500, 'Error process finding parent document');
     }
-
-
+  
     try {
-      await recursiveArchive(id);
-    }
-    catch (error) {
-      throw new ErrorClass(500, 'Error process recusive archiving document');
+      await recursiveArchive(id, archiveId);
+    } catch (error) {
+      throw new ErrorClass(500, 'Error process recursive archiving document');
     }
   },
 
@@ -147,28 +149,31 @@ export const DocumentService = {
     if (!document || document.userId !== userId) {
       throw new ErrorClass(401, 'Unauthorized or Not Found');
     }
-
-    const recursiveRestore = async (documentId: string) => {
-      const children = await DocumentRepository.findChildDocuments(userId, documentId);
-      for (const child of children) {
-        await DocumentRepository.updateDocument(child.id, { isArchived: false });
-        await recursiveRestore(child.id);
+  
+    const archivedId = document.archivedId;
+    console.log("archivedId", archivedId);
+    if (!archivedId) {
+      throw new ErrorClass(400, 'Document is not archived');
+    }
+  
+    const recursiveRestore = async (archivedId: string) => {
+      const documentsToRestore = await DocumentRepository.findDocumentsByArchivedId(userId, archivedId.slice(0, -1) + 'c');
+      console.log("documentsToRestore", documentsToRestore);
+      for (const doc of documentsToRestore) {
+        await DocumentRepository.updateDocument(doc.id, { isArchived: false, archivedId: null });
       }
     };
-
+  
     try {
-      await DocumentRepository.updateDocument(id, { isArchived: false });
-    }
-    catch (error) {
+      await DocumentRepository.updateDocument(id, { isArchived: false, archivedId: null });
+    } catch (error) {
       throw new ErrorClass(500, 'Error process restore document');
     }
-
-
+  
     try {
-      await recursiveRestore(id);
-    }
-    catch (error) {
-      throw new ErrorClass(500, 'Error process recusive restore document');
+      await recursiveRestore(archivedId);
+    } catch (error) {
+      throw new ErrorClass(500, 'Error process recursive restore document');
     }
   },
 

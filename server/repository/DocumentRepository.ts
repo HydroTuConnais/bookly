@@ -7,11 +7,19 @@ export const DocumentRepository = {
   },
 
 
-  async findDocumentsByParent(userId: string, parentDocumentId: string | null, isArchived: boolean) {
+  async findDocumentsByParent(userId: string, parentDocumentId: string | null) {
     return await prisma.document.findMany({
-      where: { userId, parentDocumentId, isArchived },
+      where: { userId, parentDocumentId, isArchived: false },
       orderBy: { createdAt: 'asc' },
-      include: { _count: { select: { children: true } } }
+      include: {
+      _count: {
+        select: {
+        children: {
+          where: { isArchived: false }
+        }
+        }
+      }
+      }
     });
   },
 
@@ -64,8 +72,20 @@ export const DocumentRepository = {
 
   async findArchivedDocuments(userId: string) {
     return await prisma.document.findMany({
-      where: { userId, isArchived: true },
+      where: {
+        userId,
+        isArchived: true,
+        archivedId: {
+          endsWith: 'p', // Vérifie que le dernier caractère de archivedId est 'p'
+        },
+      },
       orderBy: { createdAt: 'desc' },
+    });
+  },
+
+  async findDocumentsByArchivedId(userId: string, archivedId: string) {
+    return await prisma.document.findMany({
+      where: { userId, archivedId },
     });
   },
 
@@ -86,7 +106,6 @@ export const DocumentRepository = {
   },
 
   async findFavoriteByParent(userId: string) {
-    console.log("forparent")
     return await prisma.document.findMany({
       where: { userId, isFavorite: true, isArchived: false },
       orderBy: { createdAt: 'asc' },
@@ -95,7 +114,6 @@ export const DocumentRepository = {
   },
 
   async findFavoriteForChild(userId: string, parentDocumentId: string | null) {
-    console.log("forchild")
     return await prisma.document.findMany({
       where: { userId, parentDocumentId, isArchived: false },
       orderBy: { createdAt: 'asc' },

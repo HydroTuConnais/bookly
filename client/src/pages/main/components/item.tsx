@@ -41,7 +41,7 @@ export const Item = ({
 
 }: ItemProps) => {
     const { user } = useAuth();
-    const { createDocument, archiveDocument,favorites, favoriteDocument, unfavoriteDocument } = useDocuments();
+    const { createDocument, archiveDocument, favoriteDocument, unfavoriteDocument } = useDocuments();
     const navigate = useNavigate();
 
     const [isHovered, setIsHovered] = useState(false);

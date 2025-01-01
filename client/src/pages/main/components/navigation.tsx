@@ -19,6 +19,7 @@ import { FavoriteList } from './favorite-list';
 import { useSearch } from '@/hooks/use-search';
 import { useSettings } from '@/hooks/use-options';
 import { Navbar } from './navbar';
+import { usePromise } from '@/hooks/usePromise';
 
 export const Navigation = () => {
     const search = useSearch();
@@ -33,22 +34,26 @@ export const Navigation = () => {
     const [isReseting, setIsReseting] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(isMobile);
 
+    const [haveFavorites, setHaveFavorites] = useState(false);
+
     const {
         createDocument,
-        haveFavorites,
-        setHaveFavorites,
         favoriteDocument,
         unfavoriteDocument,
         getSidebarCountFavoriteDocuments
     } = useDocuments();
 
+    const { data, loading, error } = usePromise(() => getSidebarCountFavoriteDocuments(), [favoriteDocument, unfavoriteDocument]);
+
     useEffect(() => {
-        getSidebarCountFavoriteDocuments().then((data) => {
+        if (data !== null) {
             setHaveFavorites(data > 0);
-        }).catch((error) => {
+        }
+        if (error) {
             console.error("Error fetching documents:", error);
-        });
-    }, [favoriteDocument, unfavoriteDocument]);
+        }
+    }, [data, error]);
+    
 
     useEffect(() => {
         if (isMobile) {
@@ -175,7 +180,7 @@ export const Navigation = () => {
                     />
                     {/* <Item
                         onClick={handleCreate}
-                        label="New page"
+                        label="New page"s
                         icon={PlusCircle}
                     /> */}
                 </div>
@@ -189,7 +194,7 @@ export const Navigation = () => {
 
                     <div>
                         <h1 className='w-full flex text-[0.8rem] pt-4 mb-1 justify-start ml-4 text-muted-foreground'>Documents</h1>
-                        <DocumentList parendDocumentId={"null"} />
+                        <DocumentList parentDocumentId={"null"} />
                         <Item
                             onClick={handleCreate}
                             icon={PlusCircle}

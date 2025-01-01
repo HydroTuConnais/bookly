@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { DocumentService } from '@/services/documentsService';
 import { useAuth } from './useAuth';
 
@@ -11,14 +11,15 @@ interface Document {
 }
 
 interface DocumentContextProps {
-    documents: any[];
-    setDocuments: any;
-    favorites: any[];
-    setFavorites: any;
-    haveFavorites: boolean;
-    setHaveFavorites: (value: boolean) => void;
     loading: boolean;
     error: string | null;
+    
+    documents: any[];
+    setDocuments: any;
+    
+    favorites: any[];
+    setFavorites: any;
+    
     getDocuments: (params: { documentId: string }) => Promise<void>;
     createDocument: (params: { title: string, parentDocumentId: string | null }) => Promise<void>;
     getDocument: (params: { id: string }) => Promise<void>;
@@ -46,9 +47,8 @@ const DocumentContext = createContext<DocumentContextProps | undefined>(undefine
 
 export const DocumentProvider = ({ children }: { children: React.ReactNode }) => {
     const { token, user } = useAuth();
-    const [documents, setDocuments] = React.useState<any[]>([]);
-    const [favorites, setFavorites] = React.useState<any[]>([]);
-    const [haveFavorites, setHaveFavorites] = useState(false);
+    const [documents, setDocuments] = useState<any[]>([]);
+    const [favorites, setFavorites] = useState<any[]>([]);
 
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
@@ -286,8 +286,6 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
                 setDocuments,
                 favorites,
                 setFavorites,
-                haveFavorites,
-                setHaveFavorites,
                 loading,
                 error,
                 getDocuments,

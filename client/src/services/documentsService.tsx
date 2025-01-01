@@ -7,7 +7,7 @@ export const DocumentService = {
     async createDocument({ token, userid, title, parentDocumentId }: { token: string, userid: string, title: string, parentDocumentId: string | null }) {
         try {
             const data = await fetchData({ method: "POST", endpoint: "/documents", body: { title, parentDocumentId }, header: { UserId: userid }, token });
-            // console.log(data);
+            console.log(data);
             return data;
         } catch (error) {
             handleErrors(error);

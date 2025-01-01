@@ -23,7 +23,7 @@ export const AuthService = {
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new ErrorClass(400,'Email and password are required');
     }
-    const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET || 'secret', { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET || 'secret', { expiresIn: '12h' });
     return { user, token };
   },
 

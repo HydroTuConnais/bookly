@@ -1,6 +1,6 @@
 import React from "react"
 
-export const DocumentId = () => {
+export const DocumentPageId = () => {
     return (
         <div>
             documentId

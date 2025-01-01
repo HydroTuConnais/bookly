@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 
 import "./style/home.css";
-import { DocumentId } from "./[documentId]/page";
+import { DocumentPageId } from "./[documentId]/page";
 
 
 
@@ -40,36 +40,34 @@ const DocumentsPage = () => {
         });
     };
 
-
-    return (
-        <>
+    console.log(documentId);
+    return ( !documentId ? (
             <Layout>
-                {!documentId ? (
-                    <div className="h-screen flex flex-col items-center justify-center space-y-4">
-                        <img
-                            src="/empty.png"
-                            className="h-[300px] dark:hidden"
-                            alt="Empty"
-                        />
-                        <img
-                            src="/empty-dark.png"
-                            className="h-[300px] hidden dark:block"
-                            alt="Empty"
-                        />
-                        <h2 className="text-lg font-medium">
-                            Bienvenue {user?.name}&apos;s Bookly
-                        </h2>
-                        <Button onClick={handleCreate}>
-                            <PlusCircle className="h-4 w-4 mr-2" />
-                            Crée une note
-                        </Button>
-                    </div>
-                ) : 
-                (
-                    <DocumentId />
-                )}
+                <div className="h-screen flex flex-col items-center justify-center space-y-4">
+                    <img
+                        src="/empty.png"
+                        className="h-[300px] dark:hidden"
+                        alt="Empty"
+                    />
+                    <img
+                        src="/empty-dark.png"
+                        className="h-[300px] hidden dark:block"
+                        alt="Empty"
+                    />
+                    <h2 className="text-lg font-medium">
+                        Bienvenue {user?.name}&apos;s Bookly
+                    </h2>
+                    <Button onClick={handleCreate}>
+                        <PlusCircle className="h-4 w-4 mr-2" />
+                        Crée une note
+                    </Button>
+                </div>
             </Layout>
-        </>
+        ) : (   
+            <Layout>
+                <DocumentPageId />
+            </Layout>
+        )
     );
 }
 

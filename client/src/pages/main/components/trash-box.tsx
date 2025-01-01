@@ -1,6 +1,7 @@
 import { useDocuments } from "@/components/context/useDocuments";
 import { ConfirmModal } from "@/components/modals/confirm-modal";
 import { Input } from "@/components/ui/input";
+import { usePromise } from "@/hooks/usePromise";
 import { CheckboxItem } from "@radix-ui/react-dropdown-menu";
 import { Search, Trash, Undo } from "lucide-react";
 import React, { useEffect, useState } from "react"
@@ -9,22 +10,19 @@ import { toast } from "sonner";
 
 export const TrashBox = () => {
     const { getArchivedDocuments, restoreDocument, deleteDocument, documents } = useDocuments();
+    const [search, setSearch] = useState("");
+    const [archivedDocuments, setArchivedDocuments] = useState<any[]>([]);
+    
     const navigate = useNavigate();
     const params = useParams();
 
-    const [search, setSearch] = useState("");
-    const [archivedDocuments, setArchivedDocuments] = useState<any[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const { data, loading, error } = usePromise(() => getArchivedDocuments(), []);
 
     useEffect(() => {
-        setIsLoading(true);
-        getArchivedDocuments().then((data) => {
+        if (data) {
             setArchivedDocuments(data);
-            setIsLoading(false)
-        }).catch((error) => {
-            console.error("Error fetching archived documents:", error);
-        });
-    }, []);
+        }
+    }, [data]);
 
     const filteredDocuments = archivedDocuments.filter((document) => {
         return document.title.toLowerCase().includes(search.toLowerCase());
@@ -62,7 +60,7 @@ export const TrashBox = () => {
             navigate("/documents");
         }
 
-        if (documents === undefined) {
+        if (loading) {
             return (
                 <div className="h-full flex items-center justify-center p-4 animate-pulse">
                     <div className="bg-gray-200 rounded w-20 h-4"></div>
@@ -84,7 +82,7 @@ export const TrashBox = () => {
                 />
             </div>
             <div className="mt-2 px-1 pb-1">
-                {isLoading ? (
+                {loading ? (
                     <div className="hidden last:block text-xs text-center text-muted-foreground pb-2">
                         <div className="animate-pulse group flex items-center h-[30px] w-full py-[5px] px-[5px]">
                             <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded mr-1"></div>

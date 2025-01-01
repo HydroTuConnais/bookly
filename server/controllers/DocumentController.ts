@@ -67,6 +67,8 @@ export const DocumentController = {
 
     try {
       const documents = await DocumentService.getSidebarDocuments(userId, parentDocumentId);
+      console.log("Sidebar");
+      console.log(documents);
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {
@@ -144,19 +146,11 @@ export const DocumentController = {
 
   async getfavoriteDocuments(req: Request, res: Response) {
     const parentFavoriteId = req.query.parentFavorite as string | null;
-    console.log("type", typeof(req.query.forChild));
-    console.log("forChildReq", req.query.forChild);
     const forChild = req.query.forChild === 'true';
-    console.log("forChild", forChild);
-
     const userId = req.headers.userid as string;
 
-    console.log("parentFavoriteId", parentFavoriteId);
-    console.log("forChild", forChild);
-    
     try {
       const documents = await DocumentService.getfavoriteDocuments(userId, parentFavoriteId, forChild);
-      console.log(documents);
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {
@@ -210,11 +204,8 @@ export const DocumentController = {
     const userId = req.headers.userid as string;
     const query = req.query.query as string;
 
-    console.log("query", query);
-
     try {
       const documents = await DocumentService.searchDocuments(userId, query);
-      console.log(documents);
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {

@@ -102,9 +102,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 console.log("User is authenticated");
                 setIsAuthenticated(true);
                 setIsLoading(false);
+                return true;
             } else {
                 logoutUser();
                 console.log("User is not authenticated");
+                return false;
             }
         });
     };
