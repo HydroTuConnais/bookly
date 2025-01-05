@@ -21,7 +21,14 @@ interface ItemProps {
     onClick?: () => void;
     icon: React.ElementType;
     childCount?: number;
-};
+}
+
+const CategoryProps = {
+    favorite: "favorite",
+    document: "document"
+} as const;
+
+type CategoryPropsType = typeof CategoryProps[keyof typeof CategoryProps];
 
 export const Item = ({
     category,
@@ -41,7 +48,7 @@ export const Item = ({
 
 }: ItemProps) => {
     const { user } = useAuth();
-    const { createDocument, archiveDocument, favoriteDocument, unfavoriteDocument } = useDocuments();
+    const { createDocument, archiveDocument, setfavoriteDocument, unfavoriteDocument } = useDocuments();
     const navigate = useNavigate();
 
     const [isHovered, setIsHovered] = useState(false);
@@ -50,17 +57,6 @@ export const Item = ({
         event.stopPropagation();
         onExpand?.();
     };
-
-    // Verifie la category de la sidebar
-    const [isDocumentCategory, setIsDocumentCategory] = useState(false);
-
-    useEffect(() => {
-        if (category === 'document') {
-            setIsDocumentCategory(true);
-        } else {
-            setIsDocumentCategory(false);
-        }
-    }, [category]);
 
     const onCreate = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.stopPropagation();
@@ -106,20 +102,21 @@ export const Item = ({
         event.stopPropagation();
         if (!id) return;
 
-        const promise = favoriteDocument({ documentId: id }).then
-            ((documentId) => {
-                // console.log(documentId);
-            })
-            .catch((error) => {
-                console.error("Error archiving document:", error
-                )
-            });
+        // const promise = setfavoriteDocument({ documentId: id }).then
+        //     ((documentId) => {
+        //         console.log("set favorite documentId:", documentId);
+        //         // console.log(documentId);
+        //     })
+        //     .catch((error) => {
+        //         console.error("Error archiving document:", error
+        //         )
+        //     });
 
-        toast.promise(promise, {
-            loading: "Set bookmark...",
-            success: "Bookmark was set",
-            error: "Error set bookmark document"
-        });
+        // toast.promise(promise, {
+        //     loading: "Set bookmark...",
+        //     success: "Bookmark was set",
+        //     error: "Error set bookmark document"
+        // });
     }
 
     const unFavorite = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -128,6 +125,7 @@ export const Item = ({
 
         const promise = unfavoriteDocument({ documentId: id }).then
             ((documentId) => {
+                console.log("unset favorite documentId:", documentId);
                 // console.log(documentId);
             })
             .catch((error) => {
@@ -141,7 +139,6 @@ export const Item = ({
             error: "Error unset bookmark document"
         });
     }
-
 
     const CheveronIcon = expanded ? ChevronDown : ChevronRight;
 
@@ -242,7 +239,7 @@ export const Item = ({
                                 </DropdownMenuItem>
                             )}
 
-                            {isDocumentCategory && (
+                            {category === CategoryProps.document && (
                                 <>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem onClick={onArchive}>
@@ -267,5 +264,5 @@ export const Item = ({
                 </div>
             )}
         </div>
-    )
+    );
 };

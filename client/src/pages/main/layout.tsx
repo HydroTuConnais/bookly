@@ -28,6 +28,7 @@ const Layout = ({
             </div>
         );
     }
+    
     if (!checkAuth) {
         return <Navigate to="/" />;
     }
@@ -47,23 +48,11 @@ const Layout = ({
 };
 
 const LayoutWithProvider = ({ children }: { children: React.ReactNode }) => {
-    const { isAnimationFinished } = useAnimation();
 
     return (
         <SearchProvider>
             <SettingsProvider>
-                {!isAnimationFinished
-                    ?
-                    <div className="h-screen flex flex-col items-center justify-center space-y-4">
-                        <Preloader />
-                        <span className="apple-loader" />
-                    </div>
-                    :
-                    <div>
-                        <span className="apple-loader" />
-                        <Layout>{children}</Layout>
-                    </div>
-                }
+                <Layout>{children}</Layout>
             </SettingsProvider>
         </SearchProvider>
     );

@@ -63,10 +63,10 @@ export const DocumentService = {
     }
   },
 
-  async updateDocument(id: string, title: string, userId: string, content: string) {
+  async updateDocument(id: string, title: string | null, userId: string, content: string | null) {
     try {
-      if (!title || !userId) {
-        throw new ErrorClass(400, 'Title and userId are required');
+      if (!userId) {
+        throw new ErrorClass(400, 'UserId is required');
       }
 
       const document = await DocumentRepository.findDocumentById(id);
@@ -74,7 +74,16 @@ export const DocumentService = {
         throw new ErrorClass(401, 'Unauthorized or Not Found');
       }
 
-      await DocumentRepository.updateDocument(id, { title, content });
+      const updateData: { title?: string, content?: string } = {};
+      if (title !== null && title !== undefined) {
+        updateData.title = title;
+      }
+      if (content !== null && content !== undefined) {
+        updateData.content = content;
+      }
+
+      console.log("updateData", updateData);
+      await DocumentRepository.updateDocument(id, updateData);
     }
     catch (error) {
       throw new ErrorClass(404, 'Error process updating document');
@@ -151,14 +160,14 @@ export const DocumentService = {
     }
   
     const archivedId = document.archivedId;
-    console.log("archivedId", archivedId);
+    //console.log("archivedId", archivedId);
     if (!archivedId) {
       throw new ErrorClass(400, 'Document is not archived');
     }
   
     const recursiveRestore = async (archivedId: string) => {
       const documentsToRestore = await DocumentRepository.findDocumentsByArchivedId(userId, archivedId.slice(0, -1) + 'c');
-      console.log("documentsToRestore", documentsToRestore);
+      //console.log("documentsToRestore", documentsToRestore);
       for (const doc of documentsToRestore) {
         await DocumentRepository.updateDocument(doc.id, { isArchived: false, archivedId: null });
       }

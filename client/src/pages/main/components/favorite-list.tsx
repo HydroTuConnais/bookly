@@ -5,11 +5,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Item } from "./item";
 import { BookTextIcon } from "./icon/file-icon";
 import { usePromise } from "@/hooks/usePromise";
+import { DocumentList } from "./document-list";
 
 interface FavoriteListProps {
     parentFavoriteId: string | null;
     level?: number;
-    isChild: boolean;
+    isChild?: boolean;
 }
 
 export const FavoriteList: React.FC<FavoriteListProps> = ({
@@ -28,11 +29,11 @@ export const FavoriteList: React.FC<FavoriteListProps> = ({
         }));
     };
 
-    const { favorites, getSidebarFavoriteDocuments, favoriteDocument, unfavoriteDocument } = useDocuments();
+    const { favorites, getSidebarFavoriteDocuments} = useDocuments();
 
     const { data: favoriteList, loading } = usePromise(() => 
-        getSidebarFavoriteDocuments({ parentFavoriteId, isChild }), 
-        [favorites, parentFavoriteId, favoriteDocument, unfavoriteDocument]
+        getSidebarFavoriteDocuments({ parentFavoriteId: parentFavoriteId, isChild }), 
+        [favorites, parentFavoriteId]
     );
 
     const onRedirect = (documentId: string) => {
@@ -40,7 +41,6 @@ export const FavoriteList: React.FC<FavoriteListProps> = ({
     };
 
     if (loading) {
-        return (
             <div className="hidden last:block text-xs text-center text-muted-foreground pb-2">
                 <div className="animate-pulse group flex items-center h-[30px] w-full py-[5px] px-[8px]">
                     <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded mr-1"></div>
@@ -48,38 +48,36 @@ export const FavoriteList: React.FC<FavoriteListProps> = ({
                     <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-10"></div>
                 </div>
             </div>
-        );
     }
-
-    console.log("Favorite List:", favoriteList);
 
     return (
         <>
-            {favoriteList?.map((document) => (
-                <div key={document.id}>
-                    <Item
-                        category="favorite"
-                        id={document.id}
-                        onClick={() => onRedirect(document.id)}
-                        label={document.title}
-                        icon={BookTextIcon}
-                        documentIcon={document.icon}
-                        active={params.id === document.id}
-                        level={level}
-                        onExpand={() => onExpand(document.id)}
-                        expanded={expanded[document.id]}
-                        childCount={document._count.children}
-                        isFavorite={document.isFavorite}
-                    />
-                    {expanded[document.id] && (
-                        <FavoriteList
-                            parentFavoriteId={document.id}
-                            level={level + 1}
-                            isChild={true}
+            {
+                favoriteList?.map((document) => (
+                    <div key={document.id}>
+                        <Item
+                            category="favorite"
+                            id={document.id}
+                            onClick={() => onRedirect(document.id)}
+                            label={document.title}
+                            icon={BookTextIcon}
+                            documentIcon={document.icon}
+                            active={params.id === document.id}
+                            level={level}
+                            onExpand={() => onExpand(document.id)}
+                            expanded={expanded[document.id]}
+                            childCount={document._count.children}
+                            isFavorite={document.isFavorite}
                         />
-                    )}
-                </div>
-            ))}
+                        {expanded[document.id] && (
+                            <DocumentList
+                                parentDocumentId={document.id}
+                                level={level + 1}
+                            />
+                        )}
+                    </div>
+                ))
+            }
         </>
     );
 };

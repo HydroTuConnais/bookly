@@ -7,25 +7,25 @@ export const DocumentService = {
     async createDocument({ token, userid, title, parentDocumentId }: { token: string, userid: string, title: string, parentDocumentId: string | null }) {
         try {
             const data = await fetchData({ method: "POST", endpoint: "/documents", body: { title, parentDocumentId }, header: { UserId: userid }, token });
-            console.log(data);
+            //console.log(data);
             return data;
         } catch (error) {
             handleErrors(error);
         }
     },
 
-    async getDocument({ token, id }: { token: string, id: string }) {
+    async getDocument({ token, userid, id}: { token: string, userid: string, id: string }) {
         try {
-            const data = await fetchData({ method: "GET", endpoint: `/documents/${id}/content`, token });
+            const data = await fetchData({ method: "GET", endpoint: `/documents/${id}/content`, header: { UserId: userid }, token });
             return data;
         } catch (error) {
             handleErrors(error);
         }
     },
 
-    async updateDocument({ token, id, title, content }: { token: string, id: string, title: string, content: string }) {
+    async updateDocument({ token, userid, id, title, content }: { token: string,userid: string, id: string, title?: string, content?: string | null }) {
         try {
-            const data = await fetchData({ method: "PUT", endpoint: `/documents/${id}/content`, body: { title, content }, token });
+            const data = await fetchData({ method: "PUT", endpoint: `/documents/${id}/content`, body: { title, content },header: { UserId: userid } ,token });
             return data;
         } catch (error) {
             handleErrors(error);
@@ -145,7 +145,7 @@ export const DocumentService = {
 
 export const fetchData = async ({ method, endpoint, params, body, header, token }: { method: string, token: string, endpoint: string, header?: any, params?: any, body?: any }) => {
     try {
-        console.dir({
+        console.log({
             method: method,
             url: `${api}${endpoint}`,
             data: body,

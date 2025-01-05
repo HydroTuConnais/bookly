@@ -40,7 +40,6 @@ const DocumentsPage = () => {
         });
     };
 
-    console.log(documentId);
     return ( !documentId ? (
             <Layout>
                 <div className="h-screen flex flex-col items-center justify-center space-y-4">
@@ -65,7 +64,7 @@ const DocumentsPage = () => {
             </Layout>
         ) : (   
             <Layout>
-                <DocumentPageId />
+                <DocumentPageId documentId={documentId} />
             </Layout>
         )
     );

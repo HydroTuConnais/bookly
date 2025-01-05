@@ -7,7 +7,7 @@ const NotFoundPage: React.FC = () => {
     const navigate = useNavigate();
 
     const handleRedirectHomePage = () => {
-        navigate(-1);
+        navigate(-2);
     };
 
     return (

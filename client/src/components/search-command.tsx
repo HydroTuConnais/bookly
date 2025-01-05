@@ -33,7 +33,9 @@ export const SearchCommand = () => {
     useEffect(() => {
         if (isOpen) {
             searchDocuments("")
-            .then((data) => { setDocuments(data); setIsLoading(false)})
+            .then((data) => { 
+              setDocuments(data); 
+              setIsLoading(false)})
             .catch(console.error);
         }
     }, [isOpen]);
@@ -41,7 +43,6 @@ export const SearchCommand = () => {
     useEffect(() => {
         const down = (e: KeyboardEvent) => {
           if (e.key === "c" && (e.metaKey || e.ctrlKey)) {
-            console.log("TOGGLED");
             toggle();
           }
         }
@@ -57,7 +58,6 @@ export const SearchCommand = () => {
 
     const handleSidebarOpen = (event: React.MouseEvent, id: string) => {
         event.stopPropagation();
-        console.log("clicked");
         onOpen();
     };
 

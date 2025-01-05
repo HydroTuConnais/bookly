@@ -16,7 +16,6 @@ export const SettingsModal = () => {
     
     useEffect(() => {
         setIsMounted(true);
-        console.log("SettingsModal");
     }, []);
 
     if (!isMounted) {

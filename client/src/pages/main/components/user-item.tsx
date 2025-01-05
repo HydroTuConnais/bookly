@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 
 import {
     Avatar,
@@ -18,8 +18,11 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/context/useAuth";
 
 export const UserItem = () => {
-    const user = useAuth().user;
-    const { logoutUser } = useAuth();
+    const { user, logoutUser } = useAuth();
+
+    useEffect(() => {
+        console.log(user);
+    }, []);
 
     return (
         <DropdownMenu>

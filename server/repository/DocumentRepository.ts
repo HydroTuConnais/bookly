@@ -11,15 +11,7 @@ export const DocumentRepository = {
     return await prisma.document.findMany({
       where: { userId, parentDocumentId, isArchived: false },
       orderBy: { createdAt: 'asc' },
-      include: {
-      _count: {
-        select: {
-        children: {
-          where: { isArchived: false }
-        }
-        }
-      }
-      }
+      include: { _count: { select: { children: { where: { isArchived: false } } } } }
     });
   },
 

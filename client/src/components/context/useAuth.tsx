@@ -34,6 +34,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
+        console.log("checkToken Validating");
         if (token) {
             checkAuth(token);
         } else {

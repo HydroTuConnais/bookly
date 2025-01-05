@@ -2,28 +2,39 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { DocumentService } from '@/services/documentsService';
 import { useAuth } from './useAuth';
 
-interface Document {
+export interface Document {
     id: string;
     title: string;
+    userId: string;
+    isArchived: boolean;
+    archivedId: string | null;
+    isFavorite: boolean;
     parentDocumentId: string | null;
-    archived: boolean;
+    content: string | null;
+    coverImage: string | null;
     icon: string;
+    isPublished: boolean;
+    urlPublished: string | null;
+    createdAt: string;
+    updatedAt: string;
+    _count: {
+        children: number;
+    };
 }
 
 interface DocumentContextProps {
     loading: boolean;
     error: string | null;
     
-    documents: any[];
+    documents: Document[];
     setDocuments: any;
     
-    favorites: any[];
+    favorites: Document[];
     setFavorites: any;
     
-    getDocuments: (params: { documentId: string }) => Promise<void>;
     createDocument: (params: { title: string, parentDocumentId: string | null }) => Promise<void>;
-    getDocument: (params: { id: string }) => Promise<void>;
-    updateDocument: (params: { id: string, title: string, content: string }) => Promise<void>;
+    getDocument: (params: { id: string }) => Promise<Document>;
+    updateDocument: (params: { id: string, title?: string, content?: string }) => Promise<void>;
     deleteDocument: (params: { documentId: string }) => Promise<void>;
 
     getSidebarDocuments: (params: { parentDocumentId: string | null }) => Promise<any[]>;
@@ -35,7 +46,7 @@ interface DocumentContextProps {
     getSidebarFavoriteDocuments: (params: { parentFavoriteId: string | null, isChild: boolean }) => Promise<any[]>;
     getSidebarCountFavoriteDocuments : () => Promise<number>;
 
-    favoriteDocument: (params: { documentId: string }) => Promise<void>;
+    setfavoriteDocument: (params: { documentId: string }) => Promise<void>;
     unfavoriteDocument: (params: { documentId: string }) => Promise<void>;
 
     shareDocument: (params: { id: string, sharedEmail: string }) => Promise<void>;
@@ -47,26 +58,15 @@ const DocumentContext = createContext<DocumentContextProps | undefined>(undefine
 
 export const DocumentProvider = ({ children }: { children: React.ReactNode }) => {
     const { token, user } = useAuth();
-    const [documents, setDocuments] = useState<any[]>([]);
-    const [favorites, setFavorites] = useState<any[]>([]);
+    const [documents, setDocuments] = useState<Document[]>([]);
+    const [favorites, setFavorites] = useState<Document[]>([]);
 
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
-    const getDocuments = async ({ documentId }: { documentId: string }) => {
-        if (token && user) {
-            setLoading(true);
-            setError(null);
-            try {
-                const fetchedDocuments = await DocumentService.getDocument({ token, id: documentId });
-                return fetchedDocuments;
-            } catch (err: any) {
-                setError('Failed to fetch documents');
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        }
+    const logCall = (functionName: string) => {
+        console.log(`useDocuments: ${functionName} called`);
+        console.trace();
     };
 
     const createDocument = async ({ title, parentDocumentId }: { title: string, parentDocumentId: string | null }) => {
@@ -74,7 +74,6 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
             setError(null);
             try {
                 const document = await DocumentService.createDocument({ token, userid: user.id, title, parentDocumentId });
-                console.log(document);
                 setDocuments(prevDocs => [...prevDocs, document]);
                 return document;
             } catch (err: any) {
@@ -88,30 +87,36 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
 
     const getDocument = async ({ id }: { id: string }) => {
         if (token && user) {
-            setLoading(true);
             setError(null);
             try {
-                const document = await DocumentService.getDocument({ token: token, id: id });
+                const document = await DocumentService.getDocument({ token: token, userid: user.id, id: id });
+                console.log("getDocument", document);
+                return document;
             } catch (err: any) {
                 setError('Failed to fetch document');
                 console.error(err);
-            } finally {
-                setLoading(false);
             }
         }
     };
 
-    const updateDocument = async ({ id, title, content }: { id: string, title: string, content: string }) => {
+    const updateDocument = async ({ id, title, content }: { id: string, title?: string, content?: string }) => {
         if (token && user) {
-            setLoading(true);
             setError(null); // Reset error state
             try {
-                await DocumentService.updateDocument({ token: token, id: id, title: title, content: content });
+                const documents =await DocumentService.updateDocument({ token: token,userid: user.id, id: id, title: title, content: content });
+
+                setDocuments(prevDocs =>
+                    prevDocs.map(doc => (doc.id === id ? { ...doc, title: title ?? doc.title } : doc))
+                );
+
+                setFavorites(prevDocs =>
+                    prevDocs.map(doc => (doc.id === id ? { ...doc, title: title ?? doc.title } : doc))
+                );
+
+                return documents;
             } catch (err: any) {
                 setError('Failed to update document');
                 console.error(err);
-            } finally {
-                setLoading(false);
             }
         }
     };
@@ -153,7 +158,6 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
             setError(null); // Reset error state
             try {
                 const archivedDocuments = await DocumentService.getArchivedDocuments({ token: token });
-
                 return archivedDocuments;
             } catch (err: any) {
                 setError('Failed to fetch archived documents');
@@ -193,7 +197,7 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
     /*--------------------------------------------------------------*/
 
     const getSidebarFavoriteDocuments = async ({ parentFavoriteId, isChild}: { parentFavoriteId: string | null, isChild: boolean}) => {
-        console.log("getSidebarFavoriteDocuments", parentFavoriteId);
+        //console.log("getSidebarFavoriteDocuments", parentFavoriteId);
         if (token && user) {
             setError(null); // Reset error state
             try {
@@ -202,6 +206,7 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
             } catch (err: any) {
                 setError('Failed to fetch favorite documents');
                 console.error(err);
+                return [];
             }
         }
     };
@@ -211,20 +216,24 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
             setError(null); // Reset error state
             try {
                 const favoriteDocuments = await DocumentService.getSidebarCountFavoriteDocuments({ token, userid: user.id });
+                logCall('getSidebarCountFavoriteDocuments');
                 return favoriteDocuments;
             } catch (err: any) {
                 setError('Failed to fetch favorite documents');
                 console.error(err);
+                return 0;
             }
         }
     };
 
-    const favoriteDocument = async ({ documentId }: { documentId: string }) => {
+    const setfavoriteDocument = async ({ documentId }: { documentId: string }) => {
         if (token && user) {
             setError(null); // Reset error state
             try {
                 const document = await DocumentService.favoriteDocument({ token, userid: user.id, id: documentId });
+                logCall('setfavoriteDocument');
                 setFavorites(prevDocs => prevDocs.map(doc => doc.id === documentId ? { ...doc, favorite: true } : doc));
+                setDocuments(prevDocs => prevDocs.map(doc => doc.id === documentId ? { ...doc, favorite: true } : doc));
                 return document;
             } catch (err: any) {
                 setError('Failed to favorite document');
@@ -238,7 +247,9 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
             setError(null); // Reset error state
             try {
                 const document = await DocumentService.unfavoriteDocument({ token, userid: user.id, id: documentId });
+                logCall('unfavoriteDocument');
                 setFavorites(prevDocs => prevDocs.map(doc => doc.id === documentId ? { ...doc, favorite: false } : doc));
+                setDocuments(prevDocs => prevDocs.map(doc => doc.id === documentId ? { ...doc, favorite: false } : doc));
                 return document;
             } catch (err: any) {
                 setError('Failed to unfavorite document');
@@ -288,7 +299,6 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
                 setFavorites,
                 loading,
                 error,
-                getDocuments,
                 createDocument,
                 getDocument,
                 updateDocument,
@@ -300,7 +310,7 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
                 restoreDocument,
                 getSidebarFavoriteDocuments,
                 getSidebarCountFavoriteDocuments,
-                favoriteDocument,
+                setfavoriteDocument,
                 unfavoriteDocument,
                 searchDocuments
             }}

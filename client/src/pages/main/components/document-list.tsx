@@ -9,12 +9,12 @@ import { usePromise } from "@/hooks/usePromise";
 interface DocumentListProps {
     parentDocumentId: string | null;
     level?: number;
-    data?: string[];
 }
 
 export const DocumentList: React.FC<DocumentListProps> = ({
     parentDocumentId,
     level = 0,
+    
 }: DocumentListProps) => {
     const params = useParams();
     const [expanded, setExpanded] = useState<Record<string, boolean>>({});
@@ -27,9 +27,12 @@ export const DocumentList: React.FC<DocumentListProps> = ({
         }));
     };
 
-    const {documents, getSidebarDocuments } = useDocuments();
+    const {documents, getSidebarDocuments} = useDocuments();
 
-    const { data: documentsList, loading } = usePromise(() => getSidebarDocuments({ parentDocumentId: parentDocumentId }), [documents, parentDocumentId]);
+    const { data: documentsList, loading } = usePromise(() => 
+        getSidebarDocuments({ parentDocumentId: parentDocumentId }), 
+    [documents, parentDocumentId]
+    );
 
     const onRedirect = (documentId: string) => {
         navigate(`/documents/${documentId}`);

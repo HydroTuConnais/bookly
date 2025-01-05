@@ -38,12 +38,22 @@ export const Navigation = () => {
 
     const {
         createDocument,
-        favoriteDocument,
+        setfavoriteDocument,
         unfavoriteDocument,
-        getSidebarCountFavoriteDocuments
+        getSidebarCountFavoriteDocuments,
     } = useDocuments();
 
-    const { data, loading, error } = usePromise(() => getSidebarCountFavoriteDocuments(), [favoriteDocument, unfavoriteDocument]);
+    useEffect(() => {
+        console.log("setFavoriteDoucument");
+    }, [setfavoriteDocument]);
+
+    useEffect(() => {
+        console.log("unFavoriteDoucument");
+    }, [unfavoriteDocument]);
+
+    const { data, loading, error } = usePromise(() => getSidebarCountFavoriteDocuments(), [setfavoriteDocument, unfavoriteDocument]);
+
+    
 
     useEffect(() => {
         if (data !== null) {
@@ -136,7 +146,7 @@ export const Navigation = () => {
             title: "new become navigation Document",
             parentDocumentId: null
         }).then((data) => {
-            console.log(data);
+            //console.log(data);
         }).catch((error) => {
             console.error("Error creating document:", error);
         });
@@ -188,7 +198,7 @@ export const Navigation = () => {
                     {haveFavorites && (
                         <div>
                             <h1 className='w-full flex text-[0.8rem] pt-4 justify-start ml-4 text-muted-foreground'>Favorites</h1>
-                            <FavoriteList parentFavoriteId={"null"} isChild={false} />
+                            <FavoriteList parentFavoriteId={"null"} />
                         </div>
                     )}
 
@@ -222,17 +232,20 @@ export const Navigation = () => {
                 </div>
                 <div onMouseDown={handleMouseDown} onClick={resetWidth} className="opacity-0 group-hover/sidebar:opacity-100 transition cursor-ew-resize absolute h-full w-1 bg-primary/10 right-0 top-0" />
             </aside>
+
             <div
                 ref={navbarref}
                 className={cn(
                     "fixed top-3 z-[99999] left-60 w-[calc(100%-240px)]",
                     isReseting && "transition-all ease-in-out duration-300",
-                    isMobile && "left-0 w-full"
+                    isMobile && "left-0 w-full",
+                    // !!params.documentId ? "top-0" : "top-3"
                 )}>
                 { !!params.documentId ? (
                     <Navbar 
                     isCollapsed={isCollapsed}
                     onResetWidth={resetWidth}
+                    documentId={params.documentId}
                     />
                 ) : (
                     <nav className={cn(isCollapsed ? "h-6 w-6 text-muted-foreground rounded-sm hover:bg-neutral-200 dark:hover:bg-neutral-600 mx-3 my-2" : "hidden")}>

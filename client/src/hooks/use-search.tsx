@@ -13,8 +13,7 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
-        console.log("use-search");
-        console.log(isOpen);
+        //console.log(isOpen);
     }, [isOpen]);
 
     const onOpen = useCallback(() => setIsOpen(true), []);

@@ -12,10 +12,7 @@ import { AnimationProvider } from './components/context/useAnimation';
 import { ThemeProvider } from './components/context/useTheme';
 import NotFoundPage from './pages/NotFoundPage';
 
-
 const queryClient = new QueryClient();
-
-
 
 const App: React.FC = () => {
   return (
@@ -23,15 +20,15 @@ const App: React.FC = () => {
       <AuthProvider>
         <DocumentProvider>
           <AnimationProvider>
-              <QueryClientProvider client={queryClient}>
-                <Toaster />
-                <Routes>
-                  <Route path="/" element={<MarketingPage />} />
-                  <Route path="/documents" element={<DocumentsPage />} />
-                  <Route path="/documents/:documentId" element={<DocumentsPage />} />
-                  <Route path="*" element={<NotFoundPage />} />
-                </Routes>
-              </QueryClientProvider>
+            <QueryClientProvider client={queryClient}>
+              <Toaster />
+              <Routes>
+                <Route path="/" element={<MarketingPage />} />
+                <Route path="/documents" element={<DocumentsPage />} />
+                <Route path="/documents/:documentId" element={<DocumentsPage />} />
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </QueryClientProvider>
           </AnimationProvider>
         </DocumentProvider>
       </AuthProvider>

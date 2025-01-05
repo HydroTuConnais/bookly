@@ -11,6 +11,7 @@ export const DocumentController = {
 
     try {
       const document = await DocumentService.getDocument(id, userId);
+      console.log("Document");
       res.status(200).json(document);
     }
     catch (error: ErrorClass | any) {
@@ -39,6 +40,7 @@ export const DocumentController = {
 
     try {
       await DocumentService.updateDocument(id, title, userId, content);
+      console.log("Update");
       res.status(202).json({ success: true });
     }
     catch (error: ErrorClass | any) {
@@ -68,7 +70,6 @@ export const DocumentController = {
     try {
       const documents = await DocumentService.getSidebarDocuments(userId, parentDocumentId);
       console.log("Sidebar");
-      console.log(documents);
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {

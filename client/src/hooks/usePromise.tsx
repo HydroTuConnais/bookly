@@ -7,6 +7,7 @@ export const usePromise = <T,>(promiseFn: () => Promise<T>, deps: any[]) => {
     const [promise, setPromise] = useState<Promise<T> | null>(null);
 
     useEffect(() => {
+        console.log('Dependencies:', deps); // Log deps
         let isMounted = true;
         setLoading(true);
         setError(null);
