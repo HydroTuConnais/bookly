@@ -4,22 +4,14 @@ import { useAuth } from './useAuth';
 
 export interface Document {
     id: string;
-    title: string;
-    userId: string;
-    isArchived: boolean;
-    archivedId: string | null;
-    isFavorite: boolean;
-    parentDocumentId: string | null;
-    content: string | null;
-    coverImage: string | null;
-    icon: string;
-    isPublished: boolean;
-    urlPublished: string | null;
-    createdAt: string;
-    updatedAt: string;
-    _count: {
-        children: number;
-    };
+    title?: string;
+    userId?: string;
+    isArchived?: boolean;
+    archivedId?: string | null;
+    isFavorite?: boolean;
+    content?: string | null;
+    coverImage?: string | null;
+    icon?: string | null;
 }
 
 interface DocumentContextProps {
@@ -34,7 +26,7 @@ interface DocumentContextProps {
     
     createDocument: (params: { title: string, parentDocumentId: string | null }) => Promise<void>;
     getDocument: (params: { id: string }) => Promise<Document>;
-    updateDocument: (params: { id: string, title?: string, content?: string }) => Promise<void>;
+    updateDocument: (params: { id: string, title?: string, content?: string, icon?: string}) => Promise<void>;
     deleteDocument: (params: { documentId: string }) => Promise<void>;
 
     getSidebarDocuments: (params: { parentDocumentId: string | null }) => Promise<any[]>;
@@ -52,6 +44,8 @@ interface DocumentContextProps {
     shareDocument: (params: { id: string, sharedEmail: string }) => Promise<void>;
     //getSharedDocuments: () => Promise<void>;
     searchDocuments: (searchTerm: string) => Promise<any[]>;
+
+    removeEmoji: (params: { id: string }) => Promise<void>;
 }
 
 const DocumentContext = createContext<DocumentContextProps | undefined>(undefined);
@@ -90,7 +84,6 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
             setError(null);
             try {
                 const document = await DocumentService.getDocument({ token: token, userid: user.id, id: id });
-                console.log("getDocument", document);
                 return document;
             } catch (err: any) {
                 setError('Failed to fetch document');
@@ -99,18 +92,18 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
         }
     };
 
-    const updateDocument = async ({ id, title, content }: { id: string, title?: string, content?: string }) => {
+    const updateDocument = async ({ id, title, content, icon}: { id: string, title?: string, content?: string, icon?: string}) => {
         if (token && user) {
             setError(null); // Reset error state
             try {
-                const documents =await DocumentService.updateDocument({ token: token,userid: user.id, id: id, title: title, content: content });
+                const documents = await DocumentService.updateDocument({ token: token, userid: user.id, id: id, title: title, icon: icon , content: content });
 
                 setDocuments(prevDocs =>
-                    prevDocs.map(doc => (doc.id === id ? { ...doc, title: title ?? doc.title } : doc))
+                    prevDocs.map(doc => (doc.id === id ? { ...doc, title: title ?? doc.title, icon: icon ?? doc.icon } : doc))
                 );
 
                 setFavorites(prevDocs =>
-                    prevDocs.map(doc => (doc.id === id ? { ...doc, title: title ?? doc.title } : doc))
+                    prevDocs.map(doc => (doc.id === id ? { ...doc, title: title ?? doc.title, icon: icon ?? doc.icon } : doc))
                 );
 
                 return documents;
@@ -290,6 +283,23 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
         }
     };
 
+    /*--------------------------------------------------------------*/
+
+    const removeEmoji = async ({ id }: { id: string }) => {
+        if (token && user) {
+            setError(null); // Reset error state
+            try {
+                const document = await DocumentService.removeicon({ token: token, userid: user.id, id: id });
+                setDocuments(prevDocs => prevDocs.map(doc => doc.id === id ? { ...doc, icon: null } : doc));
+                setFavorites(prevDocs => prevDocs.map(doc => doc.id === id ? { ...doc, icon: null } : doc));
+                return document;
+            } catch (err: any) {
+                setError('Failed to remove emoji');
+                console.error(err);
+            }
+        }
+    }
+
     return (
         <DocumentContext.Provider
             value={{
@@ -312,7 +322,8 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
                 getSidebarCountFavoriteDocuments,
                 setfavoriteDocument,
                 unfavoriteDocument,
-                searchDocuments
+                searchDocuments,
+                removeEmoji,
             }}
         >
             {children}

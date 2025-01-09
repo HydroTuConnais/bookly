@@ -26,4 +26,6 @@ router.get('/documents/shared', authenticate, DocumentController.getSharedDocume
 
 router.get('/documents/search', authenticate, DocumentController.searchDocuments);
 
+router.delete('/documents/:id/removeicon', authenticate, DocumentController.removeIcon);
+
 export default router;

@@ -53,8 +53,6 @@ export const Navigation = () => {
 
     const { data, loading, error } = usePromise(() => getSidebarCountFavoriteDocuments(), [setfavoriteDocument, unfavoriteDocument]);
 
-    
-
     useEffect(() => {
         if (data !== null) {
             setHaveFavorites(data > 0);

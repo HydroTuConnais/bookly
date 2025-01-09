@@ -102,21 +102,21 @@ export const Item = ({
         event.stopPropagation();
         if (!id) return;
 
-        // const promise = setfavoriteDocument({ documentId: id }).then
-        //     ((documentId) => {
-        //         console.log("set favorite documentId:", documentId);
-        //         // console.log(documentId);
-        //     })
-        //     .catch((error) => {
-        //         console.error("Error archiving document:", error
-        //         )
-        //     });
+        const promise = setfavoriteDocument({ documentId: id }).then
+            ((documentId) => {
+                console.log("set favorite documentId:", documentId);
+                // console.log(documentId);
+            })
+            .catch((error) => {
+                console.error("Error archiving document:", error
+                )
+            });
 
-        // toast.promise(promise, {
-        //     loading: "Set bookmark...",
-        //     success: "Bookmark was set",
-        //     error: "Error set bookmark document"
-        // });
+        toast.promise(promise, {
+            loading: "Set bookmark...",
+            success: "Bookmark was set",
+            error: "Error set bookmark document"
+        });
     }
 
     const unFavorite = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

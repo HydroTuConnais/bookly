@@ -7,6 +7,7 @@ import { Navigate, useParams } from "react-router-dom";
 import { Title } from "./title";
 import { Banner } from "./banner";
 import { Menu } from "./menu";
+import { useQuery } from "react-query";
 
 interface NavbarProps {
     isCollapsed: boolean;
@@ -19,18 +20,17 @@ export const Navbar = ( {
     onResetWidth,
     documentId
 }: NavbarProps) => {
-    const { getDocument, restoreDocument, deleteDocument} = useDocuments();
+    const { getDocument, updateDocument, archiveDocument, restoreDocument} = useDocuments();
 
-    const { data: documents, loading, error } = usePromise<Document | null>(() => getDocument({ id: documentId }), [documentId, restoreDocument, deleteDocument]);
-
-    useEffect(() => {
-        if (documents) {
-            console.log("NAVBAR")
-            console.log(documents.title);
+    const { data: documents, isLoading, isError } = useQuery<Document | null>(
+        ["document", documentId, updateDocument, archiveDocument, restoreDocument],
+        () => getDocument({ id: documentId }),
+        {
+          refetchOnWindowFocus: true,
         }
-    }, [documents]);
+    );
 
-    if (loading) {
+    if (isLoading) {
         return (
             <nav className="bg-background dark:bg-[#1F1F1F] px-3 py-2 w-full flex items-center justify-between gap-x-4 animate-pulse">
                 <div className="h-6 w-[200px] rounded bg-gray-200 dark:bg-neutral-700"></div>

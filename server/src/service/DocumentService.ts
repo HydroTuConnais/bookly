@@ -63,7 +63,7 @@ export const DocumentService = {
     }
   },
 
-  async updateDocument(id: string, title: string | null, userId: string, content: string | null) {
+  async updateDocument(id: string, title: string | null, userId: string, content: string | null, emoji: string | null, coveredImage: string | null) {
     try {
       if (!userId) {
         throw new ErrorClass(400, 'UserId is required');
@@ -74,12 +74,27 @@ export const DocumentService = {
         throw new ErrorClass(401, 'Unauthorized or Not Found');
       }
 
-      const updateData: { title?: string, content?: string } = {};
+      const updateData: { 
+        title?: string, 
+        content?: string, 
+        icon?: string 
+        coverImage?: string
+      } = {};
+
+
       if (title !== null && title !== undefined) {
         updateData.title = title;
       }
       if (content !== null && content !== undefined) {
         updateData.content = content;
+      }
+
+      if (emoji !== null && emoji !== undefined) {
+        updateData.icon = emoji;
+      }
+
+      if (coveredImage !== null && coveredImage !== undefined) {
+        updateData.coverImage = coveredImage;
       }
 
       console.log("updateData", updateData);
@@ -307,5 +322,21 @@ export const DocumentService = {
     catch (error) {
       throw new ErrorClass(500, 'Error process searching documents');
     }
-  }
+  },
+
+  /*--------------------------------------------------------------*/
+
+  async removeIcon(documentId: string | null, userId: string) {
+    try {
+      const document = await DocumentRepository.findDocumentById(documentId);
+      if (!document || document.userId !== userId) {
+        throw new ErrorClass(401, 'Unauthorized or Not Found');
+      }
+
+      return await DocumentRepository.removeIcon(documentId);
+    }
+    catch (error) {
+      throw new ErrorClass(500, 'Error process removing icon');
+    }
+  },
 };

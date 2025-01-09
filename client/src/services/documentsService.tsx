@@ -23,9 +23,9 @@ export const DocumentService = {
         }
     },
 
-    async updateDocument({ token, userid, id, title, content }: { token: string,userid: string, id: string, title?: string, content?: string | null }) {
+    async updateDocument({ token, userid, id, title, content, icon}: { token: string,userid: string, id: string, title?: string, content?: string | null, icon?: string }) {
         try {
-            const data = await fetchData({ method: "PUT", endpoint: `/documents/${id}/content`, body: { title, content },header: { UserId: userid } ,token });
+            const data = await fetchData({ method: "PUT", endpoint: `/documents/${id}/content`, body: { title, content, icon }, header: { UserId: userid }, token });
             return data;
         } catch (error) {
             handleErrors(error);
@@ -141,6 +141,15 @@ export const DocumentService = {
             handleErrors(error);
         }
     },
+
+    async removeicon({ token, userid, id }: { token: string, id: string, userid: string }) {
+        try {
+            const data = await fetchData({ method: "DELETE", endpoint: `/documents/${id}/removeicon`, header: { UserId: userid }, token });
+            return data;
+        } catch (error) {
+            handleErrors(error);
+        }
+    }
 }
 
 export const fetchData = async ({ method, endpoint, params, body, header, token }: { method: string, token: string, endpoint: string, header?: any, params?: any, body?: any }) => {

@@ -166,4 +166,13 @@ export const DocumentRepository = {
       orderBy: { createdAt: 'desc' },
     });
   },
+
+  /*--------------------------------------------------------------*/
+
+  async removeIcon(id: string | null) {
+    return await prisma.document.update({
+      where: { id },
+      data: { icon: null }
+    });
+  },
 };

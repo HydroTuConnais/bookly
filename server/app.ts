@@ -1,6 +1,6 @@
 const express = require('express');
-import DocumentRoutes from './routes/DocumentRoutes';
-import AuthRoutes from './routes/AuthRoutes';
+import DocumentRoutes from './src/routes/DocumentRoutes';
+import AuthRoutes from './src/routes/AuthRoutes';
 import cors from 'cors';
 
 const app = express();

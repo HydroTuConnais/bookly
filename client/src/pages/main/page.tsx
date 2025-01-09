@@ -18,7 +18,6 @@ const DocumentsPage = () => {
     const { user } = useAuth();
     const { documentId } = useParams<{ documentId: string }>();
 
-
     const {
         createDocument,
     } = useDocuments();
