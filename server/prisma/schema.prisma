@@ -49,3 +49,10 @@ model Document {
   @@index([userId], name: "idx_documents_by_user")
   @@index([userId, parentDocumentId], name: "idx_documents_by_user_parent")
 }
+
+model Image {
+  id         String   @id @default(uuid())
+  filename   String
+  filepath   String
+  uploadedAt DateTime @default(now())
+}

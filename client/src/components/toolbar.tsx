@@ -2,9 +2,10 @@ import React, { ElementRef, useRef, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { Document, useDocuments} from "@/components/context/useDocuments";
 import { useQueryClient } from "react-query";
+import { useCoverImage } from "@/hooks/use-cover-image";
 import { IconPicker } from "./icon-picker";
 import { Button } from "./ui/button";
-import { ImageIcon, Smile, X } from "lucide-react";
+import { ImageIcon, Smile } from "lucide-react";
 
 interface ToolbarProps {
   initialData: Document;
@@ -18,6 +19,7 @@ export const Toolbar = ({
   const inputRef = useRef<ElementRef<"textarea">>(null);
   const { updateDocument, removeEmoji} = useDocuments();
   const queryClient = useQueryClient();
+  const coverImage = useCoverImage();
 
   const [title, setTitle] = useState(initialData.title || "Untitled");
   const [isEditing, setIsEditing] = useState(false);
@@ -101,7 +103,7 @@ export const Toolbar = ({
         )}
         {!initialData.coverImage && !preview && (
           <Button
-            onClick={() => {}}
+            onClick={coverImage.onOpen}
             className="text-muted-foreground text-xs bg-white dark:bg-[#1F1F1F] hover:bg-neutral-200 hover:dark:bg-neutral-800 transition border-none"
             variant="outline"
             size="sm"
