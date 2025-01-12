@@ -3,6 +3,7 @@ import { Navigate } from "react-router-dom";
 import { Toolbar } from "@/components/toolbar";
 import { Document, useDocuments } from "@/components/context/useDocuments";
 import { useQuery } from "react-query";
+import { Cover } from "../components/cover";
 
 export const DocumentPageId = ({ documentId }: { documentId: string }) => {
   const { getDocument, archiveDocument, restoreDocument} = useDocuments();
@@ -32,7 +33,7 @@ export const DocumentPageId = ({ documentId }: { documentId: string }) => {
 
   return (
     <div className="pb-40">
-        <div className="h-[35vh]"/>
+        <Cover url={documents.coverImage}/>
         <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
             <Toolbar initialData={documents} />
         </div>

@@ -14,6 +14,7 @@ import { SettingsProvider } from "@/hooks/use-options";
 import { SettingsModal } from "@/components/modals/settings-modal";
 import { CoverImageProvider } from "@/hooks/use-cover-image";
 import { CoverImageModal } from "@/components/modals/cover-image-modal";
+import { ImageProvider } from "@/components/context/useImage";
 
 
 
@@ -56,9 +57,11 @@ const LayoutWithProvider = ({ children }: { children: React.ReactNode }) => {
     return (
         <SearchProvider>
             <SettingsProvider>
-                <CoverImageProvider>
-                    <Layout>{children}</Layout>
-                </CoverImageProvider>
+                <ImageProvider>
+                    <CoverImageProvider>
+                        <Layout>{children}</Layout>
+                    </CoverImageProvider>
+                </ImageProvider>
             </SettingsProvider>
         </SearchProvider>
     );

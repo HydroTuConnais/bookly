@@ -1,6 +1,7 @@
 const express = require('express');
 import DocumentRoutes from './src/routes/DocumentRoutes';
 import AuthRoutes from './src/routes/AuthRoutes';
+import ImageRoutes from './src/routes/ImageRoutes';
 import cors from 'cors';
 
 const app = express();
@@ -8,6 +9,8 @@ const app = express();
 app.use(express.json());
 app.use("/api", DocumentRoutes);
 app.use(AuthRoutes);
+app.use("/api", ImageRoutes);
+
 
 app.use(
   cors({
@@ -17,6 +20,7 @@ app.use(
     allowedHeaders: ['Content-Type', 'Authorization']
   })
 );
+
 
 
 const PORT = process.env.PORT || 3000;

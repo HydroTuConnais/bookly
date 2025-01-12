@@ -1,9 +1,10 @@
-import { PrismaClient, Image } from "@prisma/client";
-
+const { PrismaClient} = require('@prisma/client');
 const prisma = new PrismaClient();
 
-class ImageRepository {
-  async createImage(imageId: string, imageData: { filename: string; filepath: string }): Promise<Image> {
+
+export const ImageRepository = {
+  
+  async createImage(imageId: string, imageData: { filename: string; filepath: string }) {
     return await prisma.image.create({
       data: {
         id: imageId,
@@ -11,23 +12,32 @@ class ImageRepository {
         filepath: imageData.filepath,
       },
     });
-  }
+  },
 
-  async findAllImages(): Promise<Image[]> {
+  async updateImage(id: string, imageData: { filename: string; filepath: string }) {
+    return await prisma.image.update({
+      where: { id },
+      data: {
+        filename: imageData.filename,
+        filepath: imageData.filepath,
+      },
+    });
+  },
+
+  async findAllImages() {
     return await prisma.image.findMany();
-  }
+  },
 
-  async findImageById(id: string): Promise<Image | null> {
+  async findImageById(id: string) {
+    console.log(id);
     return await prisma.image.findUnique({
       where: { id },
     });
-  }
+  },
 
-  async deleteImage(id: string): Promise<Image> {
+  async deleteImage(id: string) {
     return await prisma.image.delete({
       where: { id },
     });
   }
 }
-
-export default new ImageRepository();
