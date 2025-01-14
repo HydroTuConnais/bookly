@@ -5,10 +5,13 @@ import path from 'path';
 
 export const ImageController = {
   async uploadImage(req: any, res: Response): Promise<void> {
+    console.log(req);
+
     const { filename, path: filepath } = req.file!;
     try {
-      const image = await ImageService.saveImage({ filename, filepath });
-      res.status(201).json({ message: "Image uploaded successfully", filename, filepath });
+      const imageUrl = await ImageService.saveImage({ filename, filepath });
+
+      res.status(201).json(imageUrl);
     } catch (error: any) {
       console.error(error.message);
       res.status(500).json({ error: "Failed to save image metadata" });
@@ -18,7 +21,7 @@ export const ImageController = {
   async getAllImages(req: Request, res: Response): Promise<void> {
     try {
       const images = await ImageService.getAllImages();
-      res.json(images);
+      res.status(200).json(images);
     } catch (error: any) {
       console.error(error.message);
       res.status(500).json({ error: "Failed to fetch images" });
@@ -27,19 +30,22 @@ export const ImageController = {
 
   async getImageById(req: Request, res: Response): Promise<void> {
     const id  = req.params.id;
-    console.log(id);
     try {
       const image = await ImageService.getImageById(id);
+      
       if (!image) {
         res.status(404).json({ error: "Image not found" });
-      } else {
+      } 
+
+      else {
         const filePath = path.resolve(image.filepath);
         if (fs.existsSync(filePath)) {
-          res.sendFile(filePath);
+          res.status(200).sendFile(filePath);
         } else {
           res.status(404).json({ error: "File not found" });
         }
       }
+
     } catch (error: any) {
       console.error(error.message);
       res.status(500).json({ error: "Failed to fetch image" });
@@ -48,9 +54,11 @@ export const ImageController = {
 
   async deleteImage(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
+    const { url	} = req.body;
+    
     try {
-      await ImageService.deleteImage(id);
-      res.json({ message: "Image deleted successfully" });
+      await ImageService.deleteImage(id, url);
+      res.status(200).json({ message: "Image deleted successfully" });
     } catch (error: any) {
       console.error(error.message);
       res.status(500).json({ error: "Failed to delete image" });

@@ -52,6 +52,7 @@ model Document {
 
 model Image {
   id         String   @id @default(uuid())
+  url        String   @unique
   filename   String
   filepath   String
   uploadedAt DateTime @default(now())

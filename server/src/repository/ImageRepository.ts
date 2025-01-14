@@ -4,10 +4,11 @@ const prisma = new PrismaClient();
 
 export const ImageRepository = {
   
-  async createImage(imageId: string, imageData: { filename: string; filepath: string }) {
+  async createImage(imageId: string, imageUrl: string, imageData: { filename: string; filepath: string }) {
     return await prisma.image.create({
       data: {
         id: imageId,
+        url: imageUrl,
         filename: imageData.filename,
         filepath: imageData.filepath,
       },
@@ -29,10 +30,29 @@ export const ImageRepository = {
   },
 
   async findImageById(id: string) {
-    console.log(id);
-    return await prisma.image.findUnique({
+    const image = await prisma.image.findUnique({
       where: { id },
     });
+    return image;
+  },
+
+  async findImageByIdDocument(id: string) {
+    const document = await prisma.document.findFirst({
+      where: {
+        coverImage: {
+          contains: id
+        }
+      },
+    });
+
+    if (document && document.coverImage) {
+      const match = document.coverImage.match(/\/([^\/]+)$/);
+      if (match) {
+        return match[1]; // This will return the extracted ID
+      }
+    }
+    
+    return null;
   },
 
   async deleteImage(id: string) {

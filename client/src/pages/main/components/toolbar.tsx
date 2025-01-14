@@ -3,8 +3,8 @@ import TextareaAutosize from "react-textarea-autosize";
 import { Document, useDocuments} from "@/components/context/useDocuments";
 import { useQueryClient } from "react-query";
 import { useCoverImage } from "@/hooks/use-cover-image";
-import { IconPicker } from "./icon-picker";
-import { Button } from "./ui/button";
+import { IconPicker } from "../../../components/icon-picker";
+import { Button } from "../../../components/ui/button";
 import { ImageIcon, Smile } from "lucide-react";
 
 interface ToolbarProps {
@@ -84,9 +84,7 @@ export const Toolbar = ({
         </div>
       )}
       {!!initialData.icon && preview && (
-        <p className="text-6xl pt-6">
-          {initialData.icon}
-        </p>
+        <p className="pt-6 text-6xl">{initialData.icon}</p>
       )}
       <div className="opacity-0 group-hover:opacity-100 flex items-center gap-x-1 py-4">
         {!initialData.icon && !preview && (

@@ -26,7 +26,7 @@ interface DocumentContextProps {
     
     createDocument: (params: { title: string, parentDocumentId: string | null }) => Promise<void>;
     getDocument: (params: { id: string }) => Promise<Document>;
-    updateDocument: (params: { id: string, title?: string, content?: string, icon?: string}) => Promise<void>;
+    updateDocument: (params: { id: string, title?: string, content?: string, icon?: string, coverImage?: string}) => Promise<Document>;
     deleteDocument: (params: { documentId: string }) => Promise<void>;
 
     getSidebarDocuments: (params: { parentDocumentId: string | null }) => Promise<any[]>;
@@ -92,18 +92,20 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
         }
     };
 
-    const updateDocument = async ({ id, title, content, icon}: { id: string, title?: string, content?: string, icon?: string}) => {
+    const updateDocument = async ({ id, title, content, icon, coverImage}: { id: string, title?: string, content?: string, icon?: string, coverImage?: string}) => {
         if (token && user) {
-            setError(null); // Reset error state
+            setError(null);
             try {
-                const documents = await DocumentService.updateDocument({ token: token, userid: user.id, id: id, title: title, icon: icon , content: content });
+                const documents = await DocumentService.updateDocument({ token: token, userid: user.id, id: id, title: title, icon: icon, content: content, coverImage: coverImage });
+
+                console.log("updateDocument", documents);
 
                 setDocuments(prevDocs =>
-                    prevDocs.map(doc => (doc.id === id ? { ...doc, title: title ?? doc.title, icon: icon ?? doc.icon } : doc))
+                    prevDocs.map(doc => (doc.id === id ? { ...doc, title: title ?? doc.title, icon: icon ?? doc.icon, coverImage: coverImage} : doc))
                 );
 
                 setFavorites(prevDocs =>
-                    prevDocs.map(doc => (doc.id === id ? { ...doc, title: title ?? doc.title, icon: icon ?? doc.icon } : doc))
+                    prevDocs.map(doc => (doc.id === id ? { ...doc, title: title ?? doc.title, icon: icon ?? doc.icon, coverImage: coverImage} : doc))
                 );
 
                 return documents;

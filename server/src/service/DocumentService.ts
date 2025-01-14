@@ -63,7 +63,7 @@ export const DocumentService = {
     }
   },
 
-  async updateDocument(id: string, title: string | null, userId: string, content: string | null, emoji: string | null, coveredImage: string | null) {
+  async updateDocument(id: string, title: string | null, userId: string, content: string | null, emoji: string | null, coverImage: string | null) {
     try {
       if (!userId) {
         throw new ErrorClass(400, 'UserId is required');
@@ -93,12 +93,11 @@ export const DocumentService = {
         updateData.icon = emoji;
       }
 
-      if (coveredImage !== null && coveredImage !== undefined) {
-        updateData.coverImage = coveredImage;
+      if (coverImage !== null && coverImage !== undefined) {
+        updateData.coverImage = coverImage;
       }
 
-      console.log("updateData", updateData);
-      await DocumentRepository.updateDocument(id, updateData);
+      return await DocumentRepository.updateDocument(id, updateData);
     }
     catch (error) {
       throw new ErrorClass(404, 'Error process updating document');

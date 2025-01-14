@@ -11,10 +11,6 @@ const CoverImageContext = createContext<CoverImageStore | undefined>(undefined);
 export const CoverImageProvider = ({ children }: { children: ReactNode }) => {
     const [isOpen, setIsOpen] = useState(false);
 
-    useEffect(() => {
-        console.log(isOpen);
-    }, [isOpen]);
-
     const onOpen = useCallback(() => setIsOpen(true), []);
     const onClose = useCallback(() => setIsOpen(false), []);
 

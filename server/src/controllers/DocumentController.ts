@@ -35,13 +35,15 @@ export const DocumentController = {
 
   async updateDocument(req: Request, res: Response) {
     const id = req.params.id;
-    const { title, content, icon, coveredImage} = req.body;
+    const { title, content, icon, coverImage} = req.body;
     const userId = req.headers.userid as string;
 
+    console.log("Update", req);
+
     try {
-      await DocumentService.updateDocument(id, title, userId, content, icon, coveredImage);
+      const document = await DocumentService.updateDocument(id, title, userId, content, icon, coverImage);
       console.log("Update");
-      res.status(202).json({ success: true });
+      res.status(202).json(document);
     }
     catch (error: ErrorClass | any) {
       res.status(error.status).json({ error: error.message });

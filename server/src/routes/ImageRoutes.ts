@@ -8,14 +8,13 @@ const router = express.Router();
 const multer = require("multer");
 const storage = multer.diskStorage({
   destination: (req: any, file: any, cb: any) => {
-    const uploadPath = path.join(__dirname, "../../public"); // Chemin absolu au répertoire Images
+    const uploadPath = path.join(__dirname, "../../public");
     if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath, { recursive: true }); // Crée le répertoire s'il n'existe pas
+      fs.mkdirSync(uploadPath, { recursive: true });
     }
-    cb(null, uploadPath); // Définit le chemin où enregistrer les fichiers
+    cb(null, uploadPath);
   },
   filename: (req: any, file: any, cb: any) => {
-    console.log(file);
     cb(null, Date.now() + path.extname(file.originalname));
   },
 });
@@ -23,9 +22,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Routes
+router.get("/image/:id", ImageController.getImageById);
 router.post("/image/upload", upload.single("image"), ImageController.uploadImage);
 // router.post("/image/update/:id", upload.single("image"), ImageController.updateImage);
-router.get("/image/:id", ImageController.getImageById);
 router.delete("/image/:id", ImageController.deleteImage);
 
 export default router;

@@ -11,30 +11,40 @@ export interface Image {
 
 interface ImageContextProps {
     upload: (params: { file: File }) => Promise<void>;
-
+    remove: (params: { url: string, documentId: string}) => Promise<void>;
 }
 
 const ImageContext = createContext<ImageContextProps | undefined>(undefined);
 
 export const ImageProvider = ({ children }: { children: React.ReactNode }) => {
     const { token, user } = useAuth();
-
-    const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
     const upload = async ({ file }: { file: File }) => {
         if (token && user) {
             setError(null);
             try {
-                const image = await ImageService.upload({ token, userid: user.id, file });
-                console.log("Image uploaded successfully", image);
-                return image;
+                const imageUrl = await ImageService.upload({ token, userid: user.id, file });
+                return imageUrl;
             } catch (err: any) {
                 setError('Failed to upload image');
-            } finally {
-                setLoading(false);
             }
         }
+    };
+
+    const remove = async ({ url, documentId} : { url: string, documentId: string | null}) => {
+        if (token && user) {
+            setError(null);
+
+            if(!documentId) return setError('Image ID is required');
+
+            try {
+                const response = await ImageService.remove({ token, userid: user.id, url,documentId});
+                return response;
+            } catch (err: any) {
+                setError('Failed to remove image');
+            }
+        };
     };
 
 
@@ -42,6 +52,7 @@ export const ImageProvider = ({ children }: { children: React.ReactNode }) => {
         <ImageContext.Provider
             value={{
                 upload,
+                remove
             }}
         >
             {children}

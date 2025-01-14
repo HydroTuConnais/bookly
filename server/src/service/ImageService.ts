@@ -1,13 +1,23 @@
-import { ImageRepository } from "../repository/ImageRepository";
 import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
+import { ImageRepository } from "../repository/ImageRepository";
+import { DocumentRepository } from "../repository/DocumentRepository";
 
 export const ImageService = {
 
   async saveImage(imageData: { filename: string; filepath: string }) {
     const imageId = uuidv4();
+    const imageUrl = process.env.SERVER_URL + "/api/image/" + imageId;
 
-    return await ImageRepository.createImage(imageId, imageData);
+    const wait = await ImageRepository.createImage(imageId, imageUrl, imageData);
+
+    if(wait){
+      return imageUrl;
+    }
+    
+    if (!wait) {
+      throw new Error("Failed to save image metadata");
+    }
   },
 
   async updateImage(id: string, imageData: { filename: string; filepath: string }) {
@@ -22,12 +32,18 @@ export const ImageService = {
     return await ImageRepository.findImageById(id);
   },
 
-  async deleteImage(id: string) {
-    const image = await ImageRepository.findImageById(id);
+  async deleteImage(id: string, url: string) {
+    const imageId = await ImageRepository.findImageByIdDocument(url);
+
+    const image = await ImageRepository.findImageById(imageId);
+
     if (!image) {
       throw new Error("Image not found");
     }
+
     fs.unlinkSync(image.filepath);
-    return await ImageRepository.deleteImage(id);
+    await ImageRepository.deleteImage(imageId);
+    await DocumentRepository.updateDocument(id, { coverImage: null });
+    return { message: "Image deleted successfully" };
   }
 }

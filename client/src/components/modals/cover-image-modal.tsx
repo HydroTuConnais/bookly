@@ -4,24 +4,44 @@ import {
     DialogContent,
     DialogHeader
 } from "@/components/ui/dialog"
+import { SingleImageDropzone } from "@/components/single-image-dropzone";
 import { useCoverImage } from "@/hooks/use-cover-image";
 import { useImage } from "@/components/context/useImage";
-import { SingleImageDropzone } from "@/components/single-image-dropzone";
+import { useDocuments } from "@/components/context/useDocuments";
+import { useParams } from "react-router-dom";
 
 export const CoverImageModal = () => {
-    const [file, setFile] = useState<File | undefined>(undefined);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const params = useParams();
+    const documentId = params.documentId;
+
     const coverImage = useCoverImage();
     const image = useImage();
+
+    const [file, setFile] = useState<File | undefined>(undefined);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+     
+    const { updateDocument } = useDocuments();
+    
+    const onClose = () => {
+        setFile(undefined);
+        setIsSubmitting(false);
+        coverImage.onClose();
+    }
 
     const onChange = async (file?: File) => {
         if (file) {
             setIsSubmitting(true);
             setFile(file);
 
-            const res = await image.upload({ 
+            const response = await image.upload({ 
                 file
-             });
+            });
+
+            if (response !== undefined && response !== null && documentId) {
+                updateDocument({ id: documentId, coverImage: response });
+            };
+
+            onClose();
         }
     };
 

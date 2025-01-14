@@ -23,9 +23,10 @@ export const DocumentService = {
         }
     },
 
-    async updateDocument({ token, userid, id, title, content, icon}: { token: string,userid: string, id: string, title?: string, content?: string | null, icon?: string }) {
+    async updateDocument({ token, userid, id, title, content, icon, coverImage}: { token: string, userid: string, id: string, title?: string, content?: string | null, icon?: string, coverImage?: string }) {
         try {
-            const data = await fetchData({ method: "PUT", endpoint: `/documents/${id}/content`, body: { title, content, icon }, header: { UserId: userid }, token });
+            const data = await fetchData({ method: "PUT", endpoint: `/documents/${id}/content`, body: { title, content, icon, coverImage}, header: { UserId: userid }, token });
+            console.log("updateDocument", data);
             return data;
         } catch (error) {
             handleErrors(error);
@@ -178,7 +179,6 @@ export const fetchData = async ({ method, endpoint, params, body, header, token 
             params: params,
         });
 
-        // console.log("FETCHDATA", response.data)
         return response.data;
     } catch (error) {
         handleErrors(error);

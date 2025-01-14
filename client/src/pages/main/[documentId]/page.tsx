@@ -1,20 +1,25 @@
 import React, { useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { Toolbar } from "@/components/toolbar";
+import { Toolbar } from "@/pages/main/components/toolbar";
 import { Document, useDocuments } from "@/components/context/useDocuments";
 import { useQuery } from "react-query";
 import { Cover } from "../components/cover";
 
 export const DocumentPageId = ({ documentId }: { documentId: string }) => {
-  const { getDocument, archiveDocument, restoreDocument} = useDocuments();
+  const { getDocument, updateDocument} = useDocuments();
 
-  const { data: documents, isLoading, isError } = useQuery<Document | null>(
-    ["document", documentId, archiveDocument, restoreDocument],
+  const { data: document, isLoading, isError, refetch } = useQuery<Document | null>(
+    ["document", documentId],
     () => getDocument({ id: documentId }),
     {
       refetchOnWindowFocus: true,
     }
   );
+
+  useEffect(() => {
+    refetch();
+    console.log("refetching");
+  }, [updateDocument, refetch]);
 
   if (isLoading) {
     return (
@@ -27,15 +32,15 @@ export const DocumentPageId = ({ documentId }: { documentId: string }) => {
     );
   }
 
-  if(documents === undefined || documents === null) {
+  if(document === undefined || document === null) {
     return <Navigate to="/404" />;
 }
 
   return (
     <div className="pb-40">
-        <Cover url={documents.coverImage}/>
-        <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
-            <Toolbar initialData={documents} />
+        <Cover url={document.coverImage}/>
+        <div className="mx-auto md:max-w-3xl lg:max-w-4xl">
+            <Toolbar initialData={document} />
         </div>
     </div>
   );
