@@ -35,6 +35,7 @@ model Document {
   parentDocumentId String?
   content          String?
   coverImage       String?
+  offsety          Float?
   icon             String?
   isPublished      Boolean  @default(false)
   urlPublished     String?  @unique

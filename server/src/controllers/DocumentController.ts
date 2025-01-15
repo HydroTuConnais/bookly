@@ -229,5 +229,34 @@ export const DocumentController = {
     catch (error: ErrorClass | any) {
       res.status(error.status).json({ error: error.message });
     }
-  }
+  },
+
+  /*--------------------------------------------------------------*/
+
+  async getCoverOffset(req: Request, res: Response) {
+    const userId = req.headers.userid as string;
+    const documentId = req.params.id;
+
+    try {
+      const offset = await DocumentService.getCoverOffset(documentId, userId);
+      res.status(200).json(offset);
+    }
+    catch (error: ErrorClass | any) {
+      res.status(error.status).json({ error: error.message });
+    }
+  },
+
+  async setCoverOffset(req: Request, res: Response) {
+    const userId = req.headers.userid as string;
+    const documentId = req.params.id;
+    const { coverOffset } = req.body;
+
+    try {
+      await DocumentService.setCoverOffset(documentId, userId, coverOffset);
+      res.status(200).json({ success: true });
+    }
+    catch (error: ErrorClass | any) {
+      res.status(error.status).json({ error: error.message });
+    }
+  },
 };

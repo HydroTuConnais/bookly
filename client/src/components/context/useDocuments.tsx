@@ -46,6 +46,9 @@ interface DocumentContextProps {
     searchDocuments: (searchTerm: string) => Promise<any[]>;
 
     removeEmoji: (params: { id: string }) => Promise<void>;
+
+    getImageOffset: (params: { id: string }) => Promise<number>;
+    setImageOffset: (params: { id: string, offset: number }) => Promise<void>;
 }
 
 const DocumentContext = createContext<DocumentContextProps | undefined>(undefined);
@@ -302,6 +305,34 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
         }
     }
 
+    /*--------------------------------------------------------------*/
+
+    const getImageOffset = async ({ id }: { id: string }) => {
+        if (token && user) {
+            setError(null);
+            try {
+                const offset = await DocumentService.getCoverOffset({ token: token, userid: user.id, id: id });
+                return offset;
+            } catch (err: any) {
+                setError('Failed to get cover offset');
+                console.error(err);
+            }
+        }
+    }
+
+    const setImageOffset = async ({ id, offset }: { id: string, offset: number }) => {
+        if (token && user) {
+            setError(null);
+            try {
+                const response = await DocumentService.setCoverOffset({ token: token, userid: user.id, id: id, coverOffset: offset });
+                return response;
+            } catch (err: any) {
+                setError('Failed to set cover offset');
+                console.error(err);
+            }
+        }
+    }
+
     return (
         <DocumentContext.Provider
             value={{
@@ -326,6 +357,8 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
                 unfavoriteDocument,
                 searchDocuments,
                 removeEmoji,
+                getImageOffset,
+                setImageOffset
             }}
         >
             {children}

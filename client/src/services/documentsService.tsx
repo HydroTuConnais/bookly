@@ -150,6 +150,24 @@ export const DocumentService = {
         } catch (error) {
             handleErrors(error);
         }
+    },
+
+    async getCoverOffset({ token, userid, id }: { token: string, id: string, userid: string }) {
+        try {
+            const data = await fetchData({ method: "GET", endpoint: `/documents/${id}/coveroffset`, header: { UserId: userid }, token });
+            return data;
+        } catch (error) {
+            handleErrors(error);
+        }
+    },
+
+    async setCoverOffset({ token, userid, id, coverOffset }: { token: string, id: string, userid: string, coverOffset: number }) {
+        try {
+            const data = await fetchData({ method: "PUT", endpoint: `/documents/${id}/coveroffset`, body: { coverOffset }, header: { UserId: userid }, token });
+            return data;
+        } catch (error) {
+            handleErrors(error);
+        }
     }
 }
 

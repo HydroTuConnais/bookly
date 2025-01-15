@@ -114,9 +114,11 @@ export const DocumentRepository = {
   },
 
   async countFavorite(userId: string) {
-    return await prisma.document.count({
+    const response = await prisma.document.count({
       where: { userId, isFavorite: true, isArchived: false }
     });
+    console.log(response);
+    return response;
   },
   
   /*--------------------------------------------------------------*/
@@ -173,6 +175,26 @@ export const DocumentRepository = {
     return await prisma.document.update({
       where: { id },
       data: { icon: null }
+    });
+  },
+
+  /*--------------------------------------------------------------*/
+
+  async getCoverOffset(id: string | null) {   
+    const response = await prisma.document.findUnique({
+      where: { id },
+      select: { offsety: true }
+    });
+  
+    const offsety = response?.offsety;
+    return offsety;
+  },
+
+  async setCoverOffset(id: string | null, offsety: number) {
+    console.log("Offset", offsety);
+    return await prisma.document.update({
+      where: { id },
+      data: { offsety }
     });
   },
 };

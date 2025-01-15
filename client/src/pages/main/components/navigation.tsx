@@ -37,6 +37,7 @@ export const Navigation = () => {
     const [haveFavorites, setHaveFavorites] = useState(false);
 
     const {
+        documents,
         createDocument,
         setfavoriteDocument,
         unfavoriteDocument,

@@ -28,4 +28,7 @@ router.get('/documents/search', authenticate, DocumentController.searchDocuments
 
 router.delete('/documents/:id/removeicon', authenticate, DocumentController.removeIcon);
 
+router.get('/documents/:id/coveroffset', authenticate, DocumentController.getCoverOffset);
+router.put('/documents/:id/coveroffset', authenticate, DocumentController.setCoverOffset);
+
 export default router;

@@ -338,4 +338,36 @@ export const DocumentService = {
       throw new ErrorClass(500, 'Error process removing icon');
     }
   },
+
+  /*--------------------------------------------------------------*/
+
+  async getCoverOffset(documentId: string | null, userId: string) {
+    try {
+      const document = await DocumentRepository.findDocumentById(documentId);
+
+      if (!document || document.userId !== userId) {
+        throw new ErrorClass(401, 'Unauthorized or Not Found');
+      }
+
+      return await DocumentRepository.getCoverOffset(documentId);
+    }
+    catch (error) {
+      throw new ErrorClass(500, 'Error process getting cover offset');
+    }
+  },
+
+  async setCoverOffset (documentId: string | null, userId: string, offset: number) {
+    try {
+      const document = await DocumentRepository.findDocumentById(documentId);
+
+      if (!document || document.userId !== userId) {
+        throw new ErrorClass(401, 'Unauthorized or Not Found');
+      }
+      
+      return await DocumentRepository.setCoverOffset(documentId, offset);
+    }
+    catch (error) {
+      throw new ErrorClass(500, 'Error process setting cover offset');
+    }
+  }
 };

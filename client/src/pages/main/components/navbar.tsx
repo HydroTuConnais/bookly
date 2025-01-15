@@ -20,7 +20,10 @@ export const Navbar = ( {
     onResetWidth,
     documentId
 }: NavbarProps) => {
-    const { getDocument, updateDocument, archiveDocument, restoreDocument} = useDocuments();
+    const { getDocument, 
+        updateDocument, 
+        archiveDocument, 
+        restoreDocument } = useDocuments();
 
     const { data: documents, isLoading, isError } = useQuery<Document | null>(
         ["document", documentId, updateDocument, archiveDocument, restoreDocument],
@@ -28,7 +31,7 @@ export const Navbar = ( {
         {
           refetchOnWindowFocus: true,
         }
-    );
+    );     
 
     if (isLoading) {
         return (
@@ -47,8 +50,8 @@ export const Navbar = ( {
 
     return (
         <>
-            <nav className="bg-background dark:bg-[#1F1F1F] px-3 py-2 w-full flex items-center gap-x-4">
-                {isCollapsed && (
+            <nav className="bg-white bg-opacity-75 dark:bg-[#1f1f1fd0] backdrop-blur-sm px-3 py-2 w-full flex items-center gap-x-4">
+            {isCollapsed && (
                     <MenuIcon 
                     role="button"
                     onClick={onResetWidth}
