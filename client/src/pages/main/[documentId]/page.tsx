@@ -1,16 +1,21 @@
 import React, { useEffect } from "react";
-import { Navigate, useFetcher } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { Toolbar } from "@/pages/main/components/toolbar";
 import { Document, useDocuments } from "@/components/context/useDocuments";
 import { useQuery } from "react-query";
 import { Cover } from "../components/cover";
 import { usePromise } from "@/hooks/usePromise";
+import { Editor } from "../components/editor";
+import { toast } from "sonner"
+import { useTheme } from "@/components/context/useTheme";
+import { File } from "lucide-react";
 
 export const DocumentPageId = ({ documentId }: { documentId: string }) => {
-  const { getDocument, updateDocument, getImageOffset} = useDocuments();
+  const { getDocument, updateDocument, getImageOffset, documents, archiveDocument, restoreDocument} = useDocuments();
+  const { resolvedTheme } = useTheme();
 
   const { data: document, isLoading, isError, refetch } = useQuery<Document | null>(
-    ["document", documentId],
+    ["document", documentId, documents, archiveDocument, restoreDocument],
     () => getDocument({ id: documentId }),
     {
       refetchOnWindowFocus: true,
@@ -19,11 +24,29 @@ export const DocumentPageId = ({ documentId }: { documentId: string }) => {
 
   const { data: offsetValue, loading, error } = usePromise(() => getImageOffset({ id: documentId }), [documentId]);
 
-
   useEffect(() => {
     refetch();
     console.log("refetching");
   }, [updateDocument, refetch]);
+
+  let timeoutId: NodeJS.Timeout;
+
+  const onChange = (value: string) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      const promise = updateDocument({ id: documentId, content: value });
+
+      toast.promise(promise, {
+        loading: "Sauvegarde...",
+        success: <> {document?.icon ? document?.icon : <File className="mr-2 h-4 w-4" />} <strong>"{document?.title}"</strong> à été sauvé </>,
+        error: "Erreur lors de la sauvegarde",
+        style: {
+          background: resolvedTheme === "dark" ? "#333" : "#fff",
+          color: resolvedTheme === "dark" ? "#fff" : "#000",
+        }
+      });
+    }, 2000);
+  }
 
   if (isLoading || loading) {
     return (
@@ -45,6 +68,10 @@ export const DocumentPageId = ({ documentId }: { documentId: string }) => {
         <Cover url={document.coverImage} offset={offsetValue || 50}/>
         <div className="mx-auto md:max-w-3xl lg:max-w-4xl">
             <Toolbar initialData={document} />
+            <Editor
+              onChange={onChange} 
+              initialContent={document.content}
+            />
         </div>
     </div>
   );

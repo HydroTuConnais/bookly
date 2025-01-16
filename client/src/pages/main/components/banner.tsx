@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { ConfirmModal } from "@/components/modals/confirm-modal";
+import { useTheme } from "@/components/context/useTheme";
 
 interface BannerProps {
     documentId: string;
@@ -16,6 +17,7 @@ export const Banner = ({
 }: BannerProps) => {
     const { restoreDocument, deleteDocument } = useDocuments();
     const navigate = useNavigate();
+    const { resolvedTheme } = useTheme();
 
     const onRemove = () => {
         const promise = deleteDocument({
@@ -30,10 +32,13 @@ export const Banner = ({
         toast.promise(promise, {
             loading: "Deleting document...",
             success: "Document delete",
-            error: "Error deleting document"
+            error: "Error deleting document",
+            style: {
+                background: resolvedTheme === "dark" ? "#333" : "#fff",
+                color: resolvedTheme === "dark" ? "#fff" : "#000",
+              }
         });
     };
-
 
     const onRestore = () => {
         const promise = restoreDocument({
@@ -47,7 +52,11 @@ export const Banner = ({
         toast.promise(promise, {
             loading: "Restoring document...",
             success: "Document restored",
-            error: "Error restoring document"
+            error: "Error restoring document",
+            style: {
+                background: resolvedTheme === "dark" ? "#333" : "#fff",
+                color: resolvedTheme === "dark" ? "#fff" : "#000",
+              }
         });
     };
     

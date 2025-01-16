@@ -11,15 +11,18 @@ import { PlusCircle } from "lucide-react";
 
 import "./style/home.css";
 import { DocumentPageId } from "./[documentId]/page";
+import { useTheme } from "@/components/context/useTheme";
 
 
 
 const DocumentsPage = () => {
     const { user } = useAuth();
+    const { resolvedTheme } = useTheme();
     const { documentId } = useParams<{ documentId: string }>();
 
     const {
         createDocument,
+        getDocument
     } = useDocuments();
 
     const handleCreate = async () => {
@@ -35,7 +38,11 @@ const DocumentsPage = () => {
         toast.promise(promise, {
             loading: "Creating document...",
             success: "Document created",
-            error: "Error creating document"
+            error: "Error creating document",
+            style: {
+                background: resolvedTheme === "dark" ? "#333" : "#fff",
+                color: resolvedTheme === "dark" ? "#fff" : "#000",
+              }
         });
     };
 

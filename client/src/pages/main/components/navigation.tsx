@@ -20,6 +20,7 @@ import { useSearch } from '@/hooks/use-search';
 import { useSettings } from '@/hooks/use-options';
 import { Navbar } from './navbar';
 import { usePromise } from '@/hooks/usePromise';
+import { useTheme } from '@/components/context/useTheme';
 
 export const Navigation = () => {
     const search = useSearch();
@@ -27,6 +28,7 @@ export const Navigation = () => {
     const params = useParams();
     const isMobile = useMediaQuery("(max-width: 768px)");
     const { pathname } = useLocation();
+    const { resolvedTheme } = useTheme();
 
     const isResizingRef = useRef(false);
     const sidebarref = useRef<ElementRef<"aside">>(null);
@@ -154,7 +156,11 @@ export const Navigation = () => {
         toast.promise(promise, {
             loading: "Creating document...",
             success: "Document created",
-            error: "Error creating document"
+            error: "Error creating document",
+            style: {
+                background: resolvedTheme === "dark" ? "#333" : "#fff",
+                color: resolvedTheme === "dark" ? "#fff" : "#000",
+              }
         });
     };
 

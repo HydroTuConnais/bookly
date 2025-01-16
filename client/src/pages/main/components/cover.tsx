@@ -1,6 +1,7 @@
 import { useDocuments } from "@/components/context/useDocuments";
 import { useImage } from "@/components/context/useImage";
 import { Button } from "@/components/ui/button";
+import { useCoverImage } from "@/hooks/use-cover-image";
 import { cn } from "@/lib/utils";
 import { ChevronsUpDownIcon, ImageIcon, X } from "lucide-react";
 import React, { useState, useEffect, useRef } from "react";
@@ -97,15 +98,6 @@ export const Cover = ({ url, preview, offset}: CoverImageProps) => {
       {/* Boutons d'action */}
       {url && !preview && (
         <div className="absolute flex items-center opacity-0 group-hover:opacity-100 bottom-5 right-5 gap-x-2 z-20">
-          <Button
-            onClick={() => {}}
-            className="text-muted-foreground bg-neutral-50 dark:bg-neutral-800 text-xs"
-            variant="outline"
-            size="sm"
-          >
-            <ImageIcon className="h-4 w-4 mr-2" />
-            Modifier l'image
-          </Button>
           <Button
             onClick={() => setIsRepositioning(!isRepositioning)}
             className="text-muted-foreground bg-neutral-50 dark:bg-neutral-800 text-xs"

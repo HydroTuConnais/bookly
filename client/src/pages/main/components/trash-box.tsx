@@ -1,4 +1,5 @@
 import { useDocuments } from "@/components/context/useDocuments";
+import { useTheme } from "@/components/context/useTheme";
 import { ConfirmModal } from "@/components/modals/confirm-modal";
 import { Input } from "@/components/ui/input";
 import { usePromise } from "@/hooks/usePromise";
@@ -10,6 +11,7 @@ import { toast } from "sonner";
 
 export const TrashBox = () => {
     const { getArchivedDocuments, restoreDocument, deleteDocument, documents } = useDocuments();
+    const { resolvedTheme } = useTheme();
     const [search, setSearch] = useState("");
     const [archivedDocuments, setArchivedDocuments] = useState<any[]>([]);
     
@@ -41,7 +43,11 @@ export const TrashBox = () => {
         toast.promise(promise, {
             loading: "Restoring document...",
             success: "Document restored",
-            error: "Error restoring document"
+            error: "Error restoring document",
+            style: {
+                background: resolvedTheme === "dark" ? "#333" : "#fff",
+                color: resolvedTheme === "dark" ? "#fff" : "#000",
+              }
         });
     };
 
@@ -53,7 +59,11 @@ export const TrashBox = () => {
         toast.promise(promise, {
             loading: "Delete document...",
             success: "Document deleted",
-            error: "Error delete document"
+            error: "Error delete document",
+            style: {
+                background: resolvedTheme === "dark" ? "#333" : "#fff",
+                color: resolvedTheme === "dark" ? "#fff" : "#000",
+              }
         });
 
         if (params.documentId === documentId) {

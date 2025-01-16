@@ -50,7 +50,7 @@ export const Navbar = ( {
 
     return (
         <>
-            <nav className="bg-white bg-opacity-75 dark:bg-[#1f1f1fd0] backdrop-blur-sm px-3 py-2 w-full flex items-center gap-x-4">
+            <nav className="bg-white bg-opacity-75 dark:bg-[#1f1f1fe5] backdrop-blur-sm px-3 py-2 w-full flex items-center gap-x-4">
             {isCollapsed && (
                     <MenuIcon 
                     role="button"

@@ -12,6 +12,7 @@ import { useDocuments } from "@/components/context/useDocuments";
 import { MoreHorizontal, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/context/useAuth";
+import { useTheme } from "@/components/context/useTheme";
 
 interface MenuProps {
     documentId: string;
@@ -21,6 +22,7 @@ export const Menu = ({ documentId }: MenuProps) => {
     const navigate = useNavigate();
     const { user } = useAuth();
     const { archiveDocument } = useDocuments();
+    const { resolvedTheme } = useTheme();
 
     const onArchive = () => {
         const promise = archiveDocument({
@@ -34,7 +36,11 @@ export const Menu = ({ documentId }: MenuProps) => {
         toast.promise(promise, {
             loading: "Archiving document...",
             success: "Document archived",
-            error: "Error archiving document"
+            error: "Error archiving document",
+            style: {
+                background: resolvedTheme === "dark" ? "#333" : "#fff",
+                color: resolvedTheme === "dark" ? "#fff" : "#000",
+              }
         });
     };
 

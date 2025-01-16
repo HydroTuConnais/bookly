@@ -6,6 +6,7 @@ import { ChevronsRight, ChevronDown, ChevronRight, LucideIcon, Plus, MoreHorizon
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useTheme } from "@/components/context/useTheme";
 
 interface ItemProps {
     category?: string;
@@ -49,7 +50,8 @@ export const Item = ({
 }: ItemProps) => {
     const { user } = useAuth();
     const { createDocument, archiveDocument, setfavoriteDocument, unfavoriteDocument } = useDocuments();
-    const navigate = useNavigate();
+    const navigate = useNavigate()
+    const { resolvedTheme } = useTheme();
 
     const [isHovered, setIsHovered] = useState(false);
 
@@ -74,7 +76,11 @@ export const Item = ({
         toast.promise(promise, {
             loading: "Creating document...",
             success: "Document created",
-            error: "Error creating document"
+            error: "Error creating document",
+            style: {
+                background: resolvedTheme === "dark" ? "#333" : "#fff",
+                color: resolvedTheme === "dark" ? "#fff" : "#000",
+              }
         });
     };
 
@@ -94,7 +100,11 @@ export const Item = ({
         toast.promise(promise, {
             loading: "Archiving document...",
             success: "Document archived",
-            error: "Error archiving document"
+            error: "Error archiving document",
+            style: {
+                background: resolvedTheme === "dark" ? "#333" : "#fff",
+                color: resolvedTheme === "dark" ? "#fff" : "#000",
+              }
         });
     }
 
@@ -115,7 +125,11 @@ export const Item = ({
         toast.promise(promise, {
             loading: "Set bookmark...",
             success: "Bookmark was set",
-            error: "Error set bookmark document"
+            error: "Error set bookmark document",
+            style: {
+                background: resolvedTheme === "dark" ? "#333" : "#fff",
+                color: resolvedTheme === "dark" ? "#fff" : "#000",
+              }
         });
     }
 
@@ -136,7 +150,11 @@ export const Item = ({
         toast.promise(promise, {
             loading: "Unset bookmark...",
             success: "Bookmark was unset",
-            error: "Error unset bookmark document"
+            error: "Error unset bookmark document",
+            style: {
+                background: resolvedTheme === "dark" ? "#333" : "#fff",
+                color: resolvedTheme === "dark" ? "#fff" : "#000",
+              }
         });
     }
 
