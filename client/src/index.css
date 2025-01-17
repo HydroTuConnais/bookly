@@ -71,6 +71,23 @@ body,
     --ring: 0 0% 83.1%;
   }
 }
+
+.dark .editor-container {
+  background-image: url('../public/black-paper.png');
+  background-repeat: repeat;
+  background-color: rgba(51, 51, 51, 0.85); /* Couche blanche semi-transparente */
+  background-blend-mode: overlay; /* Mélange la couleur et l'image */
+  box-shadow: inset 0px 0px 18px 5px rgba(23,23,23,0.85)
+}
+
+.editor-container {
+  background-image: url('../public/white-paper.png');
+  background-repeat: repeat;
+  background-color: rgba(255, 255, 255, 0.85); /* Couche blanche semi-transparente */
+  background-blend-mode: overlay; /* Mélange la couleur et l'image */
+  box-shadow: inset 0px 0px 18px 5px rgba(255,255,255,1)
+}
+
  
 @layer base {
   * {

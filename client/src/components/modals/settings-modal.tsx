@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import {
     Dialog,
     DialogContent,
-    DialogHeader
+    DialogHeader,
+    DialogTitle
 } from "@/components/ui/dialog"
 
 import { useSettings } from "@/hooks/use-options";
@@ -25,6 +26,7 @@ export const SettingsModal = () => {
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent>
+                <DialogTitle className="hidden"></DialogTitle>
                 <DialogHeader className="border-b pb-3">
                     <h2 className="text-lg font-medium">
                         Mes settings

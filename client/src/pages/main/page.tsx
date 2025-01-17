@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 import { useAuth } from "@/components/context/useAuth";
 import { useDocuments } from "@/components/context/useDocuments";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,7 @@ const DocumentsPage = () => {
     const { user } = useAuth();
     const { resolvedTheme } = useTheme();
     const { documentId } = useParams<{ documentId: string }>();
+    const navigate = useNavigate();
 
     const {
         createDocument,
@@ -30,7 +31,7 @@ const DocumentsPage = () => {
             title: "new become page Document",
             parentDocumentId: null
         }).then((data) => {
-            // console.log(data);
+            navigate(`/documents/${data.id}`);
         }).catch((error) => {
             console.error("Error creating document:", error);
         });

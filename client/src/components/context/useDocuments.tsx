@@ -24,7 +24,7 @@ interface DocumentContextProps {
     favorites: Document[];
     setFavorites: any;
     
-    createDocument: (params: { title: string, parentDocumentId: string | null }) => Promise<void>;
+    createDocument: (params: { title: string, parentDocumentId: string | null }) => Promise<Document>;
     getDocument: (params: { id: string }) => Promise<Document>;
     updateDocument: (params: { id: string, title?: string, content?: string, icon?: string, coverImage?: string}) => Promise<Document>;
     deleteDocument: (params: { documentId: string }) => Promise<void>;

@@ -68,9 +68,7 @@ export const Item = ({
                 if (!expanded) {
                     onExpand?.();
                 }
-                // console.log(documentId);
-
-                //navigate(`/documents/${documentId}`);
+                navigate(`/documents/${documentId}`);
             });
 
         toast.promise(promise, {
@@ -90,7 +88,7 @@ export const Item = ({
 
         const promise = archiveDocument({ id }).then
             ((documentId) => {
-                // console.log(documentId);
+                //navigate(`/documents`);
             })
             .catch((error) => {
                 console.error("Error archiving document:", error

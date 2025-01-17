@@ -44,7 +44,7 @@ export const Banner = ({
         const promise = restoreDocument({
             id: documentId
         }).then((data) => {
-            // console.log(data);
+            navigate(`/documents/${documentId}`);
         }).catch((error) => {
             console.error("Error creating document:", error);
         });

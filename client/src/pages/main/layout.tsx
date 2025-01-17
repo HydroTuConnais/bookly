@@ -38,11 +38,11 @@ const Layout = ({
     }
 
     return (
-        <div className="h-full flex dark:bg-[#1F1F1F]">
+        <div className="h-screen flex dark:bg-[#1F1F1F]">
             <div className="fade-in-right h-screen">
                 <Navigation />
             </div>
-            <main className="flex-1 h-full overflow-y-auto">
+            <main className="flex-1 h-full overflow-y-auto editor-container">
                 <SearchCommand />
                 <SettingsModal />
                 <CoverImageModal />

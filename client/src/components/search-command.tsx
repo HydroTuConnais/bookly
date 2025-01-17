@@ -42,7 +42,7 @@ export const SearchCommand = () => {
 
     useEffect(() => {
         const down = (e: KeyboardEvent) => {
-          if (e.key === "c" && (e.metaKey || e.ctrlKey)) {
+          if (e.key === "c" && (e.metaKey)) {
             toggle();
           }
         }

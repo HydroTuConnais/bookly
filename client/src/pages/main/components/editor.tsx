@@ -5,6 +5,7 @@ import { useCreateBlockNote } from "@blocknote/react";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 
+import "./editor/style.css";
 
 import { useTheme } from "@/components/context/useTheme";
 
@@ -36,8 +37,7 @@ export const Editor = ({
                 theme={resolvedTheme === "dark" ? "dark" : "light"}
                 onChange={() =>  {
                     onChange(JSON.stringify(editor.topLevelBlocks, null, 2));
-                }}
-                
+                }}                
             />
         </div>
     );

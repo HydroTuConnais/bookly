@@ -97,7 +97,7 @@ export const Cover = ({ url, preview, offset}: CoverImageProps) => {
 
       {/* Boutons d'action */}
       {url && !preview && (
-        <div className="absolute flex items-center opacity-0 group-hover:opacity-100 bottom-5 right-5 gap-x-2 z-20">
+        <div className="absolute flex items-center opacity-0 group-hover:opacity-100 bottom-5 right-5 gap-x-1 z-20">
           <Button
             onClick={() => setIsRepositioning(!isRepositioning)}
             className="text-muted-foreground bg-neutral-50 dark:bg-neutral-800 text-xs"

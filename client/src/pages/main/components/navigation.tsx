@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, ElementRef } from 'react';
 
 import { useMediaQuery } from "usehooks-ts";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDocuments } from "@/components/context/useDocuments";
 
 import { DocumentList } from "./document-list";
@@ -26,6 +26,7 @@ export const Navigation = () => {
     const search = useSearch();
     const settings = useSettings();
     const params = useParams();
+    const navigate = useNavigate();
     const isMobile = useMediaQuery("(max-width: 768px)");
     const { pathname } = useLocation();
     const { resolvedTheme } = useTheme();
@@ -147,7 +148,7 @@ export const Navigation = () => {
             title: "new become navigation Document",
             parentDocumentId: null
         }).then((data) => {
-            //console.log(data);
+            navigate(`/documents/${data.id}`);
         }).catch((error) => {
             console.error("Error creating document:", error);
         });
@@ -169,7 +170,7 @@ export const Navigation = () => {
             <aside
                 ref={sidebarref}
                 className={cn(
-                    "group/sidebar h-full bottom-0 bg-secondary overflow-hidden overflow-y-auto relative flex w-60 flex-col z-[99999]",
+                    "group/sidebar h-full bottom-0 overflow-hidden overflow-y-auto relative flex w-60 flex-col z-[99999]",
                     isReseting && "transition-all ease-in-out duration-300",
                     isMobile && "w-0"
                 )}

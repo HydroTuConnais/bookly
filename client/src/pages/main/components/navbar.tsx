@@ -25,13 +25,18 @@ export const Navbar = ( {
         archiveDocument, 
         restoreDocument } = useDocuments();
 
-    const { data: documents, isLoading, isError } = useQuery<Document | null>(
+    const { data: documents, isLoading, isError, refetch} = useQuery<Document | null>(
         ["document", documentId, updateDocument, archiveDocument, restoreDocument],
         () => getDocument({ id: documentId }),
         {
           refetchOnWindowFocus: true,
         }
     );     
+
+    useEffect(() => {
+        refetch();
+        console.log("refetching");
+    }, [archiveDocument, restoreDocument, refetch]);
 
     if (isLoading) {
         return (
@@ -50,7 +55,7 @@ export const Navbar = ( {
 
     return (
         <>
-            <nav className="bg-white bg-opacity-75 dark:bg-[#1f1f1fe5] backdrop-blur-sm px-3 py-2 w-full flex items-center gap-x-4">
+            <nav className="bg-white dark:bg-[#1f1f1f] backdrop-blur-sm px-3 py-2 w-full flex items-center gap-x-4">
             {isCollapsed && (
                     <MenuIcon 
                     role="button"

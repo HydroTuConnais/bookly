@@ -28,7 +28,7 @@ export const Menu = ({ documentId }: MenuProps) => {
         const promise = archiveDocument({
             id: documentId
         }).then((data) => {
-            // console.log(data);
+            //navigate(`/documents`);
         }).catch((error) => {
             console.error("Error creating document:", error);
         });
