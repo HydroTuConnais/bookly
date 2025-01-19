@@ -6,7 +6,7 @@ import {
     PopoverTrigger,
     PopoverContent
 } from '@/components/ui/popover';
-import emojisData from "@/pages/main/components/icon/emoji.json";
+import emojisData from "@/pages/documents/components/icon/emoji.json";
 import { Search, Shuffle } from "lucide-react";
 import { Button } from "./ui/button";
 
@@ -68,7 +68,7 @@ export const IconPicker = ({
             className="p-0 w-[400px]"
             style={{ boxShadow: "rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.2) 0px 3px 6px, rgba(15, 15, 15, 0.4) 0px 9px 24px"}}>
                 <div className="flex flex-col border border-none rounded-lg">    
-                    <div className="flex items-center rounded-t-lg justify-between px-4 py-[6px] bg-neutral-100 dark:bg-[#222222]">
+                    <div className="flex items-center rounded-t-lg justify-between px-4 py-[6px] bg-white dark:bg-[#222222]">
                         <span className="text-sm font-normal text-muted-foreground">
                             Choisissez une icône
                         </span>

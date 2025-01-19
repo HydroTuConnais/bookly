@@ -43,7 +43,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }, []);
 
     const registerUser = async (email: string, userName: string, password: string) => {
-        setIsLoading(true);
         try {
             const res = await registerAPI(email, userName, password);
             if (res) {
@@ -57,13 +56,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } catch (error) {
             console.error("Registration error:", error);
             toast.warning("Server error occurred");
-        } finally {
-            setIsLoading(false);
         }
     };
 
     const loginUser = async (email: string, password: string) => {
-        setIsLoading(true);
         try {
             console.log("-----------------login-----------------");
             const res = await loginAPI(email, password);
@@ -79,8 +75,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } catch (error) {
             console.error("Login error:", error);
             toast.warning("Invalid email or password");
-        } finally {
-            setIsLoading(false);
         }
     };
 

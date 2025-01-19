@@ -9,8 +9,8 @@ import { useParams } from "react-router-dom";
 
 interface CoverImageProps {
   url?: string | null;
-  preview?: string;
-  offset: number;
+  preview?: boolean;
+  offset: number | null;
 }
 
 export const Cover = ({ url, preview, offset}: CoverImageProps) => {
@@ -47,7 +47,7 @@ export const Cover = ({ url, preview, offset}: CoverImageProps) => {
   };
 
   useEffect(() => {
-    if (isRepositioning && scrollContainerRef.current) {
+    if (isRepositioning && scrollContainerRef.current && offsetY !== null) {
       const scrollContainer = scrollContainerRef.current;
       const scrollHeight = scrollContainer.scrollHeight - scrollContainer.clientHeight;
 
@@ -57,7 +57,7 @@ export const Cover = ({ url, preview, offset}: CoverImageProps) => {
   }, [isRepositioning, offsetY]);
 
   useEffect(() => {
-    if (documentId && !isRepositioning) {
+    if (documentId && !isRepositioning && offsetY !== null) {
       setImageOffset({ id: documentId, offset: offsetY });
     }
   }, [isRepositioning, setImageOffset, documentId, offsetY]);

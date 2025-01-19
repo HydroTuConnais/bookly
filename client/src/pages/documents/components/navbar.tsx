@@ -8,6 +8,7 @@ import { Title } from "./title";
 import { Banner } from "./banner";
 import { Menu } from "./menu";
 import { useQuery } from "react-query";
+import { Publish } from "./publish";
 
 interface NavbarProps {
     isCollapsed: boolean;
@@ -20,13 +21,14 @@ export const Navbar = ( {
     onResetWidth,
     documentId
 }: NavbarProps) => {
-    const { getDocument, 
+    const { 
+        getDocument, 
         updateDocument, 
         archiveDocument, 
         restoreDocument } = useDocuments();
 
     const { data: documents, isLoading, isError, refetch} = useQuery<Document | null>(
-        ["document", documentId, updateDocument, archiveDocument, restoreDocument],
+        ["document", documentId, archiveDocument, restoreDocument],
         () => getDocument({ id: documentId }),
         {
           refetchOnWindowFocus: true,
@@ -36,7 +38,7 @@ export const Navbar = ( {
     useEffect(() => {
         refetch();
         console.log("refetching");
-    }, [archiveDocument, restoreDocument, refetch]);
+    }, [archiveDocument, restoreDocument]);
 
     if (isLoading) {
         return (
@@ -66,6 +68,7 @@ export const Navbar = ( {
                 <div className="flex items-center justify-between w-full">
                     <Title initialData={documents}/>
                     <div className="flex items-center gap-x-2">
+                        <Publish initialData={documents} />
                         <Menu documentId={documents.id} />
                     </div>
                 </div>

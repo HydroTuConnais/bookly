@@ -35,13 +35,13 @@ export const DocumentController = {
 
   async updateDocument(req: Request, res: Response) {
     const id = req.params.id;
-    const { title, content, icon, coverImage} = req.body;
+    const { title, content, icon, coverImage, isPublished} = req.body;
     const userId = req.headers.userid as string;
 
     console.log("Update", req);
 
     try {
-      const document = await DocumentService.updateDocument(id, title, userId, content, icon, coverImage);
+      const document = await DocumentService.updateDocument(id, title, userId, content, icon, coverImage, isPublished);
       console.log("Update");
       res.status(202).json(document);
     }

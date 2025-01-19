@@ -6,17 +6,18 @@ import { usePopup } from '@/components/context/popup-context';
 export const Heading: React.FC = () => {
   const { openPopup } = usePopup();
   return (
-    <div className="max-w-3xl space-y-4">
-      <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold">
-        Vos Idées, Documents, et Projets, en un seul endroit. Bienvenue sur <span className="underline">Bookly</span>
-      </h1>
-      <h3 className="text-base sm:text-xl md:text-2xl font-medium">
-        Bookly est une application de gestion de projets et de documents qui vous permet de centraliser vos idées, documents, et projets en un seul endroit.
-      </h3>
-      <Button size="sm" onClick={() => openPopup('login')}>
-        Commencer Bookly
-        <ArrowRight className="h-4 w-4 ml-2" /> 
-      </Button>
-    </div>
+    <div className="w-full md:w-1/2 text-center md:text-left">
+        <p className="text-3xl font-bold tracking-tight sm:text-5xl mb-6">
+          Vos Idées, Documents, et Projets, en un seul endroit.
+        </p>
+        <Button
+          size="sm"
+          className="mx-auto md:mx-0"
+          onClick={() => openPopup('login')}
+        >
+          Commencer Bookly
+          <ArrowRight className="h-4 w-4 ml-2" />
+        </Button>
+      </div>
   );
 };

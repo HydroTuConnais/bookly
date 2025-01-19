@@ -6,16 +6,22 @@ export interface Document {
     id: string;
     title?: string;
     userId?: string;
+    
     isArchived?: boolean;
     archivedId?: string | null;
+
     isFavorite?: boolean;
+    parendDocumentId?: string;
+
     content?: string | null;
     coverImage?: string | null;
+
     icon?: string | null;
+    isPublished?: boolean;
+    urlPublished?: string;
 }
 
 interface DocumentContextProps {
-    loading: boolean;
     error: string | null;
     
     documents: Document[];
@@ -26,7 +32,7 @@ interface DocumentContextProps {
     
     createDocument: (params: { title: string, parentDocumentId: string | null }) => Promise<Document>;
     getDocument: (params: { id: string }) => Promise<Document>;
-    updateDocument: (params: { id: string, title?: string, content?: string, icon?: string, coverImage?: string}) => Promise<Document>;
+    updateDocument: (params: { id: string, title?: string, content?: string, icon?: string, coverImage?: string, isPublished?: boolean}) => Promise<Document>;
     deleteDocument: (params: { documentId: string }) => Promise<void>;
 
     getSidebarDocuments: (params: { parentDocumentId: string | null }) => Promise<any[]>;
@@ -58,7 +64,6 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
     const [documents, setDocuments] = useState<Document[]>([]);
     const [favorites, setFavorites] = useState<Document[]>([]);
 
-    const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
     const logCall = (functionName: string) => {
@@ -76,8 +81,6 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
             } catch (err: any) {
                 setError('Failed to create document');
                 console.error(err);
-            } finally {
-                setLoading(false);
             }
         }
     };
@@ -95,13 +98,11 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
         }
     };
 
-    const updateDocument = async ({ id, title, content, icon, coverImage}: { id: string, title?: string, content?: string, icon?: string, coverImage?: string}) => {
+    const updateDocument = async ({ id, title, content, icon, coverImage, isPublished}: { id: string, title?: string, content?: string, icon?: string, coverImage?: string, isPublished?: boolean}) => {
         if (token && user) {
             setError(null);
             try {
-                const documents = await DocumentService.updateDocument({ token: token, userid: user.id, id: id, title: title, icon: icon, content: content, coverImage: coverImage });
-
-                console.log("updateDocument", documents);
+                const documents = await DocumentService.updateDocument({ token: token, userid: user.id, id: id, title: title, icon: icon, content: content, coverImage: coverImage, isPublished: isPublished });
 
                 setDocuments(prevDocs =>
                     prevDocs.map(doc => (doc.id === id ? { ...doc, title: title ?? doc.title, icon: icon ?? doc.icon, coverImage: coverImage} : doc))
@@ -110,7 +111,7 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
                 setFavorites(prevDocs =>
                     prevDocs.map(doc => (doc.id === id ? { ...doc, title: title ?? doc.title, icon: icon ?? doc.icon, coverImage: coverImage} : doc))
                 );
-
+                
                 return documents;
             } catch (err: any) {
                 setError('Failed to update document');
@@ -260,15 +261,12 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
 
     const shareDocument = async ({ id, sharedEmail }: { id: string, sharedEmail: string }) => {
         if (token && user) {
-            setLoading(true);
             setError(null); // Reset error state
             try {
                 const sharedDocument = await DocumentService.shareDocument({ token: token, id: id, sharedEmail: sharedEmail });
             } catch (err: any) {
                 setError('Failed to share document');
                 console.error(err);
-            } finally {
-                setLoading(false);
             }
         }
     };
@@ -340,7 +338,6 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
                 setDocuments,
                 favorites,
                 setFavorites,
-                loading,
                 error,
                 createDocument,
                 getDocument,

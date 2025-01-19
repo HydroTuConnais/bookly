@@ -40,7 +40,7 @@ export const Title = ({
         }
         const newTimeoutId = setTimeout(() => {
             handleUpdateDocument({ id: initialData.id, title: e.target.value });
-        }, 150);
+        }, 250);
         setTimeoutId(newTimeoutId);
     };
 

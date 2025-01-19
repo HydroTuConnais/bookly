@@ -22,6 +22,7 @@ export const UserItem = () => {
 
     useEffect(() => {
         console.log(user);
+        console.log("imageUrl", user?.imageUrl);
     }, []);
 
     return (
@@ -30,7 +31,7 @@ export const UserItem = () => {
                 <div role="button" className="flex items-center text-sm p-1 mb-2 w-full rounded-sm hover:bg-primary/5">
                     <div className="gap-x-2 flex items-center max-w-[150px]">
                         <Avatar className="h-6 w-6">
-                            <AvatarImage src={user?.imageUrl || "avatar-default.png"} alt="Avatar" />
+                            <AvatarImage src={user?.imageUrl || "/avatar-default.png"} alt="Avatar" />
                         </Avatar>
                         <span className="text-start font-medium line-clamp-1">
                             {user?.name}&apos;s Bookly
@@ -53,7 +54,7 @@ export const UserItem = () => {
                     <div className="flex items-center gap-x-2">
                         <div className="rounded-md p-1">
                             <Avatar className="h-8 w-8">
-                                <AvatarImage src={user?.imageUrl || "avatar-default.png"} alt="Avatar" />
+                                <AvatarImage src={user?.imageUrl || "/avatar-default.png"} alt="Avatar" />
                             </Avatar>
                         </div>
                         <div className="space-y-1">

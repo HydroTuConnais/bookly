@@ -23,9 +23,9 @@ export const DocumentService = {
         }
     },
 
-    async updateDocument({ token, userid, id, title, content, icon, coverImage}: { token: string, userid: string, id: string, title?: string, content?: string | null, icon?: string, coverImage?: string }) {
+    async updateDocument({ token, userid, id, title, content, icon, coverImage, isPublished}: { token: string, userid: string, id: string, title?: string, content?: string | null, icon?: string, coverImage?: string, isPublished?: boolean }) {
         try {
-            const data = await fetchData({ method: "PUT", endpoint: `/documents/${id}/content`, body: { title, content, icon, coverImage}, header: { UserId: userid }, token });
+            const data = await fetchData({ method: "PUT", endpoint: `/documents/${id}/content`, body: { title, content, icon, coverImage, isPublished}, header: { UserId: userid }, token });
             console.log("updateDocument", data);
             return data;
         } catch (error) {

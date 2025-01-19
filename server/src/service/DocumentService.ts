@@ -63,7 +63,7 @@ export const DocumentService = {
     }
   },
 
-  async updateDocument(id: string, title: string | null, userId: string, content: string | null, emoji: string | null, coverImage: string | null) {
+  async updateDocument(id: string, title: string | null, userId: string, content: string | null, emoji: string | null, coverImage: string | null, isPublished: boolean | null) {
     try {
       if (!userId) {
         throw new ErrorClass(400, 'UserId is required');
@@ -79,6 +79,7 @@ export const DocumentService = {
         content?: string, 
         icon?: string 
         coverImage?: string
+        isPublished?: boolean
       } = {};
 
 
@@ -95,6 +96,10 @@ export const DocumentService = {
 
       if (coverImage !== null && coverImage !== undefined) {
         updateData.coverImage = coverImage;
+      }
+
+      if (isPublished !== null && isPublished !== undefined) {
+        updateData.isPublished = isPublished;
       }
 
       return await DocumentRepository.updateDocument(id, updateData);

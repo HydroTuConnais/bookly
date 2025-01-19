@@ -8,7 +8,7 @@ import { DocumentList } from "./document-list";
 import { UserItem } from "./user-item";
 import { Item } from "./item";
 
-import { ChevronsLeft, ChevronsRight, MenuIcon, PlusCircle, Search, Settings, Trash } from "lucide-react";
+import { ChevronsLeft, ChevronsRight, Home, MenuIcon, PlusCircle, Search, Settings, Trash } from "lucide-react";
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -40,7 +40,6 @@ export const Navigation = () => {
     const [haveFavorites, setHaveFavorites] = useState(false);
 
     const {
-        documents,
         createDocument,
         setfavoriteDocument,
         unfavoriteDocument,
@@ -145,7 +144,7 @@ export const Navigation = () => {
 
     const handleCreate = async () => {
         const promise = createDocument({
-            title: "new become navigation Document",
+            title: "Sans titre",
             parentDocumentId: null
         }).then((data) => {
             navigate(`/documents/${data.id}`);
@@ -193,6 +192,11 @@ export const Navigation = () => {
                         label="Settings"
                         icon={Settings}
                         onClick={settings.onOpen}
+                    />
+                    <Item
+                        label="Home"
+                        icon={Home}
+                        onClick={() => navigate("/documents")}
                     />
                     {/* <Item
                         onClick={handleCreate}

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import { Navigate } from "react-router-dom";
-import { Toolbar } from "@/pages/main/components/toolbar";
+import { Toolbar } from "@/pages/documents/components/toolbar";
 import { Document, useDocuments } from "@/components/context/useDocuments";
 import { useQuery } from "react-query";
 import { Cover } from "../components/cover";
@@ -14,19 +14,23 @@ export const DocumentPageId = ({ documentId }: { documentId: string }) => {
   const { getDocument, updateDocument, getImageOffset, documents, archiveDocument, restoreDocument} = useDocuments();
   const { resolvedTheme } = useTheme();
 
+  useEffect(() => {
+    console.log("DocumentPageId");
+  }, []);
+
   const { data: document, isLoading, isError, refetch } = useQuery<Document | null>(
-    ["document", documentId, documents, archiveDocument, restoreDocument],
+    ["document", documentId, archiveDocument, restoreDocument],
     () => getDocument({ id: documentId }),
     {
       refetchOnWindowFocus: true,
     }
   );
+  
 
-  const { data: offsetValue, loading, error } = usePromise(() => getImageOffset({ id: documentId }), [documentId]);
+  const { data: offsetValue, loading, error } = usePromise(() => getImageOffset({ id: documentId }), []);
 
   useEffect(() => {
     refetch();
-    console.log("refetching");
   }, [updateDocument, refetch]);
 
   let timeoutId: NodeJS.Timeout;
@@ -45,7 +49,7 @@ export const DocumentPageId = ({ documentId }: { documentId: string }) => {
           color: resolvedTheme === "dark" ? "#fff" : "#000",
         }
       });
-    }, 2000);
+    }, 5000);
   }
 
   if (isLoading || loading) {
@@ -65,7 +69,7 @@ export const DocumentPageId = ({ documentId }: { documentId: string }) => {
 
   return (
     <div className="pb-40">
-        <Cover url={document.coverImage} offset={offsetValue || 50}/>
+        <Cover url={document.coverImage} offset={offsetValue}/>
         <div className="mx-auto md:max-w-3xl lg:max-w-4xl">
             <Toolbar initialData={document} />
             <Editor

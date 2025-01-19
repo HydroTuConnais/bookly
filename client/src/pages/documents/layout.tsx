@@ -12,11 +12,7 @@ import { SearchCommand } from "@/components/search-command";
 import { SearchProvider } from "@/hooks/use-search";
 import { SettingsProvider } from "@/hooks/use-options";
 import { SettingsModal } from "@/components/modals/settings-modal";
-import { CoverImageProvider } from "@/hooks/use-cover-image";
 import { CoverImageModal } from "@/components/modals/cover-image-modal";
-import { ImageProvider } from "@/components/context/useImage";
-
-
 
 const Layout = ({
     children
@@ -24,9 +20,8 @@ const Layout = ({
     children: React.ReactNode;
 }) => {
     const { checkAuth, isLoading } = useAuth();
-    const { loading } = useDocuments();
 
-    if (isLoading || loading) {
+    if (isLoading ) {
         return (
             <div>
             </div>
@@ -57,11 +52,7 @@ const LayoutWithProvider = ({ children }: { children: React.ReactNode }) => {
     return (
         <SearchProvider>
             <SettingsProvider>
-                <ImageProvider>
-                    <CoverImageProvider>
-                        <Layout>{children}</Layout>
-                    </CoverImageProvider>
-                </ImageProvider>
+                <Layout>{children}</Layout>
             </SettingsProvider>
         </SearchProvider>
     );
