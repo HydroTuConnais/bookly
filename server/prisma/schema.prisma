@@ -21,6 +21,7 @@ model User {
   imageProfile    String?
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
+  boardingStatus  Boolean    @default(false)
   documents       Document[]
   sharedDocuments Document[] @relation("SharedDocuments")
 }
@@ -30,7 +31,7 @@ model Document {
   title            String
   userId           String
   isArchived       Boolean  @default(false)
-  archivedId       String?  
+  archivedId       String?
   isFavorite       Boolean  @default(false)
   parentDocumentId String?
   content          String?

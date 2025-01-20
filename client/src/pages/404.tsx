@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowBigRight, ArrowRight, ArrowRightIcon } from 'lucide-react';
 
-const NotFoundPage: React.FC = () => {
+const Form404: React.FC = () => {
     const navigate = useNavigate();
 
     const handleRedirectHomePage = () => {
@@ -38,4 +38,4 @@ const NotFoundPage: React.FC = () => {
     );
 };
 
-export default NotFoundPage;
+export default Form404;

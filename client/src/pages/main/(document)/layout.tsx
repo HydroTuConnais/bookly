@@ -10,6 +10,8 @@ import { SearchProvider } from "@/hooks/use-search";
 import { SettingsProvider } from "@/hooks/use-options";
 import { SettingsModal } from "@/components/modals/settings-modal";
 import { CoverImageModal } from "@/components/modals/cover-image-modal";
+import { BoardingProvider } from "@/hooks/use-boarding";
+import { BoardingModal } from "@/components/modals/boarding-modal";
 
 const Layout = ({
     children
@@ -38,6 +40,7 @@ const Layout = ({
                 <SearchCommand />
                 <SettingsModal />
                 <CoverImageModal />
+                <BoardingModal />
                 {children}
             </main>
         </div>

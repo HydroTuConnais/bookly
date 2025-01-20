@@ -15,7 +15,7 @@ interface DocumentListProps {
 export const DocumentList: React.FC<DocumentListProps> = ({
     parentDocumentId,
     level = 0,
-    
+
 }: DocumentListProps) => {
     const params = useParams();
     const [expanded, setExpanded] = useState<Record<string, boolean>>({});
@@ -28,16 +28,16 @@ export const DocumentList: React.FC<DocumentListProps> = ({
         }));
     };
 
-    const {documents, getSidebarDocuments} = useDocuments();
+    const { documents, getSidebarDocuments } = useDocuments();
 
-    const { data: documentsList, isLoading, isError, refetch} = useQuery(
-            ["document", parentDocumentId],
-            () => getSidebarDocuments({ parentDocumentId: parentDocumentId }),
-            {
-              refetchOnWindowFocus: true,
-            }
-        );   
-        
+    const { data: documentsList, isLoading, isError, refetch } = useQuery(
+        ["document", parentDocumentId],
+        () => getSidebarDocuments({ parentDocumentId: parentDocumentId }),
+        {
+            refetchOnWindowFocus: true,
+        }
+    );
+
     useEffect(() => {
         refetch();
     }, [documents]);
@@ -74,6 +74,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                             expanded={expanded[document.id]}
                             childCount={document._count.children}
                             isFavorite={document.isFavorite}
+                            isPublished={document.isPublished}
                         />
                         {expanded[document.id] && (
                             <DocumentList

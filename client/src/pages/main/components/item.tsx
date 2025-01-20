@@ -16,6 +16,7 @@ interface ItemProps {
     expanded?: boolean;
     isSearch?: boolean;
     isFavorite?: boolean;
+    isPublished?: boolean;
     level?: number;
     onExpand?: () => void;
     label: string;
@@ -41,6 +42,7 @@ export const Item = ({
     documentIcon,
     isSearch,
     isFavorite,
+    isPublished,
     level = 0,
     onExpand,
     expanded,
@@ -78,7 +80,7 @@ export const Item = ({
             style: {
                 background: resolvedTheme === "dark" ? "#333" : "#fff",
                 color: resolvedTheme === "dark" ? "#fff" : "#000",
-              }
+            }
         });
     };
 
@@ -102,7 +104,7 @@ export const Item = ({
             style: {
                 background: resolvedTheme === "dark" ? "#333" : "#fff",
                 color: resolvedTheme === "dark" ? "#fff" : "#000",
-              }
+            }
         });
     }
 
@@ -127,7 +129,7 @@ export const Item = ({
             style: {
                 background: resolvedTheme === "dark" ? "#333" : "#fff",
                 color: resolvedTheme === "dark" ? "#fff" : "#000",
-              }
+            }
         });
     }
 
@@ -152,7 +154,7 @@ export const Item = ({
             style: {
                 background: resolvedTheme === "dark" ? "#333" : "#fff",
                 color: resolvedTheme === "dark" ? "#fff" : "#000",
-              }
+            }
         });
     }
 
@@ -235,7 +237,7 @@ export const Item = ({
                             className="w-60"
                             align="start"
                             side="right"
-                            style={{ boxShadow: "rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.2) 0px 3px 6px, rgba(15, 15, 15, 0.4) 0px 9px 24px"}}
+                            style={{ boxShadow: "rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.2) 0px 3px 6px, rgba(15, 15, 15, 0.4) 0px 9px 24px" }}
                             forceMount
                             onClick={(e) => e.stopPropagation()}
                         >

@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import {
     Dialog,
     DialogContent,
-    DialogHeader
+    DialogHeader,
+    DialogTitle
 } from "@/components/ui/dialog"
 import { SingleImageDropzone } from "@/components/single-image-dropzone";
 import { useCoverImage } from "@/hooks/use-cover-image";
@@ -19,9 +20,9 @@ export const CoverImageModal = () => {
 
     const [file, setFile] = useState<File | undefined>(undefined);
     const [isSubmitting, setIsSubmitting] = useState(false);
-     
+
     const { updateDocument } = useDocuments();
-    
+
     const onClose = () => {
         setFile(undefined);
         setIsSubmitting(false);
@@ -33,7 +34,7 @@ export const CoverImageModal = () => {
             setIsSubmitting(true);
             setFile(file);
 
-            const response = await image.upload({ 
+            const response = await image.upload({
                 file
             });
 
@@ -48,16 +49,17 @@ export const CoverImageModal = () => {
     return (
         <Dialog open={coverImage.isOpen} onOpenChange={coverImage.onClose}>
             <DialogContent>
+                <DialogTitle className="hidden">test</DialogTitle>
                 <DialogHeader>
                     <h2 className="text-center text-lg font-semibold">
                         Cover Image
                     </h2>
                 </DialogHeader>
                 <SingleImageDropzone
-                className="w-full outline-none"
-                disabled={isSubmitting}
-                value={file}
-                onChange={onChange}
+                    className="w-full outline-none"
+                    disabled={isSubmitting}
+                    value={file}
+                    onChange={onChange}
                 />
             </DialogContent>
         </Dialog>

@@ -8,8 +8,8 @@ interface TitleProps {
     initialData: Document;
 }
 
-export const Title = ({ 
-    initialData 
+export const Title = ({
+    initialData
 }: TitleProps) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const { updateDocument } = useDocuments();
@@ -44,7 +44,7 @@ export const Title = ({
         setTimeoutId(newTimeoutId);
     };
 
-    const handleUpdateDocument = async (params: { id: string, title?: string, content?: string, icon?: string}) => {
+    const handleUpdateDocument = async (params: { id: string, title?: string, content?: string, icon?: string }) => {
         await updateDocument(params);
         queryClient.invalidateQueries(["document", params.id]);
     };

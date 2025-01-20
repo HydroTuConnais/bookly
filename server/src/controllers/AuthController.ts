@@ -31,6 +31,19 @@ export const AuthController = {
     }
   },
 
+  async user(req: Request, res: Response) {
+    try {
+      const token = req.headers.authorization?.split(' ')[1] || '';
+      const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret');
+      const user = await AuthService.findUser(payload.id);
+      console.log(user);
+      res.status(200).json(user);
+    }
+    catch (error: ErrorClass | any) {
+      res.status(error.status).json({ error: error.message });
+    }
+  },
+
   async check(req: Request, res: Response) {
     try {
       const token = req.headers.authorization?.split(' ')[1] || '';
@@ -40,11 +53,28 @@ export const AuthController = {
       const user = {
         id: request?.id,
         email: request?.email,
-        name: request?.name
+        name: request?.name,
+        imageUrl: request?.imageProfile,
+        boardingStatus: request?.boardingStatus
       };
       res.status(200).json({ user, token });
     } catch (error: ErrorClass | any) {
       res.status(error.status).json({ error: error.message });
     }
   },
+
+  async update(req: Request, res: Response) {
+    const { name, imageUrl, boardingStatus } = req.body;
+    console.log(name, imageUrl);
+    try {
+      const token = req.headers.authorization?.split(' ')[1] || '';
+      const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret');
+      if (payload) {
+        const user = await AuthService.updateUser(payload.id, name, imageUrl, boardingStatus);
+        res.status(200).json(user);
+      }
+    } catch (error: ErrorClass | any) {
+      res.status(error.status).json({ error: error.message });
+    }
+  }
 };

@@ -2,13 +2,14 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { loginAPI, registerAPI, checkAPI } from "@/services/authService";
+import { AuthService } from "@/services/authService";
 
 interface UserProfile {
     id: string;
     email: string;
     name: string;
     imageUrl?: string;
+    boardingStatus?: boolean;
 }
 
 interface AuthContextType {
@@ -18,14 +19,18 @@ interface AuthContextType {
     isLoading: boolean;
     loginUser: (email: string, password: string) => Promise<void>;
     registerUser: (email: string, userName: string, password: string) => Promise<void>;
+    updateUser: (params: { name: string, imageUrl: string, boardingStatus: boolean }) => Promise<void>;
     isLoggedIn: () => boolean;
     logoutUser: () => void;
+    getUser: () => Promise<UserProfile | null>;
     checkAuth: (token: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+    const [error, setError] = useState<string | null>(null);
+
     const [user, setUser] = useState<UserProfile | null>(null);
     const [token, setToken] = useState<string | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -44,7 +49,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const registerUser = async (email: string, userName: string, password: string) => {
         try {
-            const res = await registerAPI(email, userName, password);
+            const res = await AuthService.registerAPI({ email, userName, password });
             if (res) {
                 const { token, user } = res.data;
                 setToken(token);
@@ -61,8 +66,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const loginUser = async (email: string, password: string) => {
         try {
-            console.log("-----------------login-----------------");
-            const res = await loginAPI(email, password);
+            const res = await AuthService.loginAPI({ email, password });
             if (res) {
                 const { token, user } = res.data;
                 setToken(token);
@@ -78,19 +82,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
-    const isLoggedIn = () => {
-        return !!user;
-    };
-
-    const logoutUser = () => {
-        setUser(null);
-        setToken(null);
-        setIsAuthenticated(false);
-        navigate("/");
+    const getUser = async (): Promise<UserProfile | null> => {
+        const token = localStorage.getItem("token");
+        try {
+            await AuthService.checkUser({ token: token || "" });
+            if (user) {
+                console.log("user", user);
+                return user;
+            }
+        } catch (error) {
+            console.error("Get user error:", error);
+        }
+        return null;
     };
 
     const checkAuth = async (token: string) => {
-        await checkAPI(token || "").then((res: any) => {
+        await AuthService.checkAPI({ token: token || "" }).then((res: any) => {
             if (res) {
                 setUser(res.user);
                 setToken(res.token);
@@ -106,8 +113,31 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         });
     };
 
+    const isLoggedIn = () => {
+        return !!user;
+    };
+
+    const logoutUser = () => {
+        setUser(null);
+        setToken(null);
+        setIsAuthenticated(false);
+        navigate("/");
+    };
+
+    const updateUser = async ({ name, imageUrl, boardingStatus }: { name: string; imageUrl: string, boardingStatus: boolean }): Promise<void> => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            try {
+                await AuthService.update({ token, name, imageUrl, boardingStatus });
+            } catch (err: any) {
+                setError('Failed to update user');
+                console.error(err);
+            }
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ user, token, isAuthenticated, isLoading, loginUser, registerUser, isLoggedIn, logoutUser, checkAuth }}>
+        <AuthContext.Provider value={{ user, token, isAuthenticated, isLoading, loginUser, registerUser, updateUser, isLoggedIn, logoutUser, getUser, checkAuth }}>
             {children}
         </AuthContext.Provider>
     );

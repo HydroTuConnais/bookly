@@ -63,7 +63,7 @@ export const PreviewPageId = ({ documentId }: { documentId: string }) => {
   }
 
   if (!documents?.isPublished || documents === undefined || documents === null) {
-    return <Navigate to="/404" />;
+    return <Navigate to="/not-publish" />;
   }
 
   return (

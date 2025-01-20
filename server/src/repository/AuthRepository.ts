@@ -18,4 +18,8 @@ export const AuthRepository = {
   async checkDoublon(email: string) {
     return await prisma.user.findUnique({ where: { email } });
   },
+
+  async updateUser(id: string, data: any) {
+    return await prisma.user.update({ where: { id }, data });
+  }
 };
