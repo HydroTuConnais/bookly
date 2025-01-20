@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '../../../components/ui/button';
 import { usePopup } from '@/components/context/popup-context';
@@ -11,6 +11,10 @@ export const Preview: React.FC = () => {
   // Références pour les vidéos
   const lightVideoRef = useRef<HTMLVideoElement>(null);
   const darkVideoRef = useRef<HTMLVideoElement>(null);
+
+  // Code erreur
+  const [lightVideoError, setLightVideoError] = useState(false);
+  const [darkVideoError, setDarkVideoError] = useState(false);
 
   // Synchronisation des vidéos
   useEffect(() => {
@@ -62,6 +66,15 @@ export const Preview: React.FC = () => {
     }
   }, [resolvedTheme]);
 
+  const handleVideoError = (theme: string) => {
+    if (theme === 'light') {
+      setLightVideoError(true);
+    } else {
+      setDarkVideoError(true);
+    }
+    console.error(`Failed to load ${theme} theme video`);
+  };
+
   return (
     <div className="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto py-12 px-6 gap-12">
       {/* Section gauche : Titre et bouton */}
@@ -88,34 +101,36 @@ export const Preview: React.FC = () => {
               'rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px',
           }}
         />
-        <div className="relative w-full z-10 h-auto rounded-3xl overflow-hidden">
-          {/* Vidéo claire */}
-          <video
-            ref={lightVideoRef}
-            src="/demo.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            className={`w-full h-auto p-[10px] object-cover ${
-              resolvedTheme === 'dark' ? 'hidden' : 'block'
-            }`}
-            style={{ clipPath: 'inset(0 0 0 2px)' }}
-          />
-          {/* Vidéo sombre */}
-          <video
-            ref={darkVideoRef}
-            src="/demo-black.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            className={`w-full h-auto p-[10px] object-cover ${
-              resolvedTheme === 'light' ? 'hidden' : 'block'
-            }`}
-            style={{ clipPath: 'inset(0 0 17px 0)' }}
-          />
-        </div>
+        {lightVideoError && darkVideoError ? (
+          <div className="w-full h-[878px] flex items-center justify-center rounded-3xl animate-pulse bg-neutral-300 dark:bg-neutral-600">
+          </div>
+        ) : (
+          <>
+            <video
+              ref={lightVideoRef}
+              src="/demo.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className={`w-full h-auto p-[10px] object-cover ${resolvedTheme === 'dark' ? 'hidden' : 'block'
+                }`}
+              style={{ clipPath: 'inset(0 0 0 2px)' }}
+            />
+
+            <video
+              ref={darkVideoRef}
+              src="/demo-black.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className={`w-full h-auto p-[10px] object-cover ${resolvedTheme === 'light' ? 'hidden' : 'block'
+                }`}
+              style={{ clipPath: 'inset(0 0 17px 0)' }}
+            />
+          </>
+        )}
       </div>
     </div>
   );
