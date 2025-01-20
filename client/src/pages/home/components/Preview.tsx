@@ -113,6 +113,7 @@ export const Preview: React.FC = () => {
               loop
               muted
               playsInline
+              onError={() => handleVideoError('light')}
               className={`w-full h-auto p-[10px] object-cover ${resolvedTheme === 'dark' ? 'hidden' : 'block'
                 }`}
               style={{ clipPath: 'inset(0 0 0 2px)' }}
@@ -125,6 +126,7 @@ export const Preview: React.FC = () => {
               loop
               muted
               playsInline
+              onError={() => handleVideoError('dark')}
               className={`w-full h-auto p-[10px] object-cover ${resolvedTheme === 'light' ? 'hidden' : 'block'
                 }`}
               style={{ clipPath: 'inset(0 0 17px 0)' }}
