@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { preLoaderAnim } from "@/pages/documents/components/animation";
+import { preLoaderAnim } from "@/pages/main/components/animation";
 
 interface AnimationContextProps {
     isAnimationFinished: boolean;

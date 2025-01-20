@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import DocumentsPage from './pages/documents/page';
+import DocumentsPage from './pages/main/(document)/page';
+import PreviewPage from './pages/main/(preview)/page';
 import './index.css';
 
 import { AuthProvider } from './components/context/useAuth';
@@ -18,26 +19,26 @@ import { Toaster } from 'sonner';
 
 const App: React.FC = () => {
   return (
-      <ThemeProvider>
-        <AuthProvider>
-          <DocumentProvider>
-            <AnimationProvider>
-              <CoverImageProvider>
-                <ImageProvider>
-                  <Toaster />
-                  <Routes>
-                    <Route path="/" element={<MarketingPage />} />
-                    <Route path="/documents" element={<DocumentsPage />} />
-                    <Route path="/documents/:documentId" element={<DocumentsPage />} />
-                    <Route path="/preview/:documentId" element={<DocumentsPage />} />
-                    <Route path="*" element={<NotFoundPage />} />
-                  </Routes>
-                </ImageProvider>
-              </CoverImageProvider>
-            </AnimationProvider>
-          </DocumentProvider>
-        </AuthProvider>
-      </ThemeProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <DocumentProvider>
+          <AnimationProvider>
+            <CoverImageProvider>
+              <ImageProvider>
+                <Toaster />
+                <Routes>
+                  <Route path="/" element={<MarketingPage />} />
+                  <Route path="/documents" element={<DocumentsPage />} />
+                  <Route path="/documents/:documentId" element={<DocumentsPage />} />
+                  <Route path="/preview/:documentId" element={<PreviewPage />} />
+                  <Route path="*" element={<NotFoundPage />} />
+                </Routes>
+              </ImageProvider>
+            </CoverImageProvider>
+          </AnimationProvider>
+        </DocumentProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

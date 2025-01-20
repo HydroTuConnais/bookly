@@ -1,13 +1,10 @@
 import React from "react";
 import { useAuth } from '@/components/context/useAuth';
-import { useDocuments } from '@/components/context/useDocuments';
 
 import { Navigate } from "react-router-dom";
-import { Navigation } from "./components/navigation";
-import { useAnimation } from "@/components/context/useAnimation";
-import { Preloader } from "./components/preloader";
+import { Navigation } from "../components/navigation";
 
-import "./style/home.css";
+import "../style/home.css";
 import { SearchCommand } from "@/components/search-command";
 import { SearchProvider } from "@/hooks/use-search";
 import { SettingsProvider } from "@/hooks/use-options";
@@ -21,13 +18,13 @@ const Layout = ({
 }) => {
     const { checkAuth, isLoading } = useAuth();
 
-    if (isLoading ) {
+    if (isLoading) {
         return (
             <div>
             </div>
         );
     }
-    
+
     if (!checkAuth) {
         return <Navigate to="/" />;
     }
