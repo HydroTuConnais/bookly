@@ -2,15 +2,18 @@ const express = require('express');
 import DocumentRoutes from './src/routes/DocumentRoutes';
 import AuthRoutes from './src/routes/AuthRoutes';
 import ImageRoutes from './src/routes/ImageRoutes';
+import RecoveryRoutes from './src/routes/RecoveryRoutes';
 import cors from 'cors';
+
+import { cronProsess } from './src/lib/cron';
 
 const app = express();
 
 app.use(express.json());
 app.use("/api", DocumentRoutes);
-app.use(AuthRoutes);
+app.use("/api", AuthRoutes);
 app.use("/api", ImageRoutes);
-
+app.use("/api", RecoveryRoutes);
 
 app.use(
   cors({
@@ -21,7 +24,8 @@ app.use(
   })
 );
 
-
+cronProsess.startJobCron();
+console.log("Le cron job est démarré !");
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

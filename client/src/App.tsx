@@ -17,6 +17,7 @@ import { ImageProvider } from "@/components/context/useImage";
 import { Toaster } from 'sonner';
 import NotPublishPage from './pages/NotPublish';
 import Form404 from './pages/404';
+import { ConfirmRecoveryPage } from './pages/recovery/page';
 
 
 const App: React.FC = () => {
@@ -34,6 +35,7 @@ const App: React.FC = () => {
                     <Route path="/documents" element={<DocumentsPage />} />
                     <Route path="/documents/:documentId" element={<DocumentsPage />} />
                     <Route path="/preview/:documentId" element={<PreviewPage />} />
+                    <Route path="/recovery/email/:id/:token" element={<ConfirmRecoveryPage />} />
                     <Route path="*" element={<Form404 />} />
                     <Route path="/not-publish" element={<NotPublishPage />} />
                   </Routes>

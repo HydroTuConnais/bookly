@@ -3,6 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { AuthService } from "@/services/authService";
+import { RecoveryService } from "@/services/recoveryService";
 
 interface UserProfile {
     id: string;
@@ -24,6 +25,8 @@ interface AuthContextType {
     logoutUser: () => void;
     getUser: () => Promise<UserProfile | null>;
     checkAuth: (token: string) => void;
+
+    sendRecovryEmail: (email: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -41,11 +44,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const token = localStorage.getItem("token");
         console.log("checkToken Validating");
         if (token) {
-            checkAuth(token);
+            checkAuth();
         } else {
             setIsLoading(false);
         }
     }, []);
+
+    useEffect(() => {
+        console.log("contextAuth", user);
+    }, [user]);
 
     const registerUser = async (email: string, userName: string, password: string) => {
         try {
@@ -96,7 +103,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return null;
     };
 
-    const checkAuth = async (token: string) => {
+    const checkAuth = async () => {
+        const token = localStorage.getItem("token");
         await AuthService.checkAPI({ token: token || "" }).then((res: any) => {
             if (res) {
                 setUser(res.user);
@@ -128,16 +136,44 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const token = localStorage.getItem("token");
         if (token) {
             try {
-                await AuthService.update({ token, name, imageUrl, boardingStatus });
+                await AuthService.update({ token, name, imageUrl, boardingStatus }).then((res) => {
+                    if (res) {
+                        console.log(res.user);
+                        setUser(res.user);
+                        console.log("User updated successfully");
+                        return true;
+                    } else {
+                        setError('Failed to update user');
+                        return false;
+                    }
+                });
             } catch (err: any) {
                 setError('Failed to update user');
                 console.error(err);
             }
         }
-    }
+    };
+
+    const sendRecovryEmail = async (email: string) => {
+        if (user && token) {
+            try {
+                await RecoveryService.sendRecovryEmail({ token, email }).then((res) => {
+                    if (res) {
+                        console.log(res);
+                        toast.success("Email sent successfully");
+                    } else {
+                        setError('Failed to send email');
+                    }
+                });
+            } catch (err: any) {
+                setError('Failed to send email');
+                console.error(err);
+            }
+        }
+    };
 
     return (
-        <AuthContext.Provider value={{ user, token, isAuthenticated, isLoading, loginUser, registerUser, updateUser, isLoggedIn, logoutUser, getUser, checkAuth }}>
+        <AuthContext.Provider value={{ user, token, isAuthenticated, isLoading, loginUser, registerUser, updateUser, isLoggedIn, logoutUser, getUser, checkAuth, sendRecovryEmail }}>
             {children}
         </AuthContext.Provider>
     );

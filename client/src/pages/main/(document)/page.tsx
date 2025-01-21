@@ -1,7 +1,7 @@
 import Layout from "./layout";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import { DocumentPageId } from "./[documents]/page";
 import { DocumentsPageHome } from "./[home]/page";
@@ -12,22 +12,31 @@ import { useAuth } from "@/components/context/useAuth";
 const DocumentsPage = () => {
     const { documentId } = useParams<{ documentId: string }>();
     const { isOpen, onClose, onOpen } = useBoarding();
-    const { updateUser, getUser } = useAuth();
+    const { getUser } = useAuth();
+
+    const [hasShownPopup, setHasShownPopup] = useState(false);
+    const { checkAuth } = useAuth();
 
     useEffect(() => {
+        if (hasShownPopup) return;
+
         getUser().then((res) => {
             if (!res) return;
 
-            console.log("res", res.boardingStatus);
-            if (!res.boardingStatus) {
+            if (!res.boardingStatus && !hasShownPopup) {
                 onOpen();
+                setHasShownPopup(true);
             }
             if (res.boardingStatus) {
                 onClose();
+                setHasShownPopup(true);
             }
         });
-    }, [isOpen]);
+    }, [hasShownPopup]);
 
+    if (!checkAuth) {
+        return <Navigate to="/" />;
+    }
     return (
         <Layout>
             {!documentId ? (

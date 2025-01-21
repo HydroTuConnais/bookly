@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 
 import {
     Avatar,
@@ -18,12 +18,11 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/context/useAuth";
 
 export const UserItem = () => {
-    const { user, logoutUser } = useAuth();
+    const { user, updateUser, logoutUser } = useAuth();
 
     useEffect(() => {
-        console.log(user);
-        console.log("imageUrl", user?.imageUrl);
-    }, []);
+        console.log("user", user);
+    }, [user, updateUser]);
 
     return (
         <DropdownMenu>
@@ -42,7 +41,7 @@ export const UserItem = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent
                 className="w-80 border rounded-md border-primary/5 dark:border-neutral-800"
-                style={{ boxShadow: "rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.2) 0px 3px 6px, rgba(15, 15, 15, 0.4) 0px 9px 24px"}}
+                style={{ boxShadow: "rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.2) 0px 3px 6px, rgba(15, 15, 15, 0.4) 0px 9px 24px" }}
                 align="start"
                 alignOffset={11}
                 forceMount

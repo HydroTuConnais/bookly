@@ -14,7 +14,7 @@ export const TrashBox = () => {
     const { resolvedTheme } = useTheme();
     const [search, setSearch] = useState("");
     const [archivedDocuments, setArchivedDocuments] = useState<any[]>([]);
-    
+
     const navigate = useNavigate();
     const params = useParams();
 
@@ -47,7 +47,7 @@ export const TrashBox = () => {
             style: {
                 background: resolvedTheme === "dark" ? "#333" : "#fff",
                 color: resolvedTheme === "dark" ? "#fff" : "#000",
-              }
+            }
         });
     };
 
@@ -63,7 +63,7 @@ export const TrashBox = () => {
             style: {
                 background: resolvedTheme === "dark" ? "#333" : "#fff",
                 color: resolvedTheme === "dark" ? "#fff" : "#000",
-              }
+            }
         });
 
         if (params.documentId === documentId) {

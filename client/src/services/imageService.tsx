@@ -4,21 +4,21 @@ import axios from "axios";
 const api = "http://localhost:4000/api";
 
 export const ImageService = {
-    async upload({ token, userid, file }: { token: string, userid: string, file: File}) {
-        try {     
+    async upload({ token, userid, file }: { token: string, userid: string, file: File }) {
+        try {
             const formData = new FormData();
             formData.append("image", file);
 
-            const data = await fetchData({ method: "POST", endpoint: "/image/upload", formData , header: { UserId: userid }, token });
+            const data = await fetchData({ method: "POST", endpoint: "/image/upload", formData, header: { UserId: userid }, token });
             return data;
         } catch (error) {
             handleErrors(error);
         }
     },
 
-    async remove({ token, userid, url, documentId}: { token: string, userid: string, url: string, documentId: string}) {
+    async remove({ token, userid, url, documentId }: { token: string, userid: string, url: string, documentId: string }) {
         try {
-            const data = await fetchData({ method: "DELETE", endpoint: `/image/${documentId}`, body: {url: url}, header: { UserId: userid }, token });
+            const data = await fetchData({ method: "DELETE", endpoint: `/image/${documentId}`, body: { url: url }, header: { UserId: userid }, token });
             return data;
         } catch (error) {
             handleErrors(error);

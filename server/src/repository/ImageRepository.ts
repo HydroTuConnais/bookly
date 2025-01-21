@@ -1,9 +1,9 @@
-const { PrismaClient} = require('@prisma/client');
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 
 export const ImageRepository = {
-  
+
   async createImage(imageId: string, imageUrl: string, imageData: { filename: string; filepath: string }) {
     return await prisma.image.create({
       data: {
@@ -51,7 +51,7 @@ export const ImageRepository = {
         return match[1]; // This will return the extracted ID
       }
     }
-    
+
     return null;
   },
 

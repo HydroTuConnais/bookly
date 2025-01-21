@@ -11,6 +11,10 @@ export const AuthRepository = {
     return await prisma.user.findUnique({ where: { id } });
   },
 
+  async findEmainById(id: string) {
+    return await prisma.user.findUnique({ where: { id }, select: { email: true } });
+  },
+
   async createUser(data: any) {
     return await prisma.user.create({ data });
   },

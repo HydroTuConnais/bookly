@@ -15,7 +15,7 @@ export const DocumentsPageHome = () => {
     const navigate = useNavigate();
 
     const { createDocument } = useDocuments();
-    
+
     const handleCreate = async () => {
         const promise = createDocument({
             title: "Sans titre",
@@ -33,10 +33,10 @@ export const DocumentsPageHome = () => {
             style: {
                 background: resolvedTheme === "dark" ? "#333" : "#fff",
                 color: resolvedTheme === "dark" ? "#fff" : "#000",
-              }
+            }
         });
     };
-    
+
     return (
         <div className="h-screen flex flex-col items-center justify-center space-y-4">
             <img

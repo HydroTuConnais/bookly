@@ -18,17 +18,13 @@ const Layout = ({
 }: {
     children: React.ReactNode;
 }) => {
-    const { checkAuth, isLoading } = useAuth();
+    const { isLoading } = useAuth();
 
     if (isLoading) {
         return (
             <div>
             </div>
         );
-    }
-
-    if (!checkAuth) {
-        return <Navigate to="/" />;
     }
 
     return (

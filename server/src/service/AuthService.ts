@@ -53,23 +53,33 @@ export const AuthService = {
     }
   },
 
-  async updateUser(id: string, name: string, imageUrl: string, boardingStatus: boolean) {
-    if (!id) {
-      throw new ErrorClass(404, 'UserId is required');
+  async findEmailById(id: string) {
+    try {
+      return await AuthRepository.findEmainById(id);
     }
+    catch (error) {
+      throw new ErrorClass(404, 'User not found');
+    }
+  },
 
-    if (!name) {
-      throw new ErrorClass(400, 'Name is required');
+  async updateUser(id: string, email: string | null, name: string | null, imageUrl: string | null, boardingStatus: boolean | null) {
+    if (!id) {
+      throw new ErrorClass(404, 'Id is required');
     }
 
     const updateUser: {
       name?: string,
+      email?: string,
       imageProfile?: string
       boardingStatus?: boolean
     } = {};
 
     if (name) {
       updateUser.name = name;
+    }
+
+    if (email) {
+      updateUser.email = email;
     }
 
     if (imageUrl) {
@@ -79,8 +89,11 @@ export const AuthService = {
     if (boardingStatus) {
       updateUser.boardingStatus = boardingStatus;
     }
-    return await AuthRepository.updateUser(id, updateUser);
 
+    console.log("id", id);
+    console.log("updateUser", updateUser);
+
+    return await AuthRepository.updateUser(id, updateUser);
   }
 };
 

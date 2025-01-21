@@ -18,6 +18,7 @@ import { Separator } from '../ui/separator';
 import { Avatar, AvatarImage } from '../ui/avatar';
 import { useAuth } from '../context/useAuth';
 import { useSettings } from '@/hooks/use-options';
+import { InputMailModal } from './mail-change-modal';
 
 interface Device {
     name: string;
@@ -33,7 +34,7 @@ export const SettingsModal = () => {
     const [startupPage, setStartupPage] = useState('last');
     const [language, setLanguage] = useState('fr');
 
-    const { user } = useAuth();
+    const { user, sendRecovryEmail } = useAuth();
 
     const mockDevices: Device[] = [
         { name: 'MacBook Pro', lastConnection: '2024-03-14 10:30', type: 'desktop' },
@@ -54,11 +55,16 @@ export const SettingsModal = () => {
         }
     };
 
+    const onEmailChange = (newEmail: string) => {
+        console.log('New email:', newEmail);
+        sendRecovryEmail(newEmail);
+    };
+
 
     return (
         <>
             {isOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[9999999]"
+                <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[99991]"
                     onClick={handleOverlayClick}>
                     <div className="bg-white dark:bg-neutral-800 rounded-l-2xl h-[600px] flex overflow-hidden">
                         {/* Sidebar */}
@@ -124,24 +130,27 @@ export const SettingsModal = () => {
                                                 value={user?.name}
                                                 onChange={() => { }}
                                                 className="h-7 px-2 border border-neutral-400 dark:border-[#3c3c3c] bg-neutral-300 dark:bg-[#2c2c2c] focus-visible:ring-0 focus-visible:ring-offset-0 focus-within:shadow-[inset_0_0_0_1px_#2383e291,0_0_0_2px_#2383e259]"
-                                                placeholder="Filter by page title..."
+                                                placeholder="..."
                                             />
                                         </div>
                                     </div>
 
                                     <div className="space-y-4">
-                                        <button className="flex items-center justify-between w-full p-3 border rounded-lg ">
-                                            <div className="flex items-center justify-center">
-                                                <Mail className="mr-3" size={20} />
-                                                <div className='flex flex-col items-start'>
-                                                    <span>Email</span>
-                                                    <p className='text-xs text-muted-foreground'>{user?.email}</p>
+                                        <InputMailModal onConfirm={onEmailChange} title="Changer d'adresse e-mail" description="Entrez votre nouvelle adresse e-mail" placeholder={user?.email}>
+                                            <button className="flex items-center justify-between w-full p-3 border rounded-lg ">
+                                                <div className="flex items-center justify-center">
+                                                    <Mail className="mr-3" size={20} />
+                                                    <div className='flex flex-col items-start'>
+                                                        <span>Email</span>
+                                                        <p className='text-xs text-muted-foreground'>{user?.email}</p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className='flex items-center justify-center border h-[32px] w-auto px-3 border-neutral-600 hover:bg-gray-50 dark:hover:bg-neutral-700 rounded-lg'>
-                                                <span className=''>Changer d'adresse e-mail</span>
-                                            </div>
-                                        </button>
+                                                <div className='flex items-center justify-center border h-[32px] w-auto px-3 border-neutral-600 hover:bg-gray-50 dark:hover:bg-neutral-700 rounded-lg'>
+                                                    <span className=''>Changer d'adresse e-mail</span>
+                                                </div>
+                                            </button>
+                                        </InputMailModal>
+
 
                                         <button className="flex items-center justify-between w-full p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-700">
                                             <div className="flex items-center">

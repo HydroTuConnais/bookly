@@ -4,6 +4,7 @@ import {
     DialogContent,
     DialogHeader,
     DialogFooter,
+    DialogTitle,
 } from "@/components/ui/dialog";
 
 import { useSettings } from "@/hooks/use-options";
@@ -23,7 +24,7 @@ export const BoardingModal = () => {
     const [file, setFile] = useState<File | undefined>(undefined);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const { isOpen, onClose, onOpen } = useBoarding();
+    const { isOpen, onClose } = useBoarding();
     const { updateUser } = useAuth();
     const image = useImage();
 
@@ -52,7 +53,7 @@ export const BoardingModal = () => {
     };
 
     const handleSubmit = () => {
-        updateUser({ name: username, imageUrl, boardingStatus: true }).then(() => {
+        updateUser({ name: username, imageUrl, boardingStatus: true }).then((data) => {
             onClose();
         });
     };
@@ -60,6 +61,7 @@ export const BoardingModal = () => {
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="dark:bg-[#1F1F1F]">
+                <DialogTitle className="hidden">test</DialogTitle>
                 <DialogHeader className="border-b pb-3">
                     <h2 className="text-lg font-medium text-center">Configurer votre profil</h2>
                 </DialogHeader>

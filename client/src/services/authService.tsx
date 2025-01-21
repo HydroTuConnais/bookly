@@ -3,7 +3,7 @@ import { UserProfileToken } from "@/models/Users";
 import axios from "axios";
 
 
-const api = "http://localhost:4000";
+const api = "http://localhost:4000/api";
 
 export const AuthService = {
 
@@ -61,7 +61,7 @@ export const AuthService = {
 
     async update({ token, name, imageUrl, boardingStatus }: { token: string, name: string, imageUrl: string | null, boardingStatus: boolean }) {
         try {
-            const data = await axios.put(api + "/auth/update", {
+            const response = await axios.put(api + "/auth/update", {
                 name,
                 imageUrl,
                 boardingStatus
@@ -70,9 +70,9 @@ export const AuthService = {
                     Authorization: "Bearer " + token
                 }
             });
-            return data;
+            return response.data;
         } catch (error) {
             handleErrors(error);
         }
     }
-}
+};

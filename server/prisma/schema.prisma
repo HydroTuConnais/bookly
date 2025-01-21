@@ -59,3 +59,11 @@ model Image {
   filepath   String
   uploadedAt DateTime @default(now())
 }
+
+model Recover {
+  id        String   @id @default(uuid())
+  emailPrev String
+  email     String
+  token     String
+  createdAt DateTime @default(now())
+}

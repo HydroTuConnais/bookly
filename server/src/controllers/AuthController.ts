@@ -2,10 +2,19 @@ import { Request, Response } from 'express';
 import { AuthService } from '../service/AuthService';
 import { ErrorClass } from '../utils/Error';
 
+
 const jwt = require('jsonwebtoken');
 
+interface userInteface {
+  id?: string;
+  email?: string;
+  name?: string | null;
+  imageUrl?: string | null;
+  boardingStatus?: boolean;
+};
 
 export const AuthController = {
+
   async register(req: Request, res: Response) {
     const { email, password } = req.body;
     try {
@@ -23,7 +32,15 @@ export const AuthController = {
     console.log(email, password);
     try {
       const { user, token } = await AuthService.loginUser(email, password);
-      res.status(200).json({ token, user });
+      const userInterface: userInteface = {
+        id: user?.id,
+        email: user?.email,
+        name: user?.name,
+        imageUrl: user?.imageProfile,
+        boardingStatus: user?.boardingStatus
+      }
+      console.log(userInterface);
+      res.status(200).json({ token, user: userInterface });
 
     }
     catch (error: ErrorClass | any) {
@@ -47,17 +64,20 @@ export const AuthController = {
   async check(req: Request, res: Response) {
     try {
       const token = req.headers.authorization?.split(' ')[1] || '';
+      console.log("token", token);
       const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret');
-
-      const request = await AuthService.findUserEmail(payload.email);
-      const user = {
-        id: request?.id,
-        email: request?.email,
-        name: request?.name,
-        imageUrl: request?.imageProfile,
-        boardingStatus: request?.boardingStatus
-      };
-      res.status(200).json({ user, token });
+      console.log("payload", payload);
+      if (payload) {
+        const request = await AuthService.findUser(payload.id);
+        const userInterface: userInteface = {
+          id: request?.id,
+          email: request?.email,
+          name: request?.name,
+          imageUrl: request?.imageProfile,
+          boardingStatus: request?.boardingStatus
+        }
+        res.status(200).json({ user: userInterface, token });
+      }
     } catch (error: ErrorClass | any) {
       res.status(error.status).json({ error: error.message });
     }
@@ -70,11 +90,18 @@ export const AuthController = {
       const token = req.headers.authorization?.split(' ')[1] || '';
       const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret');
       if (payload) {
-        const user = await AuthService.updateUser(payload.id, name, imageUrl, boardingStatus);
-        res.status(200).json(user);
+        const request = await AuthService.updateUser(payload.id, null, name, imageUrl, boardingStatus);
+        const userInterface: userInteface = {
+          id: request?.id,
+          email: request?.email,
+          name: request?.name,
+          imageUrl: request?.imageProfile,
+          boardingStatus: request?.boardingStatus
+        }
+        res.status(200).json({ user: userInterface });
       }
     } catch (error: ErrorClass | any) {
       res.status(error.status).json({ error: error.message });
     }
-  }
+  },
 };

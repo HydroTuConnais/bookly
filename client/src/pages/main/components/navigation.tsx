@@ -64,7 +64,7 @@ export const Navigation = () => {
             console.error("Error fetching documents:", error);
         }
     }, [data, error]);
-    
+
 
     useEffect(() => {
         if (isMobile) {
@@ -160,7 +160,7 @@ export const Navigation = () => {
             style: {
                 background: resolvedTheme === "dark" ? "#333" : "#fff",
                 color: resolvedTheme === "dark" ? "#fff" : "#000",
-              }
+            }
         });
     };
 
@@ -169,7 +169,7 @@ export const Navigation = () => {
             <aside
                 ref={sidebarref}
                 className={cn(
-                    "group/sidebar h-full bottom-0 overflow-hidden overflow-y-auto relative flex w-60 flex-col z-[99999]",
+                    "group/sidebar h-full bottom-0 overflow-hidden overflow-y-auto relative flex w-60 flex-col z-[99990]",
                     isReseting && "transition-all ease-in-out duration-300",
                     isMobile && "w-0"
                 )}
@@ -231,7 +231,7 @@ export const Navigation = () => {
                             </PopoverTrigger>
                             <PopoverContent
                                 className="p-2 w-72"
-                                style={{ boxShadow: "rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.2) 0px 3px 6px, rgba(15, 15, 15, 0.4) 0px 9px 24px"}}
+                                style={{ boxShadow: "rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.2) 0px 3px 6px, rgba(15, 15, 15, 0.4) 0px 9px 24px" }}
                                 side={isMobile ? "bottom" : "right"}
                                 align='start'
                             >
@@ -251,17 +251,17 @@ export const Navigation = () => {
                     isMobile && "left-0 w-full",
                     // !!params.documentId ? "top-0" : "top-3"
                 )}>
-                { !!params.documentId ? (
-                    <Navbar 
-                    isCollapsed={isCollapsed}
-                    onResetWidth={resetWidth}
-                    documentId={params.documentId}
+                {!!params.documentId ? (
+                    <Navbar
+                        isCollapsed={isCollapsed}
+                        onResetWidth={resetWidth}
+                        documentId={params.documentId}
                     />
                 ) : (
                     <nav className={cn(isCollapsed ? "h-6 w-6 text-muted-foreground rounded-sm hover:bg-neutral-200 dark:hover:bg-neutral-600 mx-3 my-2" : "hidden")}>
-                        {isCollapsed && <MenuIcon onClick={resetWidth} role="button" className="h-6 w-6 text-muted-foreground"/>}
+                        {isCollapsed && <MenuIcon onClick={resetWidth} role="button" className="h-6 w-6 text-muted-foreground" />}
                     </nav>
-                )}    
+                )}
             </div>
         </>
     );
