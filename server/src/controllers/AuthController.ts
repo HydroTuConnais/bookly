@@ -29,7 +29,6 @@ export const AuthController = {
 
   async login(req: Request, res: Response) {
     const { email, password } = req.body;
-    console.log(email, password);
     try {
       const { user, token } = await AuthService.loginUser(email, password);
       const userInterface: userInteface = {
@@ -39,9 +38,23 @@ export const AuthController = {
         imageUrl: user?.imageProfile,
         boardingStatus: user?.boardingStatus
       }
-      console.log(userInterface);
       res.status(200).json({ token, user: userInterface });
 
+    }
+    catch (error: ErrorClass | any) {
+      res.status(error.status).json({ error: error.message });
+    }
+  },
+
+  async psw(req: Request, res: Response) {
+    const { password } = req.body;
+    try {
+      const token = req.headers.authorization?.split(' ')[1] || '';
+      const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret');
+
+      const response = await AuthService.checkPassword(payload.email, password);
+      console.log(response);
+      res.status(200).json(response);
     }
     catch (error: ErrorClass | any) {
       res.status(error.status).json({ error: error.message });
@@ -53,7 +66,6 @@ export const AuthController = {
       const token = req.headers.authorization?.split(' ')[1] || '';
       const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret');
       const user = await AuthService.findUser(payload.id);
-      console.log(user);
       res.status(200).json(user);
     }
     catch (error: ErrorClass | any) {
@@ -64,9 +76,7 @@ export const AuthController = {
   async check(req: Request, res: Response) {
     try {
       const token = req.headers.authorization?.split(' ')[1] || '';
-      console.log("token", token);
       const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret');
-      console.log("payload", payload);
       if (payload) {
         const request = await AuthService.findUser(payload.id);
         const userInterface: userInteface = {
@@ -84,13 +94,13 @@ export const AuthController = {
   },
 
   async update(req: Request, res: Response) {
-    const { name, imageUrl, boardingStatus } = req.body;
-    console.log(name, imageUrl);
+    const { name, imageUrl, boardingStatus, password } = req.body;
+    console.log(req.body);
     try {
       const token = req.headers.authorization?.split(' ')[1] || '';
       const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret');
       if (payload) {
-        const request = await AuthService.updateUser(payload.id, null, name, imageUrl, boardingStatus);
+        const request = await AuthService.updateUser(payload.id, null, name, imageUrl, boardingStatus, password);
         const userInterface: userInteface = {
           id: request?.id,
           email: request?.email,

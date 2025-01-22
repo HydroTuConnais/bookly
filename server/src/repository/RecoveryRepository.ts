@@ -2,19 +2,38 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-interface RecoveryData {
+interface RecoveryDataEmail {
     prevemail: string;
     email: string;
     token: string;
 }
 
+interface RecoveryDataPassword {
+    prevemail: string;
+    token: string;
+}
+
 export const RecoveryRepository = {
-    async createRecovery(data: RecoveryData) {
+    async createRecoveryMail(data: RecoveryDataEmail) {
         try {
             return await prisma.recover.create({
                 data: {
                     emailPrev: data.prevemail,
                     email: data.email,
+                    token: data.token
+                }
+            });
+        } catch (error) {
+            console.error('Error creating recovery:', error);
+            throw error;
+        }
+    },
+
+    async createRecoveryPassword(data: RecoveryDataPassword) {
+        try {
+            return await prisma.recover.create({
+                data: {
+                    emailPrev: data.prevemail,
                     token: data.token
                 }
             });

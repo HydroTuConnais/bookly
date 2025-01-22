@@ -114,14 +114,14 @@ export const SingleImageDropzone: React.FC<InputProps> = ({
 
         {imageUrl ? (
           <img
-            className="h-full w-full rounded-lg"
+            className="w-full h-full rounded-lg"
             src={imageUrl}
             alt={acceptedFiles[0]?.name}
           />
         ) : (
-          <div className="flex justify-center items-center">
+          <div className="flex items-center justify-center">
             <p className="text-gray-500">
-                Cliquer ou glisser une image ici
+              Cliquer ou glisser une image ici
             </p>
           </div>
         )}
@@ -129,7 +129,7 @@ export const SingleImageDropzone: React.FC<InputProps> = ({
         {imageUrl && !disabled && (
           <button
             type="button"
-            className="absolute right-0 top-0 transform translate-x-3 -translate-y-3 bg-white rounded-full w-6 h-6 flex justify-center items-center"
+            className="absolute top-0 right-0 flex items-center justify-center w-6 h-6 transform translate-x-3 -translate-y-3 bg-white rounded-full"
             onClick={(e) => {
               e.stopPropagation();
               void onChange?.(undefined);
@@ -140,7 +140,7 @@ export const SingleImageDropzone: React.FC<InputProps> = ({
         )}
       </div>
 
-      {errorMessage && <p className="mt-1 text-red-500 text-sm">{errorMessage}</p>}
+      {errorMessage && <p className="mt-1 text-sm text-red-500">{errorMessage}</p>}
     </div>
   );
 };

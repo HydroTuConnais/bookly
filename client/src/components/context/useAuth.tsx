@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { AuthService } from "@/services/authService";
 import { RecoveryService } from "@/services/recoveryService";
@@ -23,10 +23,12 @@ interface AuthContextType {
     updateUser: (params: { name: string, imageUrl: string, boardingStatus: boolean }) => Promise<void>;
     isLoggedIn: () => boolean;
     logoutUser: () => void;
+    checkPassword: (password: string) => Promise<boolean>;
     getUser: () => Promise<UserProfile | null>;
     checkAuth: (token: string) => void;
 
     sendRecovryEmail: (email: string) => Promise<void>;
+    sendRecovryPassword: (password: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -132,6 +134,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         navigate("/");
     };
 
+    const checkPassword = async (password: string): Promise<boolean> => {
+        const token = localStorage.getItem("token");
+        try {
+            const res = await AuthService.checkPassword({ token: token || "", password });
+            if (res) {
+                console.log("Password is correct");
+                return true;
+            } else {
+                console.log("Password is incorrect");
+                return false;
+            }
+        } catch (error) {
+            console.error("Password check error:", error);
+            return false;
+        }
+    };
+
     const updateUser = async ({ name, imageUrl, boardingStatus }: { name: string; imageUrl: string, boardingStatus: boolean }): Promise<void> => {
         const token = localStorage.getItem("token");
         if (token) {
@@ -172,8 +191,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
+    const sendRecovryPassword = async (password: string) => {
+        if (user && token) {
+            try {
+                await RecoveryService.sendRecoveryPassword({ token, password }).then((res) => {
+                    if (res) {
+                        console.log(res);
+                        toast.success("Password updated successfully");
+                    } else {
+                        setError('Failed to update password');
+                    }
+                });
+            } catch (err: any) {
+                setError('Failed to update password');
+                console.error(err);
+            }
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ user, token, isAuthenticated, isLoading, loginUser, registerUser, updateUser, isLoggedIn, logoutUser, getUser, checkAuth, sendRecovryEmail }}>
+        <AuthContext.Provider value={{ user, token, isAuthenticated, isLoading, loginUser, registerUser, updateUser, isLoggedIn, logoutUser, checkPassword, getUser, checkAuth, sendRecovryEmail, sendRecovryPassword }}>
             {children}
         </AuthContext.Provider>
     );

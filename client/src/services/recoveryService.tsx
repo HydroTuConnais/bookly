@@ -29,4 +29,28 @@ export const RecoveryService = {
             handleErrors(error);
         }
     },
+
+    async sendRecoveryPassword({ token, password }: { token: string, password: string }) {
+        try {
+            const response = await axios.post(api + "/api/recovery/reset/password", {
+                password
+            }, {
+                headers: {
+                    Authorization: "Bearer " + token
+                }
+            });
+            return response.data;
+        } catch (error) {
+            handleErrors(error);
+        }
+    },
+
+    async recoveryPassword({ id, token }: { id: string, token: string }) {
+        try {
+            const response = await axios.get(api + `/api/recovery/password/${id}/${token}`);
+            return response.data;
+        } catch (error) {
+            handleErrors(error);
+        }
+    }
 };

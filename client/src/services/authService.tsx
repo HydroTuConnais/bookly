@@ -33,6 +33,22 @@ export const AuthService = {
         }
     },
 
+    async checkPassword({ token, password }: { token: string, password: string }) {
+        try {
+            const response = await axios.post(api + "/auth/password", {
+                password
+            }, {
+                headers: {
+                    Authorization: "Bearer " + token
+                }
+            });
+            return response.data;
+        }
+        catch (error) {
+            handleErrors(error);
+        }
+    },
+
     async checkUser({ token }: { token: string }) {
         try {
             const response = await axios.get(api + "/auth/user", {

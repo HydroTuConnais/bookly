@@ -16,7 +16,7 @@ const Layout = ({
     <PopupProvider>
       <div className="h-full dark:bg-[#1F1F1F] relative">
         <Navbar />
-        <main className="min-h-screen pt-40">
+        <main className="min-h-screen pt-20">
           {children}
         </main>
         <Login />

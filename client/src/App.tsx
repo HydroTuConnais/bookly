@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Toaster } from 'sonner';
 import DocumentsPage from './pages/main/(document)/page';
 import PreviewPage from './pages/main/(preview)/page';
 import './index.css';
@@ -13,11 +14,12 @@ import { CoverImageProvider } from "@/hooks/use-cover-image";
 import { BoardingProvider } from './hooks/use-boarding';
 import { ImageProvider } from "@/components/context/useImage";
 
+import { ConfirmRecoveryPageEmail } from './pages/recovery/(email)/page';
+import { ConfirmRecoveryPagePassword } from './pages/recovery/(password)/page';
 
-import { Toaster } from 'sonner';
 import NotPublishPage from './pages/NotPublish';
+import NotChange from './pages/NotChange';
 import Form404 from './pages/404';
-import { ConfirmRecoveryPage } from './pages/recovery/page';
 
 
 const App: React.FC = () => {
@@ -35,9 +37,13 @@ const App: React.FC = () => {
                     <Route path="/documents" element={<DocumentsPage />} />
                     <Route path="/documents/:documentId" element={<DocumentsPage />} />
                     <Route path="/preview/:documentId" element={<PreviewPage />} />
-                    <Route path="/recovery/email/:id/:token" element={<ConfirmRecoveryPage />} />
+                    <Route path="/recovery/email/:id/:token" element={<ConfirmRecoveryPageEmail />} />
+                    <Route path="/recovery/password/:id/:token" element={<ConfirmRecoveryPagePassword />} />
+
+
                     <Route path="*" element={<Form404 />} />
                     <Route path="/not-publish" element={<NotPublishPage />} />
+                    <Route path="/not-changed/:prefix" element={<NotChange />} />
                   </Routes>
                 </ImageProvider>
               </CoverImageProvider>

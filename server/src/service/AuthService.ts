@@ -20,6 +20,10 @@ export const AuthService = {
 
   async loginUser(email: string, password: string) {
     const user = await AuthRepository.findUserByEmail(email);
+    console.log("user", user);
+    if (user)
+      console.log(await bcrypt.compare(password, user.password));
+
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new ErrorClass(400, 'Email and password are required');
     }
@@ -32,6 +36,20 @@ export const AuthService = {
       return jwt.verify(token, process.env.JWT_SECRET || 'secret');
     } catch (error) {
       throw new ErrorClass(404, 'Invalid or expired token');
+    }
+  },
+
+  async checkPassword(email: string, password: string) {
+    if (!password) {
+      throw new ErrorClass(400, 'Password is required');
+    }
+    const user = await AuthRepository.findUserByEmail(email);
+
+    if (user) {
+      return await bcrypt.compare(password, user.password);
+    }
+    else {
+      throw new ErrorClass(404, 'User not found');
     }
   },
 
@@ -62,7 +80,7 @@ export const AuthService = {
     }
   },
 
-  async updateUser(id: string, email: string | null, name: string | null, imageUrl: string | null, boardingStatus: boolean | null) {
+  async updateUser(id: string, email: string | null, name: string | null, imageUrl: string | null, boardingStatus: boolean | null, password: string | null) {
     if (!id) {
       throw new ErrorClass(404, 'Id is required');
     }
@@ -70,6 +88,7 @@ export const AuthService = {
     const updateUser: {
       name?: string,
       email?: string,
+      password?: string,
       imageProfile?: string
       boardingStatus?: boolean
     } = {};
@@ -82,6 +101,11 @@ export const AuthService = {
       updateUser.email = email;
     }
 
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      updateUser.password = hashedPassword;
+    }
+
     if (imageUrl) {
       updateUser.imageProfile = imageUrl;
     }
@@ -90,10 +114,9 @@ export const AuthService = {
       updateUser.boardingStatus = boardingStatus;
     }
 
-    console.log("id", id);
-    console.log("updateUser", updateUser);
-
-    return await AuthRepository.updateUser(id, updateUser);
+    const response = await AuthRepository.updateUser(id, updateUser);
+    console.log("response", response);
+    return response;
   }
 };
 

@@ -117,10 +117,9 @@ export const DocumentRepository = {
     const response = await prisma.document.count({
       where: { userId, isFavorite: true, isArchived: false }
     });
-    console.log(response);
     return response;
   },
-  
+
   /*--------------------------------------------------------------*/
 
   async addSharedUser(documentId: string, userId: string) {
@@ -152,11 +151,11 @@ export const DocumentRepository = {
   async searchDocuments(userId: string, query: string | null) {
     const searchCondition = query
       ? {
-          OR: [
-            { title: { contains: query, mode: 'insensitive' } },
-            { content: { contains: query, mode: 'insensitive' } }
-          ]
-        }
+        OR: [
+          { title: { contains: query, mode: 'insensitive' } },
+          { content: { contains: query, mode: 'insensitive' } }
+        ]
+      }
       : {};
 
     return await prisma.document.findMany({
@@ -180,18 +179,17 @@ export const DocumentRepository = {
 
   /*--------------------------------------------------------------*/
 
-  async getCoverOffset(id: string | null) {   
+  async getCoverOffset(id: string | null) {
     const response = await prisma.document.findUnique({
       where: { id },
       select: { offsety: true }
     });
-  
+
     const offsety = response?.offsety;
     return offsety;
   },
 
   async setCoverOffset(id: string | null, offsety: number) {
-    console.log("Offset", offsety);
     return await prisma.document.update({
       where: { id },
       data: { offsety }

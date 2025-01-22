@@ -8,6 +8,18 @@ import cors from 'cors';
 import { cronProsess } from './src/lib/cron';
 
 const app = express();
+const port = process.env.PORT || 3000;
+
+app.use(express.json());
+
+app.use(
+  cors({
+    origin: "*", // Update this to match your frontend URL
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  })
+);
 
 app.use(express.json());
 app.use("/api", DocumentRoutes);
@@ -15,19 +27,9 @@ app.use("/api", AuthRoutes);
 app.use("/api", ImageRoutes);
 app.use("/api", RecoveryRoutes);
 
-app.use(
-  cors({
-    origin: process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 3000}`,
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-  })
-);
+// cronProsess.startJobCron();
+// console.log("Le cron job est démarré !");
 
-cronProsess.startJobCron();
-console.log("Le cron job est démarré !");
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });

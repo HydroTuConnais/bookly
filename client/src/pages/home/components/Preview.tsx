@@ -76,10 +76,10 @@ export const Preview: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto py-12 px-6 gap-12">
+    <div className="flex flex-col items-center justify-between gap-12 px-6 py-12 mx-auto md:flex-row max-w-[63vw]">
       {/* Section gauche : Titre et bouton */}
-      <div className="w-full md:w-1/2 text-center md:text-left">
-        <p className="text-3xl font-bold tracking-tight sm:text-5xl mb-6">
+      <div className="w-full text-center md:w-1/2 md:text-left">
+        <p className="mb-6 text-3xl font-bold tracking-tight sm:text-5xl">
           Vos Idées, Documents, et Projets, en un seul endroit.
         </p>
         <Button
@@ -88,48 +88,50 @@ export const Preview: React.FC = () => {
           onClick={() => openPopup('login')}
         >
           Commencer Bookly
-          <ArrowRight className="h-4 w-4 ml-2" />
+          <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
       </div>
 
       {/* Section droite : Vidéo */}
-      <div className="w-full md:w-1/2 flex justify-center md:justify-end relative">
+      <div className="relative flex justify-center w-full md:w-1/2 md:justify-end">
         <div
-          className="absolute w-full h-[878px] rounded-2xl border-[1vh] z-20 border-[#f7f7f7] dark:border-[#2a2a2a]"
+          className="absolute w-full h-[78vh] rounded-2xl border-[12px] z-20 border-[#f7f7f7] dark:border-[#2a2a2a]"
           style={{
             boxShadow:
               'rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px',
           }}
         />
         {lightVideoError && darkVideoError ? (
-          <div className="w-full h-[878px] flex items-center justify-center rounded-3xl animate-pulse bg-neutral-300 dark:bg-neutral-600">
+          <div className="w-full h-[80vh] flex items-center justify-center rounded-3xl animate-pulse bg-neutral-300 dark:bg-neutral-600">
           </div>
         ) : (
           <>
             <video
               ref={lightVideoRef}
-              src="/demo.mp4"
+              src="demo.mp4"
               autoPlay
               loop
               muted
               playsInline
+              controls
               onError={() => handleVideoError('light')}
-              className={`w-full h-auto p-[10px] object-cover ${resolvedTheme === 'dark' ? 'hidden' : 'block'
+              className={`w-full h-[78vh] p-[10px] object-cover ${resolvedTheme === 'dark' ? 'hidden' : 'block'
                 }`}
               style={{ clipPath: 'inset(0 0 0 2px)' }}
             />
 
             <video
               ref={darkVideoRef}
-              src="/demo-black.mp4"
+              src="demo-black.mp4"
               autoPlay
               loop
               muted
               playsInline
+              controls
               onError={() => handleVideoError('dark')}
-              className={`w-full h-auto p-[10px] object-cover ${resolvedTheme === 'light' ? 'hidden' : 'block'
+              className={`w-full h-[78vh] p-[10px] object-cover ${resolvedTheme === 'light' ? 'hidden' : 'block'
                 }`}
-              style={{ clipPath: 'inset(0 0 17px 0)' }}
+              style={{ clipPath: 'inset(0 0 0 0)' }}
             />
           </>
         )}

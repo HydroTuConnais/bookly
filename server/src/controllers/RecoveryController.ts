@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { RecoveryService } from '../service/RecoveryService';
 import { AuthService } from '../service/AuthService';
 import { ErrorClass } from '../utils/Error';
-import { changeEmail } from '../lib/resend';
+import { changeEmail, changePassword } from '../lib/resend';
 
 import axios from 'axios';
 
@@ -24,10 +24,8 @@ export const RecoveryController = {
         if (payload) {
             const response = await AuthService.findUser(payload.id);
             if (response) {
-                console.log(response.id);
                 const user = await AuthService.findUser(response.id);
                 const infoReq = await RequestInfo.getRequestInfo(req);
-                console.log(infoReq);
                 if (!user?.email) {
                     throw new ErrorClass(404, 'User not found');
                 }
@@ -35,7 +33,7 @@ export const RecoveryController = {
                 try {
                     if (user?.email && user?.name && infoReq.ip) {
                         changeEmail(user.email, email, user.name, `http://localhost:3000/recovery/email/${user.id}/${token}`, infoReq.ip, infoReq.country || 'Unknown');
-                        RecoveryService.inputRegistery(user.email, email, token);
+                        RecoveryService.inputRegisteryEmail(user.email, email, token);
                     } else {
                         throw new ErrorClass(400, 'Email or Name or IP or Country is missing');
                     }
@@ -56,7 +54,6 @@ export const RecoveryController = {
 
     async recoveryEmail(req: Request, res: Response) {
         const { id, token } = req.params;
-        console.log(id, token);
         try {
             const user = await AuthService.findUser(id);
             if (!user) {
@@ -66,7 +63,7 @@ export const RecoveryController = {
             if (payload) {
                 const reponse = await RecoveryService.getRecoveryId(user.email);
                 if (reponse) {
-                    const request = await AuthService.updateUser(payload.id, reponse.email, null, null, null);
+                    const request = await AuthService.updateUser(payload.id, reponse.email, null, null, null, null);
                     if (request) {
                         await RecoveryService.deleteRecoveryId(user.email);
                     }
@@ -76,7 +73,73 @@ export const RecoveryController = {
         } catch (error: any) {
             res.status(500).json({ error: "Failed to update email" });
         }
-    }
+    },
+
+    async resetPassword(req: Request, res: Response) {
+        const { password } = req.body;
+        const token = req.headers.authorization?.split(' ')[1] || '';
+        const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret');
+        if (payload) {
+            const response = await AuthService.findUser(payload.id);
+            if (response) {
+                const user = await AuthService.findUser(response.id);
+                if (!user?.email) {
+                    throw new ErrorClass(404, 'User not found');
+                }
+
+                try {
+                    if (user?.email && user?.name) {
+                        const request = await AuthService.updateUser(payload.id, user.email, null, null, null, password);
+                        if (request) {
+                            res.status(200).json({ message: "Password updated successfully" });
+                        }
+                    } else {
+                        throw new ErrorClass(400, 'Email or Name is missing');
+                    }
+                } catch (error: any) {
+                    res.status(500).json({ error: "Failed to update password" });
+                }
+
+            }
+        }
+    },
+
+    async sendRPassword(req: Request, res: Response) {
+        const token = req.headers.authorization?.split(' ')[1] || '';
+        const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret');
+        if (payload) {
+            const response = await AuthService.findUser(payload.id);
+            if (response) {
+                const user = await AuthService.findUser(response.id);
+                const infoReq = await RequestInfo.getRequestInfo(req);
+                if (!user?.email) {
+                    throw new ErrorClass(404, 'User not found');
+                }
+
+                try {
+                    if (user?.email && user?.name && infoReq.ip) {
+                        changePassword(user.email, user.name, `http://localhost:3000/recovery/password/${user.id}/${token}`, infoReq.ip, infoReq.country || 'Unknown');
+                        RecoveryService.inputRegisteryPassword(user.email, token);
+                    } else {
+                        throw new ErrorClass(400, 'Email or Name or IP or Country is missing');
+                    }
+                } catch (error: any) {
+                    res.status(500).json({ error: "Failed to send email" });
+                }
+
+            }
+            try {
+                res.status(200).json({ message: "Email sent successfully" });
+            } catch (error: any) {
+                res.status(500).json({ error: "Failed to send email" });
+            }
+        };
+    },
+
+    async recoveryPassword(req: Request, res: Response) {
+        const { id, token } = req.params;
+
+    },
 };
 
 const RequestInfo = {

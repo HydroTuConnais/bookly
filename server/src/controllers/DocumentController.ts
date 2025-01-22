@@ -11,7 +11,6 @@ export const DocumentController = {
 
     try {
       const document = await DocumentService.getDocument(id, userId);
-      console.log("Document");
       res.status(200).json(document);
     }
     catch (error: ErrorClass | any) {
@@ -35,14 +34,11 @@ export const DocumentController = {
 
   async updateDocument(req: Request, res: Response) {
     const id = req.params.id;
-    const { title, content, icon, coverImage, isPublished} = req.body;
+    const { title, content, icon, coverImage, isPublished } = req.body;
     const userId = req.headers.userid as string;
-
-    console.log("Update", req);
 
     try {
       const document = await DocumentService.updateDocument(id, title, userId, content, icon, coverImage, isPublished);
-      console.log("Update");
       res.status(202).json(document);
     }
     catch (error: ErrorClass | any) {
@@ -71,7 +67,6 @@ export const DocumentController = {
 
     try {
       const documents = await DocumentService.getSidebarDocuments(userId, parentDocumentId);
-      console.log("Sidebar");
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {

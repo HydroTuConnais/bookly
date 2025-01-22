@@ -5,8 +5,6 @@ import path from 'path';
 
 export const ImageController = {
   async uploadImage(req: any, res: Response): Promise<void> {
-    console.log(req);
-
     const { filename, path: filepath } = req.file!;
     try {
       const imageUrl = await ImageService.saveImage({ filename, filepath });
@@ -29,13 +27,13 @@ export const ImageController = {
   },
 
   async getImageById(req: Request, res: Response): Promise<void> {
-    const id  = req.params.id;
+    const id = req.params.id;
     try {
       const image = await ImageService.getImageById(id);
-      
+
       if (!image) {
         res.status(404).json({ error: "Image not found" });
-      } 
+      }
 
       else {
         const filePath = path.resolve(image.filepath);
@@ -54,8 +52,8 @@ export const ImageController = {
 
   async deleteImage(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
-    const { url	} = req.body;
-    
+    const { url } = req.body;
+
     try {
       await ImageService.deleteImage(id, url);
       res.status(200).json({ message: "Image deleted successfully" });

@@ -63,7 +63,7 @@ model Image {
 model Recover {
   id        String   @id @default(uuid())
   emailPrev String
-  email     String
+  email     String?
   token     String
   createdAt DateTime @default(now())
 }

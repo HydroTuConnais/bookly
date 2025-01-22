@@ -1,13 +1,13 @@
 import Layout from "./layout";
 import React, { useEffect, useState } from "react";
 
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { DocumentPageId } from "./[documents]/page";
 import { DocumentsPageHome } from "./[home]/page";
-import "../style/home.css";
 import { useBoarding } from "@/hooks/use-boarding";
 import { useAuth } from "@/components/context/useAuth";
+import "../style/home.css";
 
 const DocumentsPage = () => {
     const { documentId } = useParams<{ documentId: string }>();
@@ -15,11 +15,8 @@ const DocumentsPage = () => {
     const { getUser } = useAuth();
 
     const [hasShownPopup, setHasShownPopup] = useState(false);
-    const { checkAuth } = useAuth();
 
     useEffect(() => {
-        if (hasShownPopup) return;
-
         getUser().then((res) => {
             if (!res) return;
 
@@ -34,9 +31,6 @@ const DocumentsPage = () => {
         });
     }, [hasShownPopup]);
 
-    if (!checkAuth) {
-        return <Navigate to="/" />;
-    }
     return (
         <Layout>
             {!documentId ? (
