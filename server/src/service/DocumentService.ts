@@ -6,6 +6,15 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const DocumentService = {
 
+  async getAllDocuments() {
+    try {
+      return await DocumentRepository.getAllDocuments();
+    }
+    catch (error) {
+      throw new ErrorClass(500, 'Error process getting all documents');
+    }
+  },
+
   async getDocument(id: string, userId: string) {
     const document = await DocumentRepository.findDocumentById(id);
     if (!document) {
@@ -74,10 +83,10 @@ export const DocumentService = {
         throw new ErrorClass(401, 'Unauthorized or Not Found');
       }
 
-      const updateData: { 
-        title?: string, 
-        content?: string, 
-        icon?: string 
+      const updateData: {
+        title?: string,
+        content?: string,
+        icon?: string
         coverImage?: string
         isPublished?: boolean
       } = {};
@@ -146,25 +155,25 @@ export const DocumentService = {
     if (!document || document.userId !== userId) {
       throw new ErrorClass(401, 'Unauthorized or Not Found');
     }
-  
+
     const recursiveArchive = async (documentId: string, archiveId: string) => {
       const children = await DocumentRepository.findChildDocuments(userId, documentId);
       for (const child of children) {
         if (!child.archivedId) { // Vérifie si l'enfant n'a pas déjà un archiveId
-          await DocumentRepository.updateDocument(child.id, { isArchived: true, archivedId : archiveId + 'c' });
+          await DocumentRepository.updateDocument(child.id, { isArchived: true, archivedId: archiveId + 'c' });
           await recursiveArchive(child.id, archiveId);
         }
       }
     };
-  
+
     const archiveId = uuidv4();
-  
+
     try {
-      await DocumentRepository.updateDocument(id, { isArchived: true, archivedId : archiveId + 'p' });
+      await DocumentRepository.updateDocument(id, { isArchived: true, archivedId: archiveId + 'p' });
     } catch (error) {
       throw new ErrorClass(500, 'Error process finding parent document');
     }
-  
+
     try {
       await recursiveArchive(id, archiveId);
     } catch (error) {
@@ -177,13 +186,13 @@ export const DocumentService = {
     if (!document || document.userId !== userId) {
       throw new ErrorClass(401, 'Unauthorized or Not Found');
     }
-  
+
     const archivedId = document.archivedId;
     //console.log("archivedId", archivedId);
     if (!archivedId) {
       throw new ErrorClass(400, 'Document is not archived');
     }
-  
+
     const recursiveRestore = async (archivedId: string) => {
       const documentsToRestore = await DocumentRepository.findDocumentsByArchivedId(userId, archivedId.slice(0, -1) + 'c');
       //console.log("documentsToRestore", documentsToRestore);
@@ -191,13 +200,13 @@ export const DocumentService = {
         await DocumentRepository.updateDocument(doc.id, { isArchived: false, archivedId: null });
       }
     };
-  
+
     try {
       await DocumentRepository.updateDocument(id, { isArchived: false, archivedId: null });
     } catch (error) {
       throw new ErrorClass(500, 'Error process restore document');
     }
-  
+
     try {
       await recursiveRestore(archivedId);
     } catch (error) {
@@ -244,14 +253,14 @@ export const DocumentService = {
     }
   },
 
-  async getfavoriteDocuments(userId: string, parentFavoriteId: string | null , forChild: boolean) {
+  async getfavoriteDocuments(userId: string, parentFavoriteId: string | null, forChild: boolean) {
 
     if (parentFavoriteId === "null") {
       parentFavoriteId = null;
     }
 
     try {
-      if(forChild) return await DocumentRepository.findFavoriteForChild(userId, parentFavoriteId);
+      if (forChild) return await DocumentRepository.findFavoriteForChild(userId, parentFavoriteId);
       else return await DocumentRepository.findFavoriteByParent(userId);
     }
     catch (error) {
@@ -361,14 +370,14 @@ export const DocumentService = {
     }
   },
 
-  async setCoverOffset (documentId: string | null, userId: string, offset: number) {
+  async setCoverOffset(documentId: string | null, userId: string, offset: number) {
     try {
       const document = await DocumentRepository.findDocumentById(documentId);
 
       if (!document || document.userId !== userId) {
         throw new ErrorClass(401, 'Unauthorized or Not Found');
       }
-      
+
       return await DocumentRepository.setCoverOffset(documentId, offset);
     }
     catch (error) {

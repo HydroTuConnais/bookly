@@ -6,6 +6,9 @@ export const DocumentRepository = {
     return await prisma.document.findUnique({ where: { id } });
   },
 
+  async getAllDocuments() {
+    return await prisma.document.findMany();
+  },
 
   async findDocumentsByParent(userId: string, parentDocumentId: string | null) {
     return await prisma.document.findMany({

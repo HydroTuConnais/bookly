@@ -1,7 +1,6 @@
 import React from "react";
 import { useAuth } from '@/components/context/useAuth';
 
-import { Navigate } from "react-router-dom";
 import { Navigation } from "../components/navigation";
 
 import "../style/home.css";
@@ -10,8 +9,9 @@ import { SearchProvider } from "@/hooks/use-search";
 import { SettingsProvider } from "@/hooks/use-options";
 import { SettingsModal } from "@/components/modals/settings-modal";
 import { CoverImageModal } from "@/components/modals/cover-image-modal";
-import { BoardingProvider } from "@/hooks/use-boarding";
 import { BoardingModal } from "@/components/modals/boarding-modal";
+import { PanelProvider } from "@/hooks/use-panel";
+import { AdminPanelModal } from "@/components/modals/panel-admin";
 
 const Layout = ({
     children
@@ -29,10 +29,11 @@ const Layout = ({
 
     return (
         <div className="h-screen flex dark:bg-[#1F1F1F]">
-            <div className="fade-in-right h-screen">
+            <div className="h-screen fade-in-right">
                 <Navigation />
             </div>
             <main className="flex-1 h-full overflow-y-auto editor-container">
+                <AdminPanelModal />
                 <SearchCommand />
                 <SettingsModal />
                 <CoverImageModal />
@@ -46,11 +47,13 @@ const Layout = ({
 const LayoutWithProvider = ({ children }: { children: React.ReactNode }) => {
 
     return (
-        <SearchProvider>
-            <SettingsProvider>
-                <Layout>{children}</Layout>
-            </SettingsProvider>
-        </SearchProvider>
+        <PanelProvider>
+            <SearchProvider>
+                <SettingsProvider>
+                    <Layout>{children}</Layout>
+                </SettingsProvider>
+            </SearchProvider>
+        </PanelProvider>
     );
 };
 

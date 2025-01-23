@@ -70,6 +70,7 @@ export const Item = ({
                 if (!expanded) {
                     onExpand?.();
                 }
+                console.log("documentId:", documentId);
                 navigate(`/documents/${documentId}`);
             });
 
@@ -189,13 +190,13 @@ export const Item = ({
                             onClick={handleExpand}
                         >
                             <CheveronIcon
-                                className="shrink-0 w-4 h-4 text-muted-foreground"
+                                className="w-4 h-4 shrink-0 text-muted-foreground"
                             />
                         </div>
                     ) : (
                         documentIcon ? (
                             <div className="w-[24.4px] select-none p-[0.2rem] hover:bg-primary/5 rounded-md transition-colors duration-200 flex items-center justify-center">
-                                <div className="shrink-0 w-5 h-5 text-muted-foreground">
+                                <div className="w-5 h-5 shrink-0 text-muted-foreground">
                                     {documentIcon}
                                 </div>
                             </div>
@@ -208,7 +209,7 @@ export const Item = ({
 
             {!id && (
                 <div>
-                    <Icon className="shrink-0 h-4 mr-2 text-muted-foreground" />
+                    <Icon className="h-4 mr-2 shrink-0 text-muted-foreground" />
                 </div>
             )}
             <span className="m-1 truncate">
@@ -220,7 +221,7 @@ export const Item = ({
                 </kbd>
             )}
             {!!id && (
-                <div className="flex w-0 group-hover:w-auto ml-auto justify-end items-center gap-x-1">
+                <div className="flex items-center justify-end w-0 ml-auto group-hover:w-auto gap-x-1">
                     <DropdownMenu>
                         <DropdownMenuTrigger
                             onClick={(e) => e.stopPropagation()}
@@ -230,7 +231,7 @@ export const Item = ({
                                 role="button"
                                 className="w-[24.4px] p-[0.2rem] opacity-0 group-hover:opacity-100 rounded-sm hover:bg-primary/5"
                             >
-                                <MoreHorizontal className="h-4 w-4" />
+                                <MoreHorizontal className="w-4 h-4" />
                             </div>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
@@ -244,7 +245,7 @@ export const Item = ({
                             {/*Favorite List */}
                             {isFavorite && (
                                 <DropdownMenuItem onClick={unFavorite}>
-                                    <StarOff className="h-4 w-4 mr-1" />
+                                    <StarOff className="w-4 h-4 mr-1" />
                                     Remove from favorites
                                 </DropdownMenuItem>
                             )}
@@ -252,7 +253,7 @@ export const Item = ({
                             {/*Document List */}
                             {!isFavorite && (
                                 <DropdownMenuItem onClick={onFavorite}>
-                                    <Star className="h-4 w-4 mr-1" />
+                                    <Star className="w-4 h-4 mr-1" />
                                     Add to favorites
                                 </DropdownMenuItem>
                             )}
@@ -261,13 +262,13 @@ export const Item = ({
                                 <>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem onClick={onArchive}>
-                                        <Trash className="h-4 w-4 mr-1" />
+                                        <Trash className="w-4 h-4 mr-1" />
                                         Delete
                                     </DropdownMenuItem>
                                 </>
                             )}
                             <DropdownMenuSeparator />
-                            <div className="text-xs text-muted-foreground p-2">
+                            <div className="p-2 text-xs text-muted-foreground">
                                 Last edited by: {user?.name}
                             </div>
                         </DropdownMenuContent>
@@ -277,7 +278,7 @@ export const Item = ({
                         onClick={onCreate}
                         className="w-[24.4px] p-[0.2rem] opacity-0 group-hover:opacity-100 rounded-sm hover:bg-primary/5"
                     >
-                        <Plus className="h-4 w-4 text-muted-foreground" />
+                        <Plus className="w-4 h-4 text-muted-foreground" />
                     </div>
                 </div>
             )}

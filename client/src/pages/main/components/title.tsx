@@ -40,7 +40,7 @@ export const Title = ({
         }
         const newTimeoutId = setTimeout(() => {
             handleUpdateDocument({ id: initialData.id, title: e.target.value });
-        }, 250);
+        }, 500);
         setTimeoutId(newTimeoutId);
     };
 
@@ -66,14 +66,14 @@ export const Title = ({
                     onChange={onChange}
                     onBlur={disableInput}
                     onKeyDown={onKeyDown}
-                    className="h-6 dark:bg-neutral-900 px-2 focus-visible:ring-blue-500"
+                    className="h-6 px-2 dark:bg-neutral-900 focus-visible:ring-blue-500"
                 />
             ) : (
                 <Button
                     onClick={enableInput}
                     variant="ghost"
                     size="sm"
-                    className="font-normal h-auto p-1"
+                    className="h-auto p-1 font-normal"
                 >
                     <span className="truncate">{initialData.title}</span>
                 </Button>

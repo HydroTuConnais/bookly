@@ -53,6 +53,25 @@ export const AuthService = {
     }
   },
 
+  async checkAdmin(id: string) {
+    try {
+      const user = await AuthRepository.findUserById(id);
+
+      if (user?.role === 'ADMIN') {
+        return true;
+      }
+
+      if (user?.role === 'OWNER') {
+        return true;
+      }
+
+      return false;
+    }
+    catch (error) {
+      throw new ErrorClass(404, 'User not found');
+    }
+  },
+
   async findUser(id: string) {
     try {
       return await AuthRepository.findUserById(id);
@@ -65,6 +84,15 @@ export const AuthService = {
   async findUserEmail(email: string) {
     try {
       return await AuthRepository.findUserByEmail(email);
+    }
+    catch (error) {
+      throw new ErrorClass(404, 'User not found');
+    }
+  },
+
+  async findAllUsers() {
+    try {
+      return await AuthRepository.findAllUsers();
     }
     catch (error) {
       throw new ErrorClass(404, 'User not found');
@@ -101,17 +129,17 @@ export const AuthService = {
       updateUser.email = email;
     }
 
-    if (password) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      updateUser.password = hashedPassword;
-    }
-
     if (imageUrl) {
       updateUser.imageProfile = imageUrl;
     }
 
     if (boardingStatus) {
       updateUser.boardingStatus = boardingStatus;
+    }
+
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      updateUser.password = hashedPassword;
     }
 
     const response = await AuthRepository.updateUser(id, updateUser);

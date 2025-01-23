@@ -9,6 +9,7 @@ interface UserProfile {
     id: string;
     email: string;
     name: string;
+    role: string;
     imageUrl?: string;
     boardingStatus?: boolean;
 }
@@ -20,11 +21,12 @@ interface AuthContextType {
     isLoading: boolean;
     loginUser: (email: string, password: string) => Promise<void>;
     registerUser: (email: string, userName: string, password: string) => Promise<void>;
-    updateUser: (params: { name: string, imageUrl: string, boardingStatus: boolean }) => Promise<void>;
+    updateUser: (params: { name?: string | null, imageUrl?: string | null, boardingStatus?: boolean | null }) => Promise<void>;
     isLoggedIn: () => boolean;
     logoutUser: () => void;
     checkPassword: (password: string) => Promise<boolean>;
     getUser: () => Promise<UserProfile | null>;
+    getAllUsers: () => Promise<UserProfile[]>;
     checkAuth: (token: string) => void;
 
     sendRecovryEmail: (email: string) => Promise<void>;
@@ -95,11 +97,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const token = localStorage.getItem("token");
         const res = await AuthService.checkAPI({ token: token || "" });
         if (res) {
+            setUser(res.user);
             try {
                 const userRes = await AuthService.checkUser({ token: token || "" });
                 if (userRes) {
-                    console.log("user", userRes);
-                    return userRes;
+                    return userRes.user;
                 }
             } catch (error) {
                 console.error("Get user error:", error);
@@ -109,7 +111,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             console.log("User is not authenticated");
             return null;
         }
-        
+
+    };
+
+    const getAllUsers = async (): Promise<UserProfile[]> => {
+        try {
+            const res = await AuthService.getAllUsersAPI({ token: token || "" });
+            if (res) {
+                console.log(res.users)
+                return res.users;
+            }
+        } catch (error) {
+            console.error("Get all users error:", error);
+        }
+        return [];
     };
 
     const checkAuth = async () => {
@@ -158,11 +173,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
-    const updateUser = async ({ name, imageUrl, boardingStatus }: { name: string; imageUrl: string, boardingStatus: boolean }): Promise<void> => {
+    const updateUser = async ({ name, imageUrl, boardingStatus }: { name?: string | null; imageUrl?: string | null, boardingStatus?: boolean | null }): Promise<void> => {
         const token = localStorage.getItem("token");
         if (token) {
             try {
-                await AuthService.update({ token, name, imageUrl, boardingStatus }).then((res) => {
+                await AuthService.update({ token, name: name ?? null, imageUrl: imageUrl ?? null, boardingStatus: boardingStatus ?? null }).then((res) => {
                     if (res) {
                         console.log(res.user);
                         setUser(res.user);
@@ -217,7 +232,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, isAuthenticated, isLoading, loginUser, registerUser, updateUser, isLoggedIn, logoutUser, checkPassword, getUser, checkAuth, sendRecovryEmail, sendRecovryPassword }}>
+        <AuthContext.Provider value={{ user, token, isAuthenticated, isLoading, loginUser, registerUser, updateUser, isLoggedIn, logoutUser, checkPassword, getUser, getAllUsers, checkAuth, sendRecovryEmail, sendRecovryPassword }}>
             {children}
         </AuthContext.Provider>
     );

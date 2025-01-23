@@ -5,6 +5,7 @@ import { authenticate } from '../service/AuthService';
 const router = express.Router();
 
 
+router.get('/documents', authenticate, DocumentController.getAllDocuments);
 router.get('/documents/:id/content', authenticate, DocumentController.getDocument);
 router.post('/documents', authenticate, DocumentController.createDocument);
 router.put('/documents/:id/content', authenticate, DocumentController.updateDocument);

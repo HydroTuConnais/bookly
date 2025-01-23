@@ -5,6 +5,23 @@ import { ErrorClass } from '../utils/Error';
 
 export const DocumentController = {
 
+  async getAllDocuments(req: Request, res: Response) {
+    const userId = req.headers.userid as string;
+    const isAdmin = AuthService.checkAdmin(userId);
+
+    if (!isAdmin) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    try {
+      const documents = await DocumentService.getAllDocuments();
+      res.status(200).json(documents);
+    }
+    catch (error: ErrorClass | any) {
+      res.status(error.status).json({ error: error.message });
+    }
+  },
+
   async getDocument(req: Request, res: Response) {
     const id = req.params.id;
     const userId = req.headers.userid as string;

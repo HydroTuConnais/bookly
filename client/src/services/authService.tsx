@@ -49,6 +49,20 @@ export const AuthService = {
         }
     },
 
+    async getAllUsersAPI({ token }: { token: string }) {
+        try {
+            const response = await axios.get(api + "/auth/users", {
+                headers: {
+                    Authorization: "Bearer " + token
+                }
+            });
+            return response.data;
+        }
+        catch (error) {
+            handleErrors(error);
+        }
+    },
+
     async checkUser({ token }: { token: string }) {
         try {
             const response = await axios.get(api + "/auth/user", {
@@ -75,7 +89,7 @@ export const AuthService = {
         }
     },
 
-    async update({ token, name, imageUrl, boardingStatus }: { token: string, name: string, imageUrl: string | null, boardingStatus: boolean }) {
+    async update({ token, name, imageUrl, boardingStatus }: { token: string, name: string | null, imageUrl: string | null, boardingStatus: boolean | null }) {
         try {
             const response = await axios.put(api + "/auth/update", {
                 name,

@@ -40,6 +40,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
 
     useEffect(() => {
         refetch();
+        console.log("DocumentList", documentsList);
     }, [documents]);
 
     const onRedirect = (documentId: string) => {
@@ -47,11 +48,11 @@ export const DocumentList: React.FC<DocumentListProps> = ({
     };
 
     if (isLoading) {
-        <div className="hidden last:block text-xs text-center text-muted-foreground pb-2">
+        <div className="hidden pb-2 text-xs text-center last:block text-muted-foreground">
             <div className="animate-pulse group flex items-center h-[30px] w-full py-[5px] px-[8px]">
-                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded mr-1"></div>
-                <span className="m-1 w-full h-4 bg-neutral-200 dark:bg-neutral-700 rounded"></span>
-                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-10"></div>
+                <div className="h-4 mr-1 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+                <span className="w-full h-4 m-1 rounded bg-neutral-200 dark:bg-neutral-700"></span>
+                <div className="w-10 h-4 rounded bg-neutral-200 dark:bg-neutral-700"></div>
             </div>
         </div>
     };

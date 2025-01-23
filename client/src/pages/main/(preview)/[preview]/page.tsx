@@ -32,31 +32,12 @@ export const PreviewPageId = ({ documentId }: { documentId: string }) => {
     refetch();
   }, [updateDocument, refetch]);
 
-  let timeoutId: NodeJS.Timeout;
-
-  const onChange = (value: string) => {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      const promise = updateDocument({ id: documentId, content: value });
-
-      toast.promise(promise, {
-        loading: "Sauvegarde...",
-        success: <> {documents?.icon ? documents?.icon : <File className="mr-2 h-4 w-4" />} <strong>"{document?.title}"</strong> à été sauvé </>,
-        error: "Erreur lors de la sauvegarde",
-        style: {
-          background: resolvedTheme === "dark" ? "#333" : "#fff",
-          color: resolvedTheme === "dark" ? "#fff" : "#000",
-        }
-      });
-    }, 5000);
-  }
-
   if (isLoading || loading) {
     return (
       <nav className="bg-background dark:bg-[#1F1F1F] px-3 py-2 w-full flex items-center justify-between gap-x-4 animate-pulse">
         <div className="h-6 w-[200px] rounded bg-gray-200 dark:bg-neutral-700"></div>
         <div className="flex items-center gap-x-2">
-          <div className="h-8 w-10 rounded bg-gray-200 dark:bg-neutral-700"></div>
+          <div className="w-10 h-8 bg-gray-200 rounded dark:bg-neutral-700"></div>
         </div>
       </nav>
     );
@@ -73,8 +54,8 @@ export const PreviewPageId = ({ documentId }: { documentId: string }) => {
         <Toolbar preview initialData={documents} />
         <Editor
           editable={false}
-          onChange={onChange}
           initialContent={documents.content}
+          onChange={() => { }}
         />
       </div>
     </div>

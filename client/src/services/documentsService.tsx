@@ -14,7 +14,7 @@ export const DocumentService = {
         }
     },
 
-    async getDocument({ token, userid, id}: { token: string, userid: string, id: string }) {
+    async getDocument({ token, userid, id }: { token: string, userid: string, id: string }) {
         try {
             const data = await fetchData({ method: "GET", endpoint: `/documents/${id}/content`, header: { UserId: userid }, token });
             return data;
@@ -23,9 +23,18 @@ export const DocumentService = {
         }
     },
 
-    async updateDocument({ token, userid, id, title, content, icon, coverImage, isPublished}: { token: string, userid: string, id: string, title?: string, content?: string | null, icon?: string, coverImage?: string, isPublished?: boolean }) {
+    async getAllDocuments({ token, userid }: { token: string, userid: string }) {
         try {
-            const data = await fetchData({ method: "PUT", endpoint: `/documents/${id}/content`, body: { title, content, icon, coverImage, isPublished}, header: { UserId: userid }, token });
+            const data = await fetchData({ method: "GET", endpoint: "/documents", header: { UserId: userid }, token });
+            return data;
+        } catch (error) {
+            handleErrors(error);
+        }
+    },
+
+    async updateDocument({ token, userid, id, title, content, icon, coverImage, isPublished }: { token: string, userid: string, id: string, title?: string, content?: string | null, icon?: string, coverImage?: string, isPublished?: boolean }) {
+        try {
+            const data = await fetchData({ method: "PUT", endpoint: `/documents/${id}/content`, body: { title, content, icon, coverImage, isPublished }, header: { UserId: userid }, token });
             console.log("updateDocument", data);
             return data;
         } catch (error) {
@@ -97,9 +106,9 @@ export const DocumentService = {
         }
     },
 
-    async getSidebarFavoriteDocuments({ token, userid, parentFavoriteId, isChild}: { token: string, userid: string, parentFavoriteId: string | null, isChild: boolean }) {
+    async getSidebarFavoriteDocuments({ token, userid, parentFavoriteId, isChild }: { token: string, userid: string, parentFavoriteId: string | null, isChild: boolean }) {
         try {
-            const data = await fetchData({ method: "GET", endpoint: "/documents/favorite", params: { parentFavorite: parentFavoriteId, forChild: isChild}, header: { UserId: userid}, token });
+            const data = await fetchData({ method: "GET", endpoint: "/documents/favorite", params: { parentFavorite: parentFavoriteId, forChild: isChild }, header: { UserId: userid }, token });
             return data;
         } catch (error) {
             handleErrors(error);

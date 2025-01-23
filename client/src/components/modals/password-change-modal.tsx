@@ -12,8 +12,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Input } from "../ui/input";
 import { useAuth } from "../context/useAuth";
-import { Separator } from "../ui/separator";
-import { cn } from "@/lib/utils";
 
 
 interface InputPasswordModalProps {
