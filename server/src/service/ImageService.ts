@@ -41,8 +41,14 @@ export const ImageService = {
       throw new Error("Image not found");
     }
 
-    fs.unlinkSync(image.filepath);
+    try {
+      fs.unlinkSync(image.filepath);
+    } catch (error: any) {
+      console.error("Failed to delete image file:", error);
+    }
+
     await ImageRepository.deleteImage(imageId);
+    
     await DocumentRepository.updateDocument(id, { coverImage: null });
     return { message: "Image deleted successfully" };
   }

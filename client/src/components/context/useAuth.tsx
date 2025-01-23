@@ -93,16 +93,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const getUser = async (): Promise<UserProfile | null> => {
         const token = localStorage.getItem("token");
-        try {
-            await AuthService.checkUser({ token: token || "" });
-            if (user) {
-                console.log("user", user);
-                return user;
+        const res = await AuthService.checkAPI({ token: token || "" });
+        if (res) {
+            try {
+                const userRes = await AuthService.checkUser({ token: token || "" });
+                if (userRes) {
+                    console.log("user", userRes);
+                    return userRes;
+                }
+            } catch (error) {
+                console.error("Get user error:", error);
             }
-        } catch (error) {
-            console.error("Get user error:", error);
+            return null;
+        } else {
+            console.log("User is not authenticated");
+            return null;
         }
-        return null;
+        
     };
 
     const checkAuth = async () => {

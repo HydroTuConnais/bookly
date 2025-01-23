@@ -246,7 +246,7 @@ export const Navigation = () => {
             <div
                 ref={navbarref}
                 className={cn(
-                    "fixed top-3 z-[99999] left-60 w-[calc(100%-240px)]",
+                    "fixed top-3 z-[99990] left-60 w-[calc(100%-240px)]",
                     isReseting && "transition-all ease-in-out duration-300",
                     isMobile && "left-0 w-full",
                     // !!params.documentId ? "top-0" : "top-3"
