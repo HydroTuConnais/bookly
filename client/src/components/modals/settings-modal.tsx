@@ -30,7 +30,7 @@ export const SettingsModal = () => {
     const [activeTab, setActiveTab] = useState('account');
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-    const { user, sendRecovryEmail, sendRecovryPassword, updateUser } = useAuth();
+    const { user, sendRecovryEmail, changePassword, updateUser } = useAuth();
 
     const [userName, setUserName] = useState(user?.name || '');
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
@@ -57,7 +57,7 @@ export const SettingsModal = () => {
 
     const onPasswordChange = (newPassword: string) => {
         console.log('Confirm password:', newPassword);
-        sendRecovryPassword(newPassword);
+        changePassword(newPassword);
     };
 
     const handleDeleteAccount = () => {

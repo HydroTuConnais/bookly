@@ -30,13 +30,16 @@ export const RecoveryRepository = {
     },
 
     async createRecoveryPassword(data: RecoveryDataPassword) {
+        console.log("data", data);
         try {
-            return await prisma.recover.create({
+            const reponse = await prisma.recover.create({
                 data: {
                     emailPrev: data.prevemail,
                     token: data.token
                 }
             });
+            console.log("reponse", reponse);
+            return reponse;
         } catch (error) {
             console.error('Error creating recovery:', error);
             throw error;

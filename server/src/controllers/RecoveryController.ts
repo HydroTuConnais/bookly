@@ -61,17 +61,40 @@ export const RecoveryController = {
             }
             const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret');
             if (payload) {
-                const reponse = await RecoveryService.getRecoveryId(user.email);
+                console.log("payload", payload)
+                const reponse = await RecoveryService.getRecoveryId(payload.email);
                 if (reponse) {
+                    console.log("reponsemail", reponse)
                     const request = await AuthService.updateUser(payload.id, reponse.email, null, null, null, null, null);
+                    res.status(200).json({ reponse: "Email updated successfully" });
                     if (request) {
-                        await RecoveryService.deleteRecoveryId(user.email);
+                        //await RecoveryService.deleteRecoveryId(payload.email);
                     }
                 }
-                res.status(200).json({ message: "Email updated successfully" });
             }
         } catch (error: any) {
             res.status(500).json({ error: "Failed to update email" });
+        }
+    },
+
+    async recoveryPassword(req: Request, res: Response) {
+        const { id, token } = req.params;
+        try {
+            const user = await AuthService.findUser(id);
+            if (!user) {
+                throw new ErrorClass(404, 'User not found');
+            }
+            const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret');
+            if (payload) {
+                console.log("payload", payload)
+                const reponse = await RecoveryService.getRecoveryId(payload.email);
+                if (reponse) {
+                    console.log("reponsepassword", reponse)
+                    res.status(200).json({ reponse: "Request successfully received" });
+                }
+            }
+        } catch (error: any) {
+            res.status(500).json({ error: "Failed to update password" });
         }
     },
 
@@ -118,7 +141,9 @@ export const RecoveryController = {
 
                 try {
                     if (user?.email && user?.name && infoReq.ip) {
+                        console.log(user.email)
                         changePassword(user.email, user.name, `http://localhost:3000/recovery/password/${user.id}/${token}`, infoReq.ip, infoReq.country || 'Unknown');
+                        console.log("TEST INTER")
                         RecoveryService.inputRegisteryPassword(user.email, token);
                     } else {
                         throw new ErrorClass(400, 'Email or Name or IP or Country is missing');
@@ -134,11 +159,6 @@ export const RecoveryController = {
                 res.status(500).json({ error: "Failed to send email" });
             }
         };
-    },
-
-    async recoveryPassword(req: Request, res: Response) {
-        const { id, token } = req.params;
-
     },
 };
 

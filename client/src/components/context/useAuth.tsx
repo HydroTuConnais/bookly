@@ -29,10 +29,12 @@ interface AuthContextType {
     checkPassword: (password: string) => Promise<boolean>;
     getUser: () => Promise<UserProfile | null>;
     getAllUsers: () => Promise<UserProfile[]>;
-    checkAuth: (token: string) => void;
+    checkAuth: () => Promise<boolean>;
 
     sendRecovryEmail: (email: string) => Promise<void>;
-    sendRecovryPassword: (password: string) => Promise<void>;
+    sendRecovryPassword: (email: string) => Promise<void>;
+
+    changePassword: (password: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -129,22 +131,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return [];
     };
 
-    const checkAuth = async () => {
+    const checkAuth = async (): Promise<boolean> => {
         const token = localStorage.getItem("token");
-        await AuthService.checkAPI({ token: token || "" }).then((res: any) => {
-            if (res) {
-                setUser(res.user);
-                setToken(res.token);
-                console.log("User is authenticated");
-                setIsAuthenticated(true);
-                setIsLoading(false);
-                return true;
-            } else {
-                logoutUser();
-                console.log("User is not authenticated");
-                return false;
-            }
-        });
+        const res = await AuthService.checkAPI({ token: token || "" });
+        if (res) {
+            setUser(res.user);
+            setToken(res.token);
+            console.log("User is authenticated");
+            setIsAuthenticated(true);
+            setIsLoading(false);
+            return true;
+        } else {
+            logoutUser();
+            console.log("User is not authenticated");
+            return false;
+        }
     };
 
     const isLoggedIn = () => {
@@ -155,6 +156,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(null);
         setToken(null);
         setIsAuthenticated(false);
+        localStorage.removeItem("token");
         navigate("/");
     };
 
@@ -186,12 +188,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                         console.log("User updated successfully");
                         return true;
                     } else {
-                        setError('Failed to update user');
+                        setError('Échec de la mise à jour de l\'utilisateur');
                         return false;
                     }
                 });
             } catch (err: any) {
-                setError('Failed to update user');
+                setError('Échec de la mise à jour de l\'utilisateur');
                 console.error(err);
             }
         }
@@ -203,38 +205,56 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 await RecoveryService.sendRecovryEmail({ token, email }).then((res) => {
                     if (res) {
                         console.log(res);
-                        toast.success("Email sent successfully");
+                        toast.success("Email envoyé avec succès");
                     } else {
-                        setError('Failed to send email');
+                        setError('Échec de l\'envoi de l\'email');
                     }
                 });
             } catch (err: any) {
-                setError('Failed to send email');
+                setError('Échec de l\'envoi de l\'email');
                 console.error(err);
             }
         }
     };
 
-    const sendRecovryPassword = async (password: string) => {
+    const sendRecovryPassword = async (email: string) => {
         if (user && token) {
             try {
-                await RecoveryService.sendRecoveryPassword({ token, password }).then((res) => {
+                await RecoveryService.sendRecovryPassword({ token, email }).then((res) => {
                     if (res) {
                         console.log(res);
-                        toast.success("Password updated successfully");
+                        toast.success("Email envoyée si l'email existe");
                     } else {
-                        setError('Failed to update password');
+                        setError('Échec de l\'envoi de l\'email');
                     }
                 });
             } catch (err: any) {
-                setError('Failed to update password');
+                setError('Échec de l\'envoi de l\'email');
+                console.error(err);
+            }
+        }
+    };
+
+    const changePassword = async (password: string) => {
+        if (user && token) {
+            try {
+                await RecoveryService.changePassword({ token, password }).then((res) => {
+                    if (res) {
+                        console.log(res);
+                        toast.success("Mot de passe mis à jour avec succès");
+                    } else {
+                        setError('Échec de la mise à jour du mot de passe');
+                    }
+                });
+            } catch (err: any) {
+                setError('Échec de la mise à jour du mot de passe');
                 console.error(err);
             }
         }
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, isAuthenticated, isLoading, loginUser, registerUser, updateUser, isLoggedIn, logoutUser, checkPassword, getUser, getAllUsers, checkAuth, sendRecovryEmail, sendRecovryPassword }}>
+        <AuthContext.Provider value={{ user, token, isAuthenticated, isLoading, loginUser, registerUser, updateUser, isLoggedIn, logoutUser, checkPassword, getUser, getAllUsers, checkAuth, sendRecovryEmail, sendRecovryPassword, changePassword }}>
             {children}
         </AuthContext.Provider>
     );

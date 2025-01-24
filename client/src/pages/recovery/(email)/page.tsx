@@ -17,16 +17,29 @@ export const ConfirmRecoveryPageEmail: React.FC = () => {
         ['recoveryEmail', id, token],
         () => {
             if (id && token) {
-                RecoveryService.recoveryEmail({ id, token })
+                return RecoveryService.recoveryEmail({ id, token });
             }
         },
         {
-            refetchOnWindowFocus: true,
+            refetchOnWindowFocus: false,
         }
     );
 
-    if (!data) {
-        navigate("/not-changed/email");
+    useEffect(() => {
+        console.log("ConfirmRecoveryPageEmail");
+        if (data) {
+            //console.log(data);
+        } else if (!isLoading && !isError) {
+            navigate("/not-changed/email");
+        }
+    }, [data, isLoading, isError, navigate]);
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (isError) {
+        return <div>Error occurred</div>;
     }
 
     return (
