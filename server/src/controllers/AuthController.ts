@@ -135,13 +135,13 @@ export const AuthController = {
   },
 
   async update(req: Request, res: Response) {
-    const { name, imageUrl, boardingStatus, password } = req.body;
+    const { name,email, imageUrl, boardingStatus, password, role} = req.body;
     console.log(req.body);
     try {
       const token = req.headers.authorization?.split(' ')[1] || '';
       const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret');
       if (payload) {
-        const request = await AuthService.updateUser(payload.id, null, name, imageUrl, boardingStatus, password);
+        const request = await AuthService.updateUser(payload.id, email, name, imageUrl, boardingStatus, password, role);
         const userInterface: userInteface = {
           id: request?.id,
           email: request?.email,

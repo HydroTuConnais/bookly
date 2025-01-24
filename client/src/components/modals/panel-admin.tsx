@@ -1,20 +1,17 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { usePanel } from "@/hooks/use-panel";
-import { useAuth } from "../context/useAuth";
-import { useQuery } from "react-query";
-import { Search, ArrowUpDown, Loader2, X, UserCog, FileText, RefreshCw, FileSearch, FileSymlink, Trash2, Brackets } from "lucide-react";
+import { useAuth, UserProfile} from "../context/useAuth";
+import { useQuery, useQueryClient } from "react-query";
 import { useDocuments, Document } from "../context/useDocuments";
+
+import { Search, ArrowUpDown, Loader2, X, UserCog, FileText, RefreshCw, FileSymlink, Trash2, Brackets, LucideShieldEllipsis } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface UserProfile {
-    id: string;
-    email: string;
-    name: string;
-    role?: string;
-    imageUrl?: string;
-    createdAt?: string;
-    updatedAt?: string;
-}
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
+import { ConfirmModal } from "@/components/modals/confirm-modal";
+import { InputEmail } from "./input-modal/input-email";
+import { InputName } from "./input-modal/input-name";
+import { InputTitle } from "./input-modal/input-title";
 
 interface SortConfig<T> {
     key: keyof T;
@@ -22,6 +19,7 @@ interface SortConfig<T> {
 }
 
 export const AdminPanelModal = () => {
+    const [isMounted, setIsMounted] = useState(false);
     const [activeTab, setActiveTab] = useState<'users' | 'documents'>('users');
     const [users, setUsers] = useState<UserProfile[]>([]);
     const [documents, setDocuments] = useState<Document[]>([]);
@@ -29,18 +27,34 @@ export const AdminPanelModal = () => {
     const [userSortConfig, setUserSortConfig] = useState<SortConfig<UserProfile>>({ key: 'createdAt', direction: 'desc' });
     const [documentSortConfig, setDocumentSortConfig] = useState<SortConfig<Document>>({ key: 'createdAt', direction: 'desc' });
 
+    
+    const queryClient = useQueryClient();
+    const [selectedRole, setSelectedRole] = useState<string | null>(null);
+    
+    const { getAllUsers, updateUser} = useAuth();
     const { isOpen, onClose } = usePanel();
-    const { getAllUsers } = useAuth();
-    const { getAllDocuments } = useDocuments();
+    const { getAllDocuments, updateDocument} = useDocuments();
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     const usersQuery = useQuery<UserProfile[]>(
-        ["users", isOpen],
+        ["users", isOpen, updateUser],
         () => getAllUsers(),
         {
             refetchOnWindowFocus: false,
             enabled: isOpen && activeTab === 'users',
         }
     );
+
+    useEffect(() => {
+        usersQuery.refetch()
+    }, [updateUser]);
+
+    useEffect(() => {
+        documentsQuery.refetch()
+    }, [updateDocument]);
 
     const documentsQuery = useQuery<Document[]>(
         ["documents", isOpen],
@@ -61,6 +75,19 @@ export const AdminPanelModal = () => {
                 return '👤';
         }
     };
+
+    const getSymbolRole = (symbol?: string) => {
+        switch (symbol) {
+            case '🛠️':
+                return 'ADMIN';
+            case '👑':
+                return 'OWNER';
+            default:
+                return 'USER';
+        }
+    };
+
+    const roleSymbole = ["🛠️", "👑", "👤"];
 
     useEffect(() => {
         if (usersQuery.data) {
@@ -178,10 +205,34 @@ export const AdminPanelModal = () => {
         setSearchTerm(userId);
     };
 
+    const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+    
+    const onChangeEmoji = (e: React.ChangeEvent<HTMLInputElement> , id: string) => {
+            setSelectedRole(e.target.value);
+            const role = getSymbolRole(e.target.value);
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+            const newTimeoutId = setTimeout(() => {
+                handleUpdateUser({ id, role });
+                
+            }, 500);
+            setTimeoutId(newTimeoutId);
+        };
+    
+    const handleUpdateUser = async (params: { id: string, role?: string }) => {
+        await updateUser(params);
+        usersQuery.refetch()
+        queryClient.invalidateQueries(["users", params.id]);
+    };
 
-    if (!isOpen) return null;
+    if (!isMounted) {
+        return null;
+    }
 
-    return (
+    return ( 
+    <>
+        {isOpen && (
         <div className="fixed z-[99999] inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm"
             onClick={handleOverlayClick}>
             <div className="relative w-[1500px] h-[760px] max-h-[90vh] bg-white shadow-xl rounded-2xl dark:bg-neutral-800  flex flex-col">
@@ -203,7 +254,7 @@ export const AdminPanelModal = () => {
                                 onClick={() => setActiveTab('users')}
                                 className={`px-3 py-1 rounded-lg text-sm transition-colors ${activeTab === 'users'
                                     ? 'bg-blue-500 text-white'
-                                    : 'text-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700'
+                                    : 'text-muted-foreground hover:bg-neutral-100 dark:hover:bg-neutral-700'
                                     }`}
                             >
                                 Users
@@ -212,7 +263,7 @@ export const AdminPanelModal = () => {
                                 onClick={() => setActiveTab('documents')}
                                 className={`px-3 py-1 rounded-lg text-sm transition-colors ${activeTab === 'documents'
                                     ? 'bg-blue-500 text-white'
-                                    : 'text-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700'
+                                    : 'text-muted-foreground hover:bg-neutral-100 dark:hover:bg-neutral-700'
                                     }`}
                             >
                                 Documents
@@ -304,7 +355,7 @@ export const AdminPanelModal = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {filteredAndSortedUsers.map((user) => (
+                                        {filteredAndSortedUsers.map((user : UserProfile) => (
                                             <tr
                                                 key={user.id}
                                                 className="transition-colors border-b border-neutral-200 dark:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-700/50"
@@ -314,50 +365,85 @@ export const AdminPanelModal = () => {
                                                 </td>
                                                 <td className="px-4 py-3 text-neutral-700 dark:text-neutral-300">
                                                     <div
-                                                        className="flex items-center justify-center w-auto rounded-md cursor-pointer hover:bg-neutral-300 hover:dark:bg-neutral-600"
-                                                        onClick={() => { }}
+                                                        className="flex items-center justify-center w-auto rounded-md cursor-pointer"
                                                     >
-                                                        {user.email}
+                                                        <InputEmail initialData={user}/>
                                                     </div>
                                                 </td>
                                                 <td className="px-4 py-3 text-neutral-700 dark:text-neutral-300">
                                                     <div
-                                                        className="flex items-center justify-center h-8 px-2 rounded-md cursor-pointer max-w-16 hover:bg-neutral-300 hover:dark:bg-neutral-600"
-                                                        onClick={() => { }}
+                                                        className="flex items-center justify-center h-8 px-2 rounded-md cursor-pointer max-w-16"
                                                     >
-                                                        {user.name ? <span className="truncate">{user.name}</span> : <span className="text-neutral-400">N/A</span>}
+                                                        {user.name ? <InputName initialData={user}/> : <span className="text-neutral-400">N/A</span>}
                                                     </div>
                                                 </td>
                                                 <td className="px-4 py-3 text-neutral-700 dark:text-neutral-300">
-                                                    <div
+                                                <div
                                                         className="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer hover:bg-neutral-300 hover:dark:bg-neutral-600"
-                                                        onClick={() => { }}
                                                     >
-                                                        {getRoleSymbol(user.role)}
+                                                        <Popover >
+                                                            <PopoverTrigger
+                                                                className="w-full mt-[0.25rem] mb-4"
+                                                            >
+                                                                {getRoleSymbol(user.role)}
+                                                            </PopoverTrigger>
+                                                            <PopoverContent
+                                                                className="p-2 w-15"
+                                                                style={{ boxShadow: "rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.2) 0px 3px 6px, rgba(15, 15, 15, 0.4) 0px 9px 24px" }}
+                                                                align="center"
+                                                            >
+                                                                <div className="flex flex-col gap-2">
+                                                                    {roleSymbole.map((role) => (
+                                                                        <label
+                                                                        key={role}
+                                                                        className={cn("flex items-center p-2 cursor-pointer rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-700",
+                                                                            selectedRole === role ? 'border border-sky-500/60 bg-blue-500/20' : ''
+                                                                        )}
+                                                                    >
+                                                                        <input
+                                                                            type="radio"
+                                                                            name="role"
+                                                                            value={role}
+                                                                            checked={selectedRole === role}
+                                                                            onChange={(e) => {
+                                                                                onChangeEmoji(e, user.id);
+                                                                            }}
+                                                                            className="hidden"
+                                                                        />
+                                                                        <span className="text-blue-500">{role}</span>
+                                                                    </label>
+                                                                    ))}
+                                                                </div>
+                                                            </PopoverContent>
+                                                        </Popover>
                                                     </div>
                                                 </td>
-                                                <td className="px-4 py-3">
-                                                    <div className="relative flex justify-center ">
-                                                        <div className="absolute inset-0 flex items-center justify-center w-full h-full round ">
-                                                            <div className="flex items-center justify-center w-10 h-10 rounded-full group/delete ring-2 hover:bg-red-500/50 hover:dark:ring-red-500/50">
-                                                                <Trash2 className="w-5 h-5 text-red-200 opacity-0 group-hover/delete:opacity-100" />
+                                                <ConfirmModal onConfirm={() => {}}>
+                                                    <td className="flex px-4 py-3 items-center justify-center">
+                                                        <div className="relative flex justify-center ">
+                                                        
+                                                            <div className="absolute inset-0 flex items-center justify-center w-full h-full round ">
+                                                                <div className="flex items-center justify-center w-10 h-10 rounded-full group/delete ring-2 hover:bg-red-500/50 hover:dark:ring-red-500/50 cursor-pointer"
+                                                                >
+                                                                    <Trash2 className="w-5 h-5 text-red-200 opacity-0 group-hover/delete:opacity-100" />
+                                                                </div>
                                                             </div>
+                                                            {user.imageUrl ? (
+                                                                <img
+                                                                    src={user.imageUrl}
+                                                                    alt={`${user.name}'s profile`}
+                                                                    className="object-cover w-10 h-10 rounded-full ring-2 ring-white dark:ring-neutral-600"
+                                                                />
+                                                            ) : (
+                                                                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-neutral-200 dark:bg-neutral-600 hover:bg-red-500">
+                                                                    <span className="text-lg font-medium text-neutral-500 dark:text-neutral-400">
+                                                                        {user.email?.[0]?.toUpperCase() || 'N/A'}
+                                                                    </span>
+                                                                </div>
+                                                            )}
                                                         </div>
-                                                        {user.imageUrl ? (
-                                                            <img
-                                                                src={user.imageUrl}
-                                                                alt={`${user.name}'s profile`}
-                                                                className="object-cover w-10 h-10 rounded-full ring-2 ring-white dark:ring-neutral-600"
-                                                            />
-                                                        ) : (
-                                                            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-neutral-200 dark:bg-neutral-600 hover:bg-red-500">
-                                                                <span className="text-lg font-medium text-neutral-500 dark:text-neutral-400">
-                                                                    {user.email?.[0]?.toUpperCase() || 'N/A'}
-                                                                </span>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </td>
+                                                    </td>
+                                                </ConfirmModal>
                                                 <td className="px-4 py-3 text-neutral-700 dark:text-neutral-300">
                                                     {user.createdAt ? (
                                                         <time dateTime={user.createdAt}>
@@ -376,7 +462,7 @@ export const AdminPanelModal = () => {
                                                         <span className="text-neutral-400">N/A</span>
                                                     )}
                                                 </td>
-                                                <td className="flex items-center justify-center px-4 py-3 text-neutral-700 dark:text-neutral-300">
+                                                <td className="px-4 py-3 text-neutral-700 dark:text-neutral-300">
                                                     <div
                                                         className="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer hover:bg-neutral-300 hover:dark:bg-neutral-600"
                                                         onClick={() => handleUserRowClick(user.id)}
@@ -425,26 +511,29 @@ export const AdminPanelModal = () => {
                                 <table className="min-w-full bg-white rounded-lg shadow-md dark:bg-neutral-800">
                                     <thead>
                                         <tr className="bg-neutral-100 dark:bg-neutral-700">
-                                            <th className="px-4 py-3 text-sm font-semibold text-left text-neutral-600 dark:text-neutral-200">
+                                            <th className="px-4 py-1 text-sm font-semibold text-left text-neutral-600 dark:text-neutral-200">
                                                 ID <SortIcon columnKey="id" type="documents" />
                                             </th>
-                                            <th className="px-4 py-3 text-sm font-semibold text-left text-neutral-600 dark:text-neutral-200">
+                                            <th className="px-4 py-1 text-sm font-semibold text-left text-neutral-600 dark:text-neutral-200">
                                                 Title <SortIcon columnKey="title" type="documents" />
                                             </th>
-                                            <th className="px-4 py-3 text-sm font-semibold text-left text-neutral-600 dark:text-neutral-200">
+                                            <th className="px-4 py-1 text-sm font-semibold text-left text-neutral-600 dark:text-neutral-200">
                                                 User ID <SortIcon columnKey="userId" type="documents" />
                                             </th>
-                                            <th className="px-4 py-3 text-sm font-semibold text-center text-neutral-600 dark:text-neutral-200">
+                                            <th className="px-4 py-1 text-sm font-semibold text-center text-neutral-600 dark:text-neutral-200">
                                                 Cover Image
                                             </th>
-                                            <th className="px-4 py-3 text-sm font-semibold text-left text-neutral-600 dark:text-neutral-200">
+                                            <th className="px-4 py-1 text-sm font-semibold text-left text-neutral-600 dark:text-neutral-200">
                                                 Status
                                             </th>
-                                            <th className="px-4 py-3 text-sm font-semibold text-left text-neutral-600 dark:text-neutral-200">
+                                            <th className="px-4 py-1 text-sm font-semibold text-left text-neutral-600 dark:text-neutral-200">
                                                 Created At <SortIcon columnKey="createdAt" type="documents" />
                                             </th>
-                                            <th className="px-4 py-3 text-sm font-semibold text-left text-neutral-600 dark:text-neutral-200">
+                                            <th className="px-4 py-1 text-sm font-semibold text-left text-neutral-600 dark:text-neutral-200">
                                                 Updated At <SortIcon columnKey="updatedAt" type="documents" />
+                                            </th>
+                                            <th className="flex items-center justify-center px-4 py-1 text-sm font-semibold text-left text-neutral-600 dark:text-neutral-200">
+                                                Action
                                             </th>
                                         </tr>
                                     </thead>
@@ -458,7 +547,7 @@ export const AdminPanelModal = () => {
                                                     {doc.id}
                                                 </td>
                                                 <td className="px-4 py-3 text-neutral-700 dark:text-neutral-300">
-                                                    {doc.title}
+                                                    <InputTitle initialData={doc}/>
                                                 </td>
                                                 <td className="px-4 py-3 text-neutral-700 dark:text-neutral-300">
                                                     {doc.userId}
@@ -508,6 +597,14 @@ export const AdminPanelModal = () => {
                                                         <span className="text-neutral-400">N/A</span>
                                                     )}
                                                 </td>
+                                                <td className="flex items-center justify-center px-4 py-6 text-neutral-700 dark:text-neutral-300">
+                                                    <button
+                                                        onClick={() => { }}
+                                                        className="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer hover:bg-neutral-300 hover:dark:bg-neutral-600"
+                                                    >
+                                                        <LucideShieldEllipsis className="w-5 h-5" />
+                                                    </button>
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -546,7 +643,9 @@ export const AdminPanelModal = () => {
                         Close
                     </button>
                 </div>
+
             </div>
         </div>
-    );
-};
+    )}
+    </>
+)}

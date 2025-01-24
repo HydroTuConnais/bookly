@@ -5,13 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { AuthService } from "@/services/authService";
 import { RecoveryService } from "@/services/recoveryService";
 
-interface UserProfile {
+export interface UserProfile {
     id: string;
     email: string;
     name: string;
     role: string;
     imageUrl?: string;
     boardingStatus?: boolean;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 interface AuthContextType {
@@ -21,7 +23,7 @@ interface AuthContextType {
     isLoading: boolean;
     loginUser: (email: string, password: string) => Promise<void>;
     registerUser: (email: string, userName: string, password: string) => Promise<void>;
-    updateUser: (params: { name?: string | null, imageUrl?: string | null, boardingStatus?: boolean | null }) => Promise<void>;
+    updateUser: (params: { email?: string | null, name?: string | null, imageUrl?: string | null, boardingStatus?: boolean | null, role?: string | null}) => Promise<void>;
     isLoggedIn: () => boolean;
     logoutUser: () => void;
     checkPassword: (password: string) => Promise<boolean>;
@@ -173,11 +175,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
-    const updateUser = async ({ name, imageUrl, boardingStatus }: { name?: string | null; imageUrl?: string | null, boardingStatus?: boolean | null }): Promise<void> => {
+    const updateUser = async ({ email, name, imageUrl, boardingStatus, role}: { email?: string | null; name?: string | null; imageUrl?: string | null, boardingStatus?: boolean | null, role?: string | null}): Promise<void> => {
         const token = localStorage.getItem("token");
         if (token) {
             try {
-                await AuthService.update({ token, name: name ?? null, imageUrl: imageUrl ?? null, boardingStatus: boardingStatus ?? null }).then((res) => {
+                await AuthService.update({ token, email: email ?? null, name: name ?? null, imageUrl: imageUrl ?? null, boardingStatus: boardingStatus ?? null, role: role ?? null}).then((res) => {
                     if (res) {
                         console.log(res.user);
                         setUser(res.user);

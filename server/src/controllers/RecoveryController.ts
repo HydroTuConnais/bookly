@@ -63,7 +63,7 @@ export const RecoveryController = {
             if (payload) {
                 const reponse = await RecoveryService.getRecoveryId(user.email);
                 if (reponse) {
-                    const request = await AuthService.updateUser(payload.id, reponse.email, null, null, null, null);
+                    const request = await AuthService.updateUser(payload.id, reponse.email, null, null, null, null, null);
                     if (request) {
                         await RecoveryService.deleteRecoveryId(user.email);
                     }
@@ -89,7 +89,7 @@ export const RecoveryController = {
 
                 try {
                     if (user?.email && user?.name) {
-                        const request = await AuthService.updateUser(payload.id, user.email, null, null, null, password);
+                        const request = await AuthService.updateUser(payload.id, user.email, null, null, null, password, null);
                         if (request) {
                             res.status(200).json({ message: "Password updated successfully" });
                         }

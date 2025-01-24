@@ -108,7 +108,7 @@ export const AuthService = {
     }
   },
 
-  async updateUser(id: string, email: string | null, name: string | null, imageUrl: string | null, boardingStatus: boolean | null, password: string | null) {
+  async updateUser(id: string, email: string | null, name: string | null, imageUrl: string | null, boardingStatus: boolean | null, password: string | null, role: string | null) {
     if (!id) {
       throw new ErrorClass(404, 'Id is required');
     }
@@ -119,6 +119,7 @@ export const AuthService = {
       password?: string,
       imageProfile?: string
       boardingStatus?: boolean
+      role?: string
     } = {};
 
     if (name) {
@@ -140,6 +141,10 @@ export const AuthService = {
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10);
       updateUser.password = hashedPassword;
+    }
+
+    if(role) {
+      updateUser.role = role;
     }
 
     const response = await AuthRepository.updateUser(id, updateUser);

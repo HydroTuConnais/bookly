@@ -89,12 +89,14 @@ export const AuthService = {
         }
     },
 
-    async update({ token, name, imageUrl, boardingStatus }: { token: string, name: string | null, imageUrl: string | null, boardingStatus: boolean | null }) {
+    async update({ token, email, name, imageUrl, boardingStatus, role}: { token: string, email: string | null, name: string | null, imageUrl: string | null, boardingStatus: boolean | null, role: string | null }) {
         try {
             const response = await axios.put(api + "/auth/update", {
+                email,
                 name,
                 imageUrl,
-                boardingStatus
+                boardingStatus,
+                role
             }, {
                 headers: {
                     Authorization: "Bearer " + token
