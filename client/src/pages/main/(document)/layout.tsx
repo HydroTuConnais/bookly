@@ -12,6 +12,8 @@ import { CoverImageModal } from "@/components/modals/cover-image-modal";
 import { BoardingModal } from "@/components/modals/boarding-modal";
 import { PanelProvider } from "@/hooks/use-panel";
 import { AdminPanelModal } from "@/components/modals/panel-admin";
+import { AdminEditDocumentProvider } from "@/hooks/use-document-admin";
+import { AdminEditDocumentModal } from "@/components/modals/document-admin-modal";
 
 const Layout = ({
     children
@@ -33,11 +35,12 @@ const Layout = ({
                 <Navigation />
             </div>
             <main className="flex-1 h-full overflow-y-auto editor-container">
-                <AdminPanelModal />
                 <SearchCommand />
                 <SettingsModal />
                 <CoverImageModal />
                 <BoardingModal />
+                <AdminPanelModal />
+                <AdminEditDocumentModal />
                 {children}
             </main>
         </div>
@@ -47,13 +50,15 @@ const Layout = ({
 const LayoutWithProvider = ({ children }: { children: React.ReactNode }) => {
 
     return (
-        <PanelProvider>
-            <SearchProvider>
-                <SettingsProvider>
-                    <Layout>{children}</Layout>
-                </SettingsProvider>
-            </SearchProvider>
-        </PanelProvider>
+        <AdminEditDocumentProvider>
+            <PanelProvider>
+                <SearchProvider>
+                    <SettingsProvider>
+                        <Layout>{children}</Layout>
+                    </SettingsProvider>
+                </SearchProvider>
+            </PanelProvider>
+        </AdminEditDocumentProvider>
     );
 };
 

@@ -3,6 +3,8 @@ import { DocumentService } from '../service/DocumentService';
 import { AuthService } from '../service/AuthService';
 import { ErrorClass } from '../utils/Error';
 
+const jwt = require('jsonwebtoken');
+
 export const DocumentController = {
 
   async getAllDocuments(req: Request, res: Response) {
@@ -52,10 +54,23 @@ export const DocumentController = {
   async updateDocument(req: Request, res: Response) {
     const id = req.params.id;
     const { title, content, icon, coverImage, isPublished } = req.body;
-    const userId = req.headers.userid as string;
+    console.log('updateDocument', id, title, content, icon, coverImage, isPublished);
+
+    let userId = req.headers.userid as string;
+    if (!userId) {
+      const token = req.headers.authorization?.split(' ')[1] || '';
+      const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret');
+      if (payload) {
+        userId = payload.id;
+      }
+    }
+
+    console.log(userId);
+    console.log(id)
 
     try {
       const document = await DocumentService.updateDocument(id, title, userId, content, icon, coverImage, isPublished);
+      console.log('updateDocument', document);
       res.status(202).json(document);
     }
     catch (error: ErrorClass | any) {

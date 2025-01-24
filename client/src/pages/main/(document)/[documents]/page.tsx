@@ -42,7 +42,7 @@ export const DocumentPageId = ({ documentId }: { documentId: string }) => {
 
       toast.promise(promise, {
         loading: "Sauvegarde...",
-        success: <> {document?.icon ? document?.icon : <File className="mr-2 h-4 w-4" />} <strong>"{document?.title}"</strong> à été sauvé </>,
+        success: <> {document?.icon ? document?.icon : <File className="w-4 h-4 mr-2" />} <strong>"{document?.title}"</strong> à été sauvé </>,
         error: "Erreur lors de la sauvegarde",
         style: {
           background: resolvedTheme === "dark" ? "#333" : "#fff",
@@ -57,7 +57,7 @@ export const DocumentPageId = ({ documentId }: { documentId: string }) => {
       <nav className="bg-background dark:bg-[#1F1F1F] px-3 py-2 w-full flex items-center justify-between gap-x-4 animate-pulse">
         <div className="h-6 w-[200px] rounded bg-gray-200 dark:bg-neutral-700"></div>
         <div className="flex items-center gap-x-2">
-          <div className="h-8 w-10 rounded bg-gray-200 dark:bg-neutral-700"></div>
+          <div className="w-10 h-8 bg-gray-200 rounded dark:bg-neutral-700"></div>
         </div>
       </nav>
     );
@@ -69,7 +69,7 @@ export const DocumentPageId = ({ documentId }: { documentId: string }) => {
 
   return (
     <div className="pb-40">
-      <Cover url={document.coverImage} offset={offsetValue} />
+      <Cover url={document.coverImage} id={document.id} offset={offsetValue} />
       <div className="mx-auto md:max-w-3xl lg:max-w-4xl">
         <Toolbar initialData={document} />
         <Editor

@@ -9,13 +9,10 @@ import { SingleImageDropzone } from "@/components/single-image-dropzone";
 import { useCoverImage } from "@/hooks/use-cover-image";
 import { useImage } from "@/components/context/useImage";
 import { useDocuments } from "@/components/context/useDocuments";
-import { useParams } from "react-router-dom";
 
 export const CoverImageModal = () => {
-    const params = useParams();
-    const documentId = params.documentId;
-
     const coverImage = useCoverImage();
+    const documentId = coverImage.documentId;
     const image = useImage();
 
     const [file, setFile] = useState<File | undefined>(undefined);
@@ -30,7 +27,9 @@ export const CoverImageModal = () => {
     }
 
     const onChange = async (file?: File) => {
+        console.log("onChange");
         if (file) {
+            console.log(file)
             setIsSubmitting(true);
             setFile(file);
 
@@ -38,7 +37,10 @@ export const CoverImageModal = () => {
                 file
             });
 
+            console.log("response", response);
+
             if (response !== undefined && response !== null && documentId) {
+                console.log("updateDocument");
                 updateDocument({ id: documentId, coverImage: response });
             };
 
@@ -51,7 +53,7 @@ export const CoverImageModal = () => {
             <DialogContent>
                 <DialogTitle className="hidden">test</DialogTitle>
                 <DialogHeader>
-                    <h2 className="text-center text-lg font-semibold">
+                    <h2 className="text-lg font-semibold text-center">
                         Cover Image
                     </h2>
                 </DialogHeader>

@@ -2,22 +2,24 @@ import React, { createContext, useContext, useState, useCallback, useEffect, Rea
 
 type CoverImageStore = {
     isOpen: boolean;
-    onOpen: () => void;
+    onOpen: (documentId: string) => void;
     onClose: () => void;
     onReplace: (url: string) => void;
+    documentId: string | null;
 }
 
 const CoverImageContext = createContext<CoverImageStore | undefined>(undefined);
 
 export const CoverImageProvider = ({ children }: { children: ReactNode }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [documentId, setDocumentId] = useState<string | null>(null);
 
-    const onOpen = useCallback(() => setIsOpen(true), []);
+    const onOpen = useCallback((documentId: string) => { setIsOpen(true); setDocumentId(documentId) }, []);
     const onClose = useCallback(() => setIsOpen(false), []);
-    const onReplace = useCallback((url: string) => {setIsOpen(true)}, []);
+    const onReplace = useCallback((url: string) => { setIsOpen(true) }, []);
 
     return (
-        <CoverImageContext.Provider value={{ isOpen, onOpen, onClose, onReplace}}>
+        <CoverImageContext.Provider value={{ isOpen, onOpen, onClose, onReplace, documentId }}>
             {children}
         </CoverImageContext.Provider>
     );

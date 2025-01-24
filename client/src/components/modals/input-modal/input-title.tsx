@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useDocuments, Document} from "@/components/context/useDocuments";
+import { useDocuments, Document } from "@/components/context/useDocuments";
 import { useQueryClient } from 'react-query';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -15,14 +15,14 @@ export const InputTitle = ({
     const { updateDocument } = useDocuments();
     const queryClient = useQueryClient();
 
-    const [value, setValue] = useState(initialData.title || "Untitled");
+    const [value, setValue] = useState(initialData.title || "");
     const [isEditing, setIsEditing] = useState(false);
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
     const enableInput = () => {
         setIsEditing(true);
         setTimeout(() => {
-            setValue(initialData.title || "Untitled");
+            setValue(initialData.title || "");
             inputRef.current?.focus();
             inputRef.current?.setSelectionRange(0, inputRef.current.value.length);
         }, 0);
@@ -39,12 +39,12 @@ export const InputTitle = ({
             clearTimeout(timeoutId);
         }
         const newTimeoutId = setTimeout(() => {
-            handleUpdateDocument({ title: e.target.value});
+            handleUpdateDocument({ title: e.target.value });
         }, 500);
         setTimeoutId(newTimeoutId);
     };
 
-    const handleUpdateDocument = async (params: { title?:string }) => {
+    const handleUpdateDocument = async (params: { title?: string }) => {
         await updateDocument({ id: initialData.id, ...params });
         queryClient.invalidateQueries(["documents", params.title]);
     };
@@ -65,14 +65,14 @@ export const InputTitle = ({
                     onChange={onChange}
                     onBlur={disableInput}
                     onKeyDown={onKeyDown}
-                    className="h-8 w-60 px-2 dark:bg-neutral-900 focus-visible:ring-blue-500"
+                    className="h-8 px-2 w-60 dark:bg-neutral-900 focus-visible:ring-blue-500"
                 />
             ) : (
                 <Button
                     onClick={enableInput}
                     variant="ghost"
                     size="lg"
-                    className="h-auto max-w-60 truncate px-4 py-2 font-normal hover:bg-neutral-300 hover:dark:bg-neutral-600"
+                    className="h-auto px-4 py-2 font-normal truncate max-w-60 hover:bg-neutral-300 hover:dark:bg-neutral-600"
                 >
                     <span className="truncate">{initialData.title}</span>
                 </Button>

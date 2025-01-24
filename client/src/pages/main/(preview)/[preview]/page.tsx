@@ -49,7 +49,7 @@ export const PreviewPageId = ({ documentId }: { documentId: string }) => {
 
   return (
     <div className="pb-40">
-      <Cover preview url={documents.coverImage} offset={offsetValue} />
+      <Cover preview url={documents.coverImage} id={documents.id} offset={offsetValue} />
       <div className="mx-auto md:max-w-3xl lg:max-w-4xl">
         <Toolbar preview initialData={documents} />
         <Editor

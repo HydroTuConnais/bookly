@@ -31,14 +31,14 @@ const App: React.FC = () => {
             <BoardingProvider>
               <CoverImageProvider>
                 <ImageProvider>
-                  <Toaster />
+                  <Toaster richColors />
                   <Routes>
                     <Route path="/" element={<MarketingPage />} />
                     <Route path="/documents" element={<DocumentsPage />} />
                     <Route path="/documents/:documentId" element={<DocumentsPage />} />
-                    
+
                     <Route path="/preview/:documentId" element={<PreviewPage />} />
-                    
+
                     <Route path="/recovery/email/:id/:token" element={<ConfirmRecoveryPageEmail />} />
                     <Route path="/recovery/password/:id/:token" element={<ConfirmRecoveryPagePassword />} />
 

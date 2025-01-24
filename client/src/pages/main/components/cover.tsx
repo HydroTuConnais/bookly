@@ -9,16 +9,17 @@ import { useParams } from "react-router-dom";
 
 interface CoverImageProps {
   url?: string | null;
+  id: string;
   preview?: boolean;
   offset: number | null;
 }
 
-export const Cover = ({ url, preview, offset}: CoverImageProps) => {
+export const Cover = ({ url, id, preview, offset }: CoverImageProps) => {
   const params = useParams();
-  const documentId = params.documentId;
+  const documentId = id;
 
   const { remove } = useImage();
-  const { updateDocument, setImageOffset} = useDocuments();
+  const { updateDocument, setImageOffset } = useDocuments();
 
   const [offsetY, setOffsetY] = useState(offset);
   const [isRepositioning, setIsRepositioning] = useState(false);
@@ -26,6 +27,9 @@ export const Cover = ({ url, preview, offset}: CoverImageProps) => {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   const onDelete = async () => {
+    console.log("onDelete");
+    console.log("url", url);
+    console.log("documentId", documentId);
     if (url && documentId) {
       const response = await remove({
         url,
@@ -88,7 +92,7 @@ export const Cover = ({ url, preview, offset}: CoverImageProps) => {
       {isRepositioning && (
         <div
           ref={scrollContainerRef} // Attacher la référence
-          className="absolute top-0 left-0 w-full h-full overflow-y-scroll bg-transparent z-10"
+          className="absolute top-0 left-0 z-10 w-full h-full overflow-y-scroll bg-transparent"
           onScroll={handleScroll}
         >
           <div className="h-[100vh]" />
@@ -97,23 +101,23 @@ export const Cover = ({ url, preview, offset}: CoverImageProps) => {
 
       {/* Boutons d'action */}
       {url && !preview && (
-        <div className="absolute flex items-center opacity-0 group-hover:opacity-100 bottom-5 right-5 gap-x-1 z-20">
+        <div className="absolute z-20 flex items-center opacity-0 group-hover:opacity-100 bottom-5 right-5 gap-x-1">
           <Button
             onClick={() => setIsRepositioning(!isRepositioning)}
-            className="text-muted-foreground bg-neutral-50 dark:bg-neutral-800 text-xs"
+            className="text-xs text-muted-foreground bg-neutral-50 dark:bg-neutral-800"
             variant="outline"
             size="sm"
           >
-            <ChevronsUpDownIcon className="h-4 w-4 mr-2" />
+            <ChevronsUpDownIcon className="w-4 h-4 mr-2" />
             {isRepositioning ? "Terminer" : "Repositionner"}
           </Button>
           <Button
             onClick={onDelete}
-            className="text-muted-foreground bg-neutral-50 dark:bg-neutral-800 text-xs"
+            className="text-xs text-muted-foreground bg-neutral-50 dark:bg-neutral-800"
             variant="outline"
             size="sm"
           >
-            <X className="h-4 w-4 mr-2" />
+            <X className="w-4 h-4 mr-2" />
             Supprimer
           </Button>
         </div>

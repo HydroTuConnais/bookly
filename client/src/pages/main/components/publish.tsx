@@ -71,7 +71,7 @@ export const Publish = ({ initialData }: PublishProps) => {
                     Publish
                     {initialData.isPublished && (
                         <Globe
-                            className="text-sky-500 w-4 h-4 ml-2"
+                            className="w-4 h-4 ml-2 text-sky-500"
                         />
                     )}
                 </Button>
@@ -85,14 +85,14 @@ export const Publish = ({ initialData }: PublishProps) => {
                 {initialData.isPublished ? (
                     <div className="space-y-4">
                         <div className="flex items-center gap-x-2">
-                            <Globe className="text-sky-500 animate-pulse h-4 w-4" />
+                            <Globe className="w-4 h-4 text-sky-500 animate-pulse" />
                             <p className="text-xs font-medium text-sky-500">
                                 This note is live on web.
                             </p>
                         </div>
                         <div className="flex items-center">
                             <input
-                                className="flex-1 px-2 text-xs border rounded-l-md h-8 bg-muted truncate"
+                                className="flex-1 h-8 px-2 text-xs truncate border rounded-l-md bg-muted"
                                 value={url}
                                 disabled
                             />
@@ -120,12 +120,12 @@ export const Publish = ({ initialData }: PublishProps) => {
                 ) : (
                     <div className="flex flex-col items-center justify-center">
                         <Globe
-                            className="w-8 h-8 text-muted-foreground mb-2"
+                            className="w-8 h-8 mb-2 text-muted-foreground"
                         />
-                        <p className="text-sm font-medium mb-2">
+                        <p className="mb-2 text-sm font-medium">
                             Publish this note
                         </p>
-                        <span className="text-xs text-muted-foreground mb-4">
+                        <span className="mb-4 text-xs text-muted-foreground">
                             Share your work with others.
                         </span>
                         <Button

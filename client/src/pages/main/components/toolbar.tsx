@@ -1,6 +1,6 @@
 import React, { ElementRef, useRef, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
-import { Document, useDocuments} from "@/components/context/useDocuments";
+import { Document, useDocuments } from "@/components/context/useDocuments";
 import { useQueryClient } from "react-query";
 import { useCoverImage } from "@/hooks/use-cover-image";
 import { IconPicker } from "../../../components/icon-picker";
@@ -17,7 +17,7 @@ export const Toolbar = ({
   preview,
 }: ToolbarProps) => {
   const inputRef = useRef<ElementRef<"textarea">>(null);
-  const { updateDocument, removeEmoji} = useDocuments();
+  const { updateDocument, removeEmoji } = useDocuments();
   const queryClient = useQueryClient();
   const coverImage = useCoverImage();
 
@@ -27,40 +27,40 @@ export const Toolbar = ({
 
   const enableInput = () => {
     if (preview) return;
-      setIsEditing(true);
-      setTimeout(() => {
-          setTitle(initialData.title || "Untitled");
-          inputRef.current?.focus();
-          inputRef.current?.setSelectionRange(0, inputRef.current.value.length);
-      }, 0);
+    setIsEditing(true);
+    setTimeout(() => {
+      setTitle(initialData.title || "Untitled");
+      inputRef.current?.focus();
+      inputRef.current?.setSelectionRange(0, inputRef.current.value.length);
+    }, 0);
   };
 
   const disableInput = () => {
-      setIsEditing(false);
-      setTitle(title);
+    setIsEditing(false);
+    setTitle(title);
   };
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setTitle(e.target.value);
-      if (timeoutId) {
-          clearTimeout(timeoutId);
-      }
-      const newTimeoutId = setTimeout(() => {
-        handleUpdateDocument({ id: initialData.id, title: e.target.value });
-      }, 150);
-      setTimeoutId(newTimeoutId);
+    setTitle(e.target.value);
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    const newTimeoutId = setTimeout(() => {
+      handleUpdateDocument({ id: initialData.id, title: e.target.value });
+    }, 150);
+    setTimeoutId(newTimeoutId);
   };
 
-  const handleUpdateDocument = async (params: { id: string, title?: string, content?: string, icon?: string}) => {
+  const handleUpdateDocument = async (params: { id: string, title?: string, content?: string, icon?: string }) => {
     await updateDocument(params);
     queryClient.invalidateQueries(["document", params.id]);
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === "Enter") {
-          disableInput();
-          setTitle(e.currentTarget.value);
-      }
+    if (e.key === "Enter") {
+      disableInput();
+      setTitle(e.currentTarget.value);
+    }
   };
 
   const onIconSelect = async (icon: string) => {
@@ -73,12 +73,12 @@ export const Toolbar = ({
   }
 
   return (
-    <div className="pl-[54px] group relative"> 
+    <div className="pl-[54px] group relative">
       {!!initialData.icon && !preview && (
         <div className="flex items-center gap-x-2 group/icon"
-        style={{ marginTop: "-40px" }}>
+          style={{ marginTop: "-40px" }}>
           <IconPicker onDelete={onRemoveIcon} onChange={onIconSelect}>
-            <p className="text-7xl hover:opacity-75 transition">
+            <p className="transition text-7xl hover:opacity-75">
               {initialData.icon}
             </p>
           </IconPicker>
@@ -87,7 +87,7 @@ export const Toolbar = ({
       {!!initialData.icon && preview && (
         <p className="pt-6 text-6xl">{initialData.icon}</p>
       )}
-      <div className="opacity-0 group-hover:opacity-100 flex items-center gap-x-1 py-4">
+      <div className="flex items-center py-4 opacity-0 group-hover:opacity-100 gap-x-1">
         {!initialData.icon && !preview && (
           <IconPicker asChild onChange={onIconSelect}>
             <Button
@@ -95,19 +95,19 @@ export const Toolbar = ({
               variant="outline"
               size="sm"
             >
-              <Smile className="rounded-full bg-transparent h-4 w-4 mr-2" />
+              <Smile className="w-4 h-4 mr-2 bg-transparent rounded-full" />
               Ajouter une icône
             </Button>
           </IconPicker>
         )}
         {!initialData.coverImage && !preview && (
           <Button
-            onClick={coverImage.onOpen}
+            onClick={() => coverImage.onOpen(initialData.id)}
             className="text-muted-foreground text-xs bg-white dark:bg-[#1F1F1F] hover:bg-neutral-200 hover:dark:bg-neutral-800 transition border-none"
             variant="outline"
             size="sm"
           >
-            <ImageIcon className="h-4 w-4 mr-2" />
+            <ImageIcon className="w-4 h-4 mr-2" />
             Ajouter une image de couverture
           </Button>
         )}

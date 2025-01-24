@@ -37,6 +37,7 @@ export const SettingsModal = () => {
 
     useEffect(() => {
         setIsMounted(true);
+        console.log("SettingsModal mounted");
     }, []);
 
     if (!isMounted) {
@@ -98,7 +99,7 @@ export const SettingsModal = () => {
                                 <h1 className='px-3 mb-4 text-sm font-semibold text-muted-foreground'>Paramètres</h1>
 
                                 <div className="flex items-center w-full p-3 mb-4 space-x-4 rounded-md bg-gray-50 dark:bg-neutral-700/50">
-                                    <Avatar className="flex justify-center items-center bg-blue-500 rounded-full w-[32px] h-[32px] ring-2 ring-blue-200 dark:ring-blue-500/20">
+                                    <Avatar className="flex justify-center items-center rounded-full w-[32px] h-[32px] ring-2 ring-blue-200 dark:ring-blue-500/20">
                                         <AvatarImage src={user?.imageUrl || "/avatar-default.png"} alt="Avatar" />
                                     </Avatar>
                                     <div>
@@ -149,7 +150,7 @@ export const SettingsModal = () => {
                                         </h2>
 
                                         <div className="flex items-center p-4 space-x-4 rounded-lg bg-gray-50 dark:bg-neutral-900/50">
-                                            <Avatar className="flex justify-center items-center bg-blue-500 rounded-full w-[60px] h-[60px] text-2xl text-muted-foreground ring-4 ring-blue-200 dark:ring-blue-500/20">
+                                            <Avatar className="flex justify-center items-center rounded-full w-[60px] h-[60px] text-2xl text-muted-foreground ring-4 ring-blue-200 dark:ring-blue-500/20">
                                                 <AvatarImage src={user?.imageUrl || "/avatar-default.png"} alt="Avatar" />
                                             </Avatar>
                                             <div className="space-y-2">

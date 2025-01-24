@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useAuth, UserProfile} from "@/components/context/useAuth";
+import { useAuth, UserProfile } from "@/components/context/useAuth";
 import { useQueryClient } from 'react-query';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 interface InputEmailProps {
     initialData: UserProfile;
@@ -15,14 +16,14 @@ export const InputEmail = ({
     const { updateUser } = useAuth();
     const queryClient = useQueryClient();
 
-    const [value, setValue] = useState(initialData.email || "Untitled");
+    const [value, setValue] = useState(initialData.email || "");
     const [isEditing, setIsEditing] = useState(false);
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
     const enableInput = () => {
         setIsEditing(true);
         setTimeout(() => {
-            setValue(initialData.email || "Untitled");
+            setValue(initialData.email || "");
             inputRef.current?.focus();
             inputRef.current?.setSelectionRange(0, inputRef.current.value.length);
         }, 0);
@@ -34,17 +35,25 @@ export const InputEmail = ({
     };
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setValue(e.target.value);
-        if (timeoutId) {
-            clearTimeout(timeoutId);
+        const newValue = e.target.value;
+        setValue(newValue);
+
+        // Vérification basique : doit contenir "@" et "."
+        if (newValue.includes("@") && newValue.includes(".")) {
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+            const newTimeoutId = setTimeout(() => {
+                handleUpdateDocument({ email: newValue });
+                toast.success("Changement d'adresse email enregistré.");
+            }, 500);
+            setTimeoutId(newTimeoutId);
+        } else {
+            toast.error("Veuillez entrer une adresse email valide.");
         }
-        const newTimeoutId = setTimeout(() => {
-            handleUpdateDocument({ email: e.target.value});
-        }, 500);
-        setTimeoutId(newTimeoutId);
     };
 
-    const handleUpdateDocument = async (params: { email?:string }) => {
+    const handleUpdateDocument = async (params: { email?: string }) => {
         await updateUser(params);
         queryClient.invalidateQueries(["users", params.email]);
     };
@@ -65,7 +74,7 @@ export const InputEmail = ({
                     onChange={onChange}
                     onBlur={disableInput}
                     onKeyDown={onKeyDown}
-                    className="h-6 w-36 px-2 dark:bg-neutral-900 focus-visible:ring-blue-500"
+                    className="h-6 px-2 w-36 dark:bg-neutral-900 focus-visible:ring-blue-500"
                 />
             ) : (
                 <Button

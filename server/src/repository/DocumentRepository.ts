@@ -86,14 +86,14 @@ export const DocumentRepository = {
 
   /*--------------------------------------------------------------*/
 
-  async favoriteDocument(id: string, userId: string) {
+  async favoriteDocument(id: string) {
     return await prisma.document.update({
       where: { id },
       data: { isFavorite: true, isArchived: false }
     });
   },
 
-  async unfavoriteDocument(id: string, userId: string) {
+  async unfavoriteDocument(id: string) {
     return await prisma.document.update({
       where: { id },
       data: { isFavorite: false }

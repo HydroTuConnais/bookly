@@ -23,7 +23,7 @@ interface AuthContextType {
     isLoading: boolean;
     loginUser: (email: string, password: string) => Promise<void>;
     registerUser: (email: string, userName: string, password: string) => Promise<void>;
-    updateUser: (params: { email?: string | null, name?: string | null, imageUrl?: string | null, boardingStatus?: boolean | null, role?: string | null}) => Promise<void>;
+    updateUser: (params: { email?: string | null, name?: string | null, imageUrl?: string | null, boardingStatus?: boolean | null, role?: string | null }) => Promise<void>;
     isLoggedIn: () => boolean;
     logoutUser: () => void;
     checkPassword: (password: string) => Promise<boolean>;
@@ -65,11 +65,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             const res = await AuthService.registerAPI({ email, userName, password });
             if (res) {
                 const { token, user } = res.data;
+                console.log("User registered successfully");
                 setToken(token);
                 setUser(user);
                 setIsAuthenticated(true);
                 toast.success("User registered successfully");
-                navigate("/documents");
             }
         } catch (error) {
             console.error("Registration error:", error);
@@ -175,11 +175,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
-    const updateUser = async ({ email, name, imageUrl, boardingStatus, role}: { email?: string | null; name?: string | null; imageUrl?: string | null, boardingStatus?: boolean | null, role?: string | null}): Promise<void> => {
+    const updateUser = async ({ email, name, imageUrl, boardingStatus, role }: { email?: string | null; name?: string | null; imageUrl?: string | null, boardingStatus?: boolean | null, role?: string | null }): Promise<void> => {
         const token = localStorage.getItem("token");
         if (token) {
             try {
-                await AuthService.update({ token, email: email ?? null, name: name ?? null, imageUrl: imageUrl ?? null, boardingStatus: boardingStatus ?? null, role: role ?? null}).then((res) => {
+                await AuthService.update({ token, email: email ?? null, name: name ?? null, imageUrl: imageUrl ?? null, boardingStatus: boardingStatus ?? null, role: role ?? null }).then((res) => {
                     if (res) {
                         console.log(res.user);
                         setUser(res.user);

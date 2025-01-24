@@ -207,11 +207,12 @@ export const Navigation = () => {
                         icon={Home}
                         onClick={() => navigate("/documents")}
                     />
-                    {(user?.role === "ADMIN" || user?.role === "OWNER") && (<Item
-                        onClick={panel.onOpen}
-                        label="Panel Admin"
-                        icon={Shield}
-                    />
+                    {(user?.role === "ADMIN" || user?.role === "OWNER") && (
+                        <Item
+                            onClick={panel.onOpen}
+                            label="Panel Admin"
+                            icon={Shield}
+                        />
                     )}
                 </div>
                 <div className="flex flex-col gap-1 m-4 mx-2 ">

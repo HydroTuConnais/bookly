@@ -1,4 +1,5 @@
 import { DocumentRepository } from '../repository/DocumentRepository';
+import { AuthService } from './AuthService';
 import { ErrorClass } from '../utils/Error';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -21,19 +22,25 @@ export const DocumentService = {
       throw new ErrorClass(401, 'Document not Found');
     }
 
-    if (document.userId !== userId) {
-      try {
-        const sharedIds = await DocumentRepository.findSharedUserIds(userId, id);
+    const isAdmin = await AuthService.checkAdmin(userId);
+    if (!isAdmin) {
+      if (document.userId !== userId) {
+        try {
+          const sharedIds = await DocumentRepository.findSharedUserIds(userId, id);
 
-        if (sharedIds != userId) {
-          throw new ErrorClass(401, 'Unauthorized or Not Found');
+          if (sharedIds != userId) {
+            throw new ErrorClass(401, 'Unauthorized or Not Found');
+          }
+
+          return document;
         }
-
-        return document;
+        catch (error) {
+          throw new ErrorClass(401, 'shardIds not found');
+        }
       }
-      catch (error) {
-        throw new ErrorClass(401, 'shardIds not found');
-      }
+    }
+    else {
+      return document;
     }
 
     if (document.userId == userId) {
@@ -79,8 +86,10 @@ export const DocumentService = {
       }
 
       const document = await DocumentRepository.findDocumentById(id);
-      if (!document || document.userId !== userId) {
-        throw new ErrorClass(401, 'Unauthorized or Not Found');
+      if (!AuthService.checkAdmin(userId)) {
+        if (!document || document.userId !== userId) {
+          throw new ErrorClass(401, 'Unauthorized or Not Found');
+        }
       }
 
       const updateData: {
@@ -91,6 +100,7 @@ export const DocumentService = {
         isPublished?: boolean
       } = {};
 
+      console.log('updateDocument', id, title, content, emoji, coverImage, isPublished);
 
       if (title !== null && title !== undefined) {
         updateData.title = title;
@@ -110,6 +120,8 @@ export const DocumentService = {
       if (isPublished !== null && isPublished !== undefined) {
         updateData.isPublished = isPublished;
       }
+
+      console.log('updateData', updateData);
 
       return await DocumentRepository.updateDocument(id, updateData);
     }
@@ -152,9 +164,13 @@ export const DocumentService = {
 
   async archiveDocument(id: string, userId: string) {
     const document = await DocumentRepository.findDocumentById(id);
-    if (!document || document.userId !== userId) {
-      throw new ErrorClass(401, 'Unauthorized or Not Found');
+
+    if (!AuthService.checkAdmin(userId)) {
+      if (!document || document.userId !== userId) {
+        throw new ErrorClass(401, 'Unauthorized or Not Found');
+      }
     }
+
 
     const recursiveArchive = async (documentId: string, archiveId: string) => {
       const children = await DocumentRepository.findChildDocuments(userId, documentId);
@@ -183,8 +199,11 @@ export const DocumentService = {
 
   async restoreDocument(id: string, userId: string) {
     const document = await DocumentRepository.findDocumentById(id);
-    if (!document || document.userId !== userId) {
-      throw new ErrorClass(401, 'Unauthorized or Not Found');
+
+    if (!AuthService.checkAdmin(userId)) {
+      if (!document || document.userId !== userId) {
+        throw new ErrorClass(401, 'Unauthorized or Not Found');
+      }
     }
 
     const archivedId = document.archivedId;
@@ -227,12 +246,13 @@ export const DocumentService = {
 
   async favoriteDocument(id: string, userId: string) {
     const document = await DocumentRepository.findDocumentById(id);
+
     if (!document || document.userId !== userId) {
       throw new ErrorClass(401, 'Unauthorized or Not Found');
     }
 
     try {
-      return await DocumentRepository.favoriteDocument(id, userId);
+      return await DocumentRepository.favoriteDocument(id);
     }
     catch (error) {
       throw new ErrorClass(500, 'Error process favoriting document');
@@ -241,12 +261,13 @@ export const DocumentService = {
 
   async unfavoriteDocument(id: string, userId: string) {
     const document = await DocumentRepository.findDocumentById(id);
+
     if (!document || document.userId !== userId) {
       throw new ErrorClass(401, 'Unauthorized or Not Found');
     }
 
     try {
-      return await DocumentRepository.unfavoriteDocument(id, userId);
+      return await DocumentRepository.unfavoriteDocument(id);
     }
     catch (error) {
       throw new ErrorClass(500, 'Error process unfavoriting document');
@@ -359,8 +380,10 @@ export const DocumentService = {
     try {
       const document = await DocumentRepository.findDocumentById(documentId);
 
-      if (!document || document.userId !== userId) {
-        throw new ErrorClass(401, 'Unauthorized or Not Found');
+      if (!AuthService.checkAdmin(userId)) {
+        if (!document || document.userId !== userId) {
+          throw new ErrorClass(401, 'Unauthorized or Not Found');
+        }
       }
 
       return await DocumentRepository.getCoverOffset(documentId);
@@ -374,8 +397,10 @@ export const DocumentService = {
     try {
       const document = await DocumentRepository.findDocumentById(documentId);
 
-      if (!document || document.userId !== userId) {
-        throw new ErrorClass(401, 'Unauthorized or Not Found');
+      if (!AuthService.checkAdmin(userId)) {
+        if (!document || document.userId !== userId) {
+          throw new ErrorClass(401, 'Unauthorized or Not Found');
+        }
       }
 
       return await DocumentRepository.setCoverOffset(documentId, offset);
