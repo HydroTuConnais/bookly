@@ -1,0 +1,27 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express = require('express');
+const DocumentController_1 = require("../controllers/DocumentController");
+const AuthService_1 = require("../service/AuthService");
+const router = express.Router();
+router.get('/documents', AuthService_1.authenticate, DocumentController_1.DocumentController.getAllDocuments);
+router.get('/documents/:id/content', AuthService_1.authenticate, DocumentController_1.DocumentController.getDocument);
+router.post('/documents', AuthService_1.authenticate, DocumentController_1.DocumentController.createDocument);
+router.put('/documents/:id/content', AuthService_1.authenticate, DocumentController_1.DocumentController.updateDocument);
+router.delete('/documents/:id/content', AuthService_1.authenticate, DocumentController_1.DocumentController.deleteDocument);
+router.get('/documents/sidebar', AuthService_1.authenticate, DocumentController_1.DocumentController.getSidebarDocuments);
+router.get('/documents/trash', AuthService_1.authenticate, DocumentController_1.DocumentController.getArchivedDocuments);
+router.post('/documents/:id/archive', AuthService_1.authenticate, DocumentController_1.DocumentController.archiveDocument);
+router.post('/documents/:id/restore', AuthService_1.authenticate, DocumentController_1.DocumentController.restoreDocument);
+router.post('/documents/:id/favorite', AuthService_1.authenticate, DocumentController_1.DocumentController.favoriteDocument);
+router.post('/documents/:id/unfavorite', AuthService_1.authenticate, DocumentController_1.DocumentController.unfavoriteDocument);
+router.get('/documents/favorite', AuthService_1.authenticate, DocumentController_1.DocumentController.getfavoriteDocuments);
+router.get('/documents/favorite/count', AuthService_1.authenticate, DocumentController_1.DocumentController.getcountFavoriteDocuments);
+router.post('/documents/:id/shared', AuthService_1.authenticate, DocumentController_1.DocumentController.shareDocument);
+router.get('/documents/shared', AuthService_1.authenticate, DocumentController_1.DocumentController.getSharedDocuments);
+router.get('/documents/search', AuthService_1.authenticate, DocumentController_1.DocumentController.searchDocuments);
+router.delete('/documents/:id/removeicon', AuthService_1.authenticate, DocumentController_1.DocumentController.removeIcon);
+router.get('/documents/:id/coveroffset', AuthService_1.authenticate, DocumentController_1.DocumentController.getCoverOffset);
+router.put('/documents/:id/coveroffset', AuthService_1.authenticate, DocumentController_1.DocumentController.setCoverOffset);
+exports.default = router;
+//# sourceMappingURL=DocumentRoutes.js.map
