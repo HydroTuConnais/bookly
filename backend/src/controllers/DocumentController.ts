@@ -20,7 +20,7 @@ export const DocumentController = {
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status || 500).json({ error: error.message });
     }
   },
 
@@ -33,7 +33,7 @@ export const DocumentController = {
       res.status(200).json(document);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status || 500).json({ error: error.message });
     }
   },
 
@@ -47,7 +47,7 @@ export const DocumentController = {
 
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status || 500).json({ error: error.message });
     }
   },
 
@@ -74,7 +74,7 @@ export const DocumentController = {
       res.status(202).json(document);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status || 500).json({ error: error.message });
     }
   },
 
@@ -87,7 +87,7 @@ export const DocumentController = {
       res.status(200).json({ success: true });
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status || 500).json({ error: error.message });
     }
   },
 
@@ -102,7 +102,7 @@ export const DocumentController = {
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status || 500).json({ error: error.message });
     }
   },
 
@@ -117,7 +117,7 @@ export const DocumentController = {
       res.status(200).json({ success: true });
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status || 500).json({ error: error.message });
     }
   },
 
@@ -130,7 +130,7 @@ export const DocumentController = {
       res.status(200).json({ success: true });
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status || 500).json({ error: error.message });
     }
   },
 
@@ -142,7 +142,7 @@ export const DocumentController = {
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status || 500).json({ error: error.message });
     }
   },
 
@@ -157,7 +157,7 @@ export const DocumentController = {
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status || 500).json({ error: error.message });
     }
   },
 
@@ -170,7 +170,7 @@ export const DocumentController = {
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status || 500).json({ error: error.message });
     }
   },
 
@@ -184,7 +184,7 @@ export const DocumentController = {
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status || 500).json({ error: error.message });
     }
   },
 
@@ -196,7 +196,7 @@ export const DocumentController = {
       res.status(200).json(count);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status || 500).json({ error: error.message });
     }
   },
 
@@ -212,7 +212,7 @@ export const DocumentController = {
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status || 500).json({ error: error.message });
     }
   },
 
@@ -224,7 +224,7 @@ export const DocumentController = {
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status || 500).json({ error: error.message });
     }
   },
 
@@ -239,7 +239,7 @@ export const DocumentController = {
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status || 500).json({ error: error.message });
     }
   },
 
@@ -254,7 +254,7 @@ export const DocumentController = {
       res.status(200).json({ success: true });
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status || 500).json({ error: error.message });
     }
   },
 
@@ -269,7 +269,7 @@ export const DocumentController = {
       res.status(200).json(offset);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status || 500).json({ error: error.message });
     }
   },
 
@@ -283,7 +283,7 @@ export const DocumentController = {
       res.status(200).json({ success: true });
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status || 500).json({ error: error.message });
     }
   },
 };
