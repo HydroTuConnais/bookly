@@ -3,13 +3,13 @@ import axios from "axios";
 import { Console } from "console";
 
 
-const api = "http://bookly.ovh/api";
+const api = "https://api.bookly.ovh/api";
 
 export const RecoveryService = {
 
     async sendRecovryEmail({ token, email }: { token: string, email: string }) {
         try {
-            const response = await axios.post(api + "/api/recovery/send/email", {
+            const response = await axios.post(api + "/recovery/send/email", {
                 email
             }, {
                 headers: {
@@ -24,7 +24,7 @@ export const RecoveryService = {
 
     async recoveryEmail({ id, token }: { id: string, token: string }) {
         try {
-            const response = await axios.post(api + `/api/recovery/email/${id}/${token}`);
+            const response = await axios.post(api + `/recovery/email/${id}/${token}`);
             return response.data;
         } catch (error) {
             handleErrors(error);
@@ -33,7 +33,7 @@ export const RecoveryService = {
 
     async sendRecovryPassword({ token, email }: { token: string, email: string }) {
         try {
-            const response = await axios.post(api + "/api/recovery/send/password", {
+            const response = await axios.post(api + "/recovery/send/password", {
                 email
             }, {
                 headers: {
@@ -50,7 +50,7 @@ export const RecoveryService = {
         console.log("token", token);
         console.log("password", password);
         try {
-            const response = await axios.post(api + "/api/recovery/reset/password", {
+            const response = await axios.post(api + "/recovery/reset/password", {
                 password
             }, {
                 headers: {
