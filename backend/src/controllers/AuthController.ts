@@ -22,8 +22,8 @@ export const AuthController = {
     try {
       const user = await AuthService.registerUser(email, password);
       res.status(201).json(user);
-
     }
+    
     catch (error: ErrorClass | any) {
       res.status(error.status).json({ error: error.message });
     }
