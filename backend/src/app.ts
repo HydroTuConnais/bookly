@@ -22,10 +22,10 @@ app.use(
 );
 
 app.use(express.json());
-app.use(DocumentRoutes);
-app.use(AuthRoutes);
-app.use(ImageRoutes);
-app.use(RecoveryRoutes);
+app.use("/api", DocumentRoutes);
+app.use("/api", AuthRoutes);
+app.use("/api", ImageRoutes);
+app.use("/api", RecoveryRoutes);
 
 // cronProsess.startJobCron();
 // console.log("Le cron job est démarré !");
