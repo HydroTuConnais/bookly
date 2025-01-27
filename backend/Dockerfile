@@ -10,9 +10,6 @@ RUN npm install
 # Copie du code source
 COPY . .
 
-# Génération des fichiers Prisma
-RUN npx prisma migrate deploy --schema=prisma/schema.prisma
-
 # Compilation du code TypeScript en JavaScript
 RUN npm run build
 
@@ -38,3 +35,6 @@ EXPOSE 4000
 
 # Nouvelle commande de démarrage
 CMD ["npm", "run", "start:prod"]
+
+# Génération des fichiers Prisma
+RUN npx prisma migrate dev --name init
