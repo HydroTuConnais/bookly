@@ -16,7 +16,7 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=azerty 
     depends_on:
-      postgres:
+      db:
         condition: service_healthy
     networks:
       - internal
