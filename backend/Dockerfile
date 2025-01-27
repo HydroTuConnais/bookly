@@ -21,9 +21,6 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Installer les dépendances nécessaires
-RUN npm install -g npm
-
 # Copier uniquement les fichiers nécessaires depuis le builder
 COPY --from=builder /app /app
 
