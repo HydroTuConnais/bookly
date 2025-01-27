@@ -8,6 +8,8 @@ RUN npm install
 
 COPY . .
 
+RUN npm prisma generate
+
 RUN npm install --save-dev ts-node typescript
 
 RUN npm run build
