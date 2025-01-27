@@ -17,8 +17,7 @@ services:
         condition: service_healthy
     command: >
       sh -c "
-        npx prisma migrate deploy && 
-        npm run start"
+        npx prisma migrate deploy"
     networks:
       - internal
     volumes:
