@@ -27,7 +27,6 @@ services:
 
   db:
     image: postgres:latest
-    container_name: db
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=azerty
