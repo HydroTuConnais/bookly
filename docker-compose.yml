@@ -16,11 +16,12 @@ services:
       - "5432:5432"
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
+      test_on_start: true
       interval: 10s
       retries: 5
       timeout: 5s
       start_period: 10s
-      
+
   backend:
     build:
       context: ./backend
@@ -34,10 +35,11 @@ services:
       - DB_PORT=5432
       - DB_NAME=database
       - DB_USER=postgres
-      - DB_PASSWORD=azerty
+      - DB_PASSWORD=azerty 
     depends_on:
       postgres:
         condition: service_healthy
+    command: bash -c "until nc -z -v -w30 db 5432; do echo 'Waiting for database...'; sleep 1; done; npx prisma migrate dev --name init;
     networks:
       - internal
     volumes:
