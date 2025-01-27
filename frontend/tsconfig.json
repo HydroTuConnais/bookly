@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
     "jsx": "react",
-    "module": "commonjs",
-    "target": "es6",
+    "module": "ESNext",
+    "target": "ESNext",
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
+    "moduleResolution": "Node",
     "esModuleInterop": true,
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,
@@ -16,5 +17,6 @@
     "paths": {
       "@/*": ["src/*"]
     }
-  }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
 }
