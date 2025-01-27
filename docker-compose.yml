@@ -1,10 +1,10 @@
-
-version: '3.7'
+version: '3.8'
 
 services:
   backend:
     build:
       context: ./backend
+      dockerfile: Dockerfile
     environment:
       - NODE_ENV=production
       - DB_HOST=postgres
@@ -17,10 +17,10 @@ services:
         condition: service_healthy
     networks:
       - internal
-    ports: 
-      - 4000:4000
     volumes:
-      - uploads_data:/app/uploads
+      - ./backend/uploads:/app/uploads
+    ports:
+      - "4000:4000"
 
   postgres:
     image: postgres:latest
@@ -35,18 +35,10 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres"]
-      interval: 10s
-      retries: 5
-      start_period: 30s
-      timeout: 10s
 
-  
 networks:
   internal:
     driver: bridge
 
 volumes:
   postgres_data:
-  uploads_data:
