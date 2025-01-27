@@ -5,12 +5,12 @@ WORKDIR /app
 COPY package*.json tsconfig.json ./
 
 RUN npm install
+RUN npm install prisma --save-dev
+
 
 COPY . .
 
 RUN npm prisma generate
-
-RUN npm install --save-dev ts-node typescript
 
 RUN npm run build
 
