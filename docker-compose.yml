@@ -16,7 +16,6 @@ services:
       - "5432:5432"
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
-      test_on_start: true
       interval: 10s
       retries: 5
       timeout: 5s
