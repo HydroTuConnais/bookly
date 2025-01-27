@@ -1,11 +1,11 @@
 const express = require('express');
-import DocumentRoutes from './routes/DocumentRoutes';
-import AuthRoutes from './routes/AuthRoutes';
-import ImageRoutes from './routes/ImageRoutes';
-import RecoveryRoutes from './routes/RecoveryRoutes';
+import DocumentRoutes from './src/routes/DocumentRoutes';
+import AuthRoutes from './src/routes/AuthRoutes';
+import ImageRoutes from './src/routes/ImageRoutes';
+import RecoveryRoutes from './src/routes/RecoveryRoutes';
 import cors from 'cors';
 
-import { cronProsess } from './lib/cron';
+import { cronProsess } from './src/lib/cron';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -26,10 +26,6 @@ app.use("/api", DocumentRoutes);
 app.use("/api", AuthRoutes);
 app.use("/api", ImageRoutes);
 app.use("/api", RecoveryRoutes);
-
-app.use((req : any, res : any) => {
-  res.status(404).json({ error: 'Route non trouvée' + req.url + ' ' + req.method });
-});
 
 // cronProsess.startJobCron();
 // console.log("Le cron job est démarré !");

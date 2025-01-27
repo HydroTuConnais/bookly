@@ -13,7 +13,7 @@
       "esModuleInterop": true,  // Autoriser l'importation des modules ES
       "baseUrl": ".",  // Définir la racine du projet pour la résolution des modules
     },
-    "include": ["src/**/*.ts"],  // Inclure tous les fichiers .ts dans le dossier src
+    "include": ["src/**/*.ts", "app.ts"],  // Inclure tous les fichiers .ts dans le dossier src
     "exclude": ["node_modules", "dist"]  // Exclure node_modules et dist de la compilation
   }
   

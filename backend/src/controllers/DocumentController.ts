@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { DocumentService } from '../service/DocumentService';
 import { AuthService } from '../service/AuthService';
 import { ErrorClass } from '../utils/Error';
@@ -20,7 +20,9 @@ export const DocumentController = {
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status || 500).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -33,7 +35,9 @@ export const DocumentController = {
       res.status(200).json(document);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status || 500).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -47,7 +51,9 @@ export const DocumentController = {
 
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status || 500).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -74,7 +80,9 @@ export const DocumentController = {
       res.status(202).json(document);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status || 500).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -87,7 +95,9 @@ export const DocumentController = {
       res.status(200).json({ success: true });
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status || 500).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -102,7 +112,9 @@ export const DocumentController = {
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status || 500).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -117,7 +129,9 @@ export const DocumentController = {
       res.status(200).json({ success: true });
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status || 500).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -130,7 +144,9 @@ export const DocumentController = {
       res.status(200).json({ success: true });
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status || 500).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -142,7 +158,9 @@ export const DocumentController = {
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status || 500).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -157,7 +175,9 @@ export const DocumentController = {
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status || 500).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -170,7 +190,9 @@ export const DocumentController = {
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status || 500).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -184,7 +206,9 @@ export const DocumentController = {
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status || 500).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -196,7 +220,9 @@ export const DocumentController = {
       res.status(200).json(count);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status || 500).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -212,7 +238,9 @@ export const DocumentController = {
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status || 500).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -224,7 +252,9 @@ export const DocumentController = {
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status || 500).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -239,7 +269,9 @@ export const DocumentController = {
       res.status(200).json(documents);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status || 500).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -254,7 +286,9 @@ export const DocumentController = {
       res.status(200).json({ success: true });
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status || 500).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -269,7 +303,9 @@ export const DocumentController = {
       res.status(200).json(offset);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status || 500).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -283,7 +319,9 @@ export const DocumentController = {
       res.status(200).json({ success: true });
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status || 500).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 };

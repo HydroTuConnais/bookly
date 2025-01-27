@@ -23,9 +23,11 @@ export const AuthController = {
       const user = await AuthService.registerUser(email, password);
       res.status(201).json(user);
     }
-    
+
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+      const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+      const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+      res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -45,7 +47,9 @@ export const AuthController = {
 
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -60,7 +64,9 @@ export const AuthController = {
       res.status(200).json(response);
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -81,7 +87,9 @@ export const AuthController = {
       res.status(200).json({ user: userInterface });
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -109,7 +117,9 @@ export const AuthController = {
       res.status(200).json({ users: userInterfaces });
     }
     catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -130,7 +140,9 @@ export const AuthController = {
         res.status(200).json({ user: userInterface, token });
       }
     } catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 
@@ -153,7 +165,9 @@ export const AuthController = {
         res.status(200).json({ user: userInterface });
       }
     } catch (error: ErrorClass | any) {
-      res.status(error.status).json({ error: error.message });
+    const statusCode = error.status || 500;  // Si 'error.status' est undefined, utilise 500 par défaut
+    const errorMessage = error.message || "Internal Server Error";  // Message d'erreur par défaut
+    res.status(statusCode).json({ error: errorMessage });
     }
   },
 };
