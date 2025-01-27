@@ -1,11 +1,11 @@
 const express = require('express');
-import DocumentRoutes from './src/routes/DocumentRoutes';
-import AuthRoutes from './src/routes/AuthRoutes';
-import ImageRoutes from './src/routes/ImageRoutes';
-import RecoveryRoutes from './src/routes/RecoveryRoutes';
+import DocumentRoutes from './routes/DocumentRoutes';
+import AuthRoutes from './routes/AuthRoutes';
+import ImageRoutes from './routes/ImageRoutes';
+import RecoveryRoutes from './routes/RecoveryRoutes';
 import cors from 'cors';
 
-import { cronProsess } from './src/lib/cron';
+import { cronProsess } from './lib/cron';
 
 const app = express();
 const port = process.env.PORT || 3000;
