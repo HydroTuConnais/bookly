@@ -2,7 +2,7 @@
   "name": "prisma",
   "version": "1.0.0",
   "description": "",
-  "type": "commonjs",
+  "type": "module",
   "main": "app.ts",
   "scripts": {
     "dev": "nodemon src/app.ts",
