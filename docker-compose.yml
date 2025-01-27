@@ -10,7 +10,7 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=azerty
     depends_on:
-      db:
+      postgres:
         condition: service_healthy
     networks:
       - internal
@@ -18,18 +18,25 @@ services:
       - uploads_data:/app/uploads
 
   postgres:
-    image: postgres:latest
-    container_name: postgres
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=azerty
-      - POSTGRES_DB=database
-    networks:
-      - internal
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+  image: postgres:latest
+  container_name: postgres
+  environment:
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=azerty
+    - POSTGRES_DB=database
+  networks:
+    - internal
+  volumes:
+    - postgres_data:/var/lib/postgresql/data
+  ports:
+    - "5432:5432"
+  healthcheck:
+    test: ["CMD", "pg_isready", "-U", "postgres"]
+    interval: 10s
+    retries: 5
+    start_period: 30s
+    timeout: 10s
+
   
 networks:
   internal:
