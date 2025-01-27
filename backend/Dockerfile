@@ -6,7 +6,7 @@ WORKDIR /app
 # Installation des dépendances
 COPY package.json package-lock.json ./
 RUN npm install
-RUN npm morgan
+RUN npm install morgan
 
 # Copie du code source
 COPY . .
