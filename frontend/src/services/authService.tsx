@@ -3,7 +3,7 @@ import { UserProfileToken } from "@/models/Users";
 import axios from "axios";
 
 
-const api = "http://localhost:4000/api";
+const api = "http://bookly.ovh/api";
 
 export const AuthService = {
 
