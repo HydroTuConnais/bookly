@@ -5,12 +5,15 @@ import ImageRoutes from './routes/ImageRoutes';
 import RecoveryRoutes from './routes/RecoveryRoutes';
 import cors from 'cors';
 
+const morgan = require('morgan');
+
 import { cronProsess } from './lib/cron';
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(morgan('dev'));
 
 app.use(
   cors({

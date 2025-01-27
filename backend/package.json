@@ -5,8 +5,8 @@
   "type": "commonjs",
   "main": "app.ts",
   "scripts": {
-    "dev": "nodemon app.ts",
-    "start:prod": "NODE_ENV=production node dist/app.js",
+    "dev": "nodemon src/app.ts",
+    "start:prod": "node dist/app.js",
     "build": "tsc",
     "email": "email dev"
   },
