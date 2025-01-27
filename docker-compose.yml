@@ -1,18 +1,4 @@
 services:
-  frontend:
-    build:
-      context: ./frontend
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-       - /etc/letsencrypt:/etc/letsencrypt:ro
-       - uploads_data:/usr/share/nginx/uploads
-    networks:
-      - internal
-    depends_on:
-      - backend
-
   backend:
     build:
       context: ./backend
