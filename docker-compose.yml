@@ -7,6 +7,9 @@ services:
       dockerfile: Dockerfile
     environment:
       - DATABASE_URL=postgresql://postgres:azerty@postgres:5432/database
+      - PORT=4000
+      - JWT_SECRET=7f!jf7O$$Mjz4fWr%43c9IcRqfMQcL!TKPE!Lfwe
+      - SERVER_URL=https://bookly.ovh
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_NAME=database
