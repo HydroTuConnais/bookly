@@ -21,20 +21,8 @@ WORKDIR /app
 # Copier uniquement les fichiers nécessaires depuis le builder
 COPY --from=builder /app /app
 
-# # Copier le script sh.sh dans l'image
-# COPY sh.sh /app/sh.sh
-
-# # Rendre le script exécutable
-# RUN chmod +x /app/sh.sh
-
-# # Exécuter le script sh.sh pour appliquer les migrations
-# RUN /app/sh.sh
-
 # Exposer le port
 EXPOSE 4000
 
 # Nouvelle commande de démarrage
 CMD ["npm", "run", "start:prod"]
-
-# Génération des fichiers Prisma
-RUN npx prisma migrate dev --name init
