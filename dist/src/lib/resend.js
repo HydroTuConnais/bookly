@@ -1,29 +1,19 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.changeEmail = changeEmail;
 exports.changePassword = changePassword;
 const resend_1 = require("resend");
 const resend = new resend_1.Resend("re_bCc5YBBN_3p1DbwcwRvTErkpnW55oDQtx");
-function changeEmail(previousemail, newemail, username, link, requestip, requestlocation) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (!previousemail || !username) {
-            console.error('Missing email or username, required parameters');
-            return;
-        }
-        yield resend.emails.send({
-            from: 'send@bookly.ovh',
-            to: previousemail,
-            subject: 'Email Change Confirmation',
-            html: `
+async function changeEmail(previousemail, newemail, username, link, requestip, requestlocation) {
+    if (!previousemail || !username) {
+        console.error('Missing email or username, required parameters');
+        return;
+    }
+    await resend.emails.send({
+        from: 'send@bookly.ovh',
+        to: previousemail,
+        subject: 'Email Change Confirmation',
+        html: `
         <!DOCTYPE html>
             <html lang="en">
             <head>
@@ -123,21 +113,19 @@ function changeEmail(previousemail, newemail, username, link, requestip, request
             </html>
 
         `
-        });
     });
 }
 ;
-function changePassword(previousemail, username, link, requestip, requestlocation) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (!previousemail || !username) {
-            console.error('Missing email or username, required parameters');
-            return;
-        }
-        yield resend.emails.send({
-            from: 'send@bookly.ovh',
-            to: previousemail,
-            subject: 'Email Change Confirmation',
-            html: `
+async function changePassword(previousemail, username, link, requestip, requestlocation) {
+    if (!previousemail || !username) {
+        console.error('Missing email or username, required parameters');
+        return;
+    }
+    await resend.emails.send({
+        from: 'send@bookly.ovh',
+        to: previousemail,
+        subject: 'Email Change Confirmation',
+        html: `
         <!DOCTYPE html>
             <html lang="en">
             <head>
@@ -237,7 +225,6 @@ function changePassword(previousemail, username, link, requestip, requestlocatio
             </html>
 
         `
-        });
     });
 }
 ;

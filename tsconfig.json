@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
-    "module": "ESNext",  // Use ESNext module system
-    "target": "es6",  // Target ECMAScript 6
+    "module": "CommonJS",
+    "target": "ESNext",
+    "moduleResolution": "node",
     "sourceMap": true,  // Generate .map files for debugging
     "allowJs": true,  // Allow JavaScript files
     "skipLibCheck": true,  // Skip type checking of declaration files
     "isolatedModules": true,  // Ensure all files are modules
     "forceConsistentCasingInFileNames": true,  // Enforce consistent casing in file names
     "incremental": true,  // Use incremental compilation
-    "outDir": "./dist",  // Specify output directory
+    "outDir": "dist",  // Specify output directory
     "strict": true,  // Enable strict type-checking options
     "esModuleInterop": true,  // Enable interoperability between CommonJS and ES modules
     "baseUrl": ".",  // Set the base directory for module resolution
