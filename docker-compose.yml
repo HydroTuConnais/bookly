@@ -26,7 +26,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     environment:
-      - DATABASE_URL=postgresql://postgres:azerty@0.0.0.0:5432/database
+      - DATABASE_URL=postgresql://postgres:azerty@172.19.0.2:5432/database
       - PORT=4000
       - JWT_SECRET=7f!jf7O$$Mjz4fWr%43c9IcRqfMQcL!TKPE!Lfwe
       - SERVER_URL=https://bookly.ovh
