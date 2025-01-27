@@ -4,14 +4,14 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Installation des dépendances
-COPY package.json tsconfig.json ./
+COPY package.json package-lock.json ./
 RUN npm install
 
 # Copie du code source
 COPY . .
 
 # Génération des fichiers Prisma
-RUN npm prisma generate
+RUN npx prisma generate
 
 # Compilation du code TypeScript en JavaScript
 RUN npm run build
@@ -28,4 +28,4 @@ COPY --from=builder /app /app
 EXPOSE 4000
 
 # Nouvelle commande de démarrage
-CMD ["npm","run", "start:prod"]
+CMD ["npm", "run", "start:prod"]
