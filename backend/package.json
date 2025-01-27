@@ -2,7 +2,8 @@
   "name": "prisma",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
+  "main": "app.ts",
   "scripts": {
     "dev": "nodemon app.ts",
     "start": "node app.ts",
