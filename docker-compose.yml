@@ -6,7 +6,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     environment:
-      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:azerty@postgres:5432/database
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_NAME=database
