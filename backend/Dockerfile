@@ -19,6 +19,7 @@ WORKDIR /app
 COPY --from=build /app /app
 
 RUN npm install --only=production
+RUN npm install ts-node typescript --save
 
 EXPOSE 4000
 
