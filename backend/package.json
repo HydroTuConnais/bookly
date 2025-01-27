@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon app.ts",
+    "start": "nodemon app.ts",
     "build": "tsc",
     "email": "email dev"
   },
