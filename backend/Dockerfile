@@ -4,7 +4,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Installation des dépendances
-COPY package.json pnpm-lock.yaml ./
+COPY package.json package-lock.yaml ./
 RUN npm install
 
 # Copie du code source
