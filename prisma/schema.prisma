@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String     @id @default(uuid())
+  email           String     @unique
+  name            String?
+  password        String
+  role            String     @default("USER")
+  imageProfile    String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  boardingStatus  Boolean    @default(false)
+  documents       Document[]
+  sharedDocuments Document[] @relation("SharedDocuments")
+}
+
+model Document {
+  id               String   @id @default(uuid())
+  title            String
+  userId           String
+  isArchived       Boolean  @default(false)
+  archivedId       String?
+  isFavorite       Boolean  @default(false)
+  parentDocumentId String?
+  content          String?
+  coverImage       String?
+  offsety          Float?
+  icon             String?
+  isPublished      Boolean  @default(false)
+  urlPublished     String?  @unique
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  ownerUser      User       @relation(fields: [userId], references: [id])
+  sharedUsers    User[]     @relation("SharedDocuments")
+  parentDocument Document?  @relation("ParentDocument", fields: [parentDocumentId], references: [id])
+  children       Document[] @relation("ParentDocument")
+
+  @@index([userId], name: "idx_documents_by_user")
+  @@index([userId, parentDocumentId], name: "idx_documents_by_user_parent")
+}
+
+model Image {
+  id         String   @id @default(uuid())
+  url        String   @unique
+  filename   String
+  filepath   String
+  uploadedAt DateTime @default(now())
+}
+
+model Recover {
+  id        String   @id @default(uuid())
+  emailPrev String
+  email     String?
+  token     String
+  createdAt DateTime @default(now())
+}

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Document" ALTER COLUMN "offsety" SET DATA TYPE DOUBLE PRECISION;
