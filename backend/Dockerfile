@@ -25,4 +25,4 @@ RUN npm install -g ts-node
 
 EXPOSE 4000
 
-CMD ["ts-node", "app.ts"]
+CMD ["npm","run", "start:prod"]
