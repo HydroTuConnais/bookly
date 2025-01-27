@@ -8,9 +8,11 @@
         "isolatedModules": true,
         "forceConsistentCasingInFileNames": true,
         "incremental": true,
-        "outDir": "dist",
+        "outDir": "./dist",
         "strict": true,
         "esModuleInterop": true,
         "baseUrl": ".",
-    }
+    },
+    "include": ["src/**/*.ts", "src/**/*.d.ts"],
+    "exclude": ["node_modules", "dist"]
 }
