@@ -11,7 +11,7 @@ RUN npm install
 COPY . .
 
 # Génération des fichiers Prisma
-RUN npx prisma generate
+RUN npx prisma migrate dev --name init
 
 # Compilation du code TypeScript en JavaScript
 RUN npm run build
