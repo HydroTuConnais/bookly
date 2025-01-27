@@ -27,6 +27,10 @@ app.use("/api", AuthRoutes);
 app.use("/api", ImageRoutes);
 app.use("/api", RecoveryRoutes);
 
+app.use((req : any, res : any) => {
+  res.status(404).json({ error: 'Route non trouvée' + req.url + ' ' + req.method });
+});
+
 // cronProsess.startJobCron();
 // console.log("Le cron job est démarré !");
 

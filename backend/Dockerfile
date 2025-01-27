@@ -4,9 +4,8 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Installation des dépendances
-COPY package.json package-lock.json ./
+COPY package.json package.json ./
 RUN npm install
-RUN npm install morgan
 
 # Copie du code source
 COPY . .
