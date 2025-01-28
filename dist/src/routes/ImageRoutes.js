@@ -1,19 +1,14 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const path = require("path");
-const fs_1 = __importDefault(require("fs"));
-const ImageController_1 = require("../controllers/ImageController");
+import fs from "fs";
+import { ImageController } from "../controllers/ImageController";
 const router = express.Router();
 const multer = require("multer");
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const uploadPath = path.join(__dirname, "/uploads");
-        if (!fs_1.default.existsSync(uploadPath)) {
-            fs_1.default.mkdirSync(uploadPath, { recursive: true });
+        if (!fs.existsSync(uploadPath)) {
+            fs.mkdirSync(uploadPath, { recursive: true });
         }
         cb(null, uploadPath);
     },
@@ -37,9 +32,9 @@ const upload = multer({
     }
 });
 // Routes
-router.get("/image/:id", ImageController_1.ImageController.getImageById);
-router.post("/image/upload", upload.single("image"), ImageController_1.ImageController.uploadImage);
+router.get("/image/:id", ImageController.getImageById);
+router.post("/image/upload", upload.single("image"), ImageController.uploadImage);
 // router.post("/image/update/:id", upload.single("image"), ImageController.updateImage);
-router.delete("/image/:id", ImageController_1.ImageController.deleteImage);
-exports.default = router;
+router.delete("/image/:id", ImageController.deleteImage);
+export default router;
 //# sourceMappingURL=ImageRoutes.js.map

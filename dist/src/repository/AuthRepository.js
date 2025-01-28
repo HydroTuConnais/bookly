@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthRepository = void 0;
-const client_1 = require("@prisma/client");
-const prisma = new client_1.PrismaClient();
-exports.AuthRepository = {
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
+export const AuthRepository = {
     async findUserByEmail(email) {
         return await prisma.user.findUnique({ where: { email } });
     },

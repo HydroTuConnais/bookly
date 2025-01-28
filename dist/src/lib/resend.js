@@ -1,10 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.changeEmail = changeEmail;
-exports.changePassword = changePassword;
-const resend_1 = require("resend");
-const resend = new resend_1.Resend("re_bCc5YBBN_3p1DbwcwRvTErkpnW55oDQtx");
-async function changeEmail(previousemail, newemail, username, link, requestip, requestlocation) {
+import { Resend } from 'resend';
+const resend = new Resend("re_bCc5YBBN_3p1DbwcwRvTErkpnW55oDQtx");
+export async function changeEmail(previousemail, newemail, username, link, requestip, requestlocation) {
     if (!previousemail || !username) {
         console.error('Missing email or username, required parameters');
         return;
@@ -116,7 +112,7 @@ async function changeEmail(previousemail, newemail, username, link, requestip, r
     });
 }
 ;
-async function changePassword(previousemail, username, link, requestip, requestlocation) {
+export async function changePassword(previousemail, username, link, requestip, requestlocation) {
     if (!previousemail || !username) {
         console.error('Missing email or username, required parameters');
         return;

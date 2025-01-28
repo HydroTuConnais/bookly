@@ -1,18 +1,12 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ImageService = void 0;
-const fs_1 = __importDefault(require("fs"));
-const uuid_1 = require("uuid");
-const ImageRepository_1 = require("../repository/ImageRepository");
-const DocumentRepository_1 = require("../repository/DocumentRepository");
-exports.ImageService = {
+import fs from "fs";
+import { v4 as uuidv4 } from "uuid";
+import { ImageRepository } from "../repository/ImageRepository";
+import { DocumentRepository } from "../repository/DocumentRepository";
+export const ImageService = {
     async saveImage(imageData) {
-        const imageId = (0, uuid_1.v4)();
+        const imageId = uuidv4();
         const imageUrl = process.env.SERVER_URL + "/api/image/" + imageId;
-        const wait = await ImageRepository_1.ImageRepository.createImage(imageId, imageUrl, imageData);
+        const wait = await ImageRepository.createImage(imageId, imageUrl, imageData);
         if (wait) {
             return imageUrl;
         }
@@ -21,28 +15,28 @@ exports.ImageService = {
         }
     },
     async updateImage(id, imageData) {
-        return await ImageRepository_1.ImageRepository.updateImage(id, imageData);
+        return await ImageRepository.updateImage(id, imageData);
     },
     async getAllImages() {
-        return await ImageRepository_1.ImageRepository.findAllImages();
+        return await ImageRepository.findAllImages();
     },
     async getImageById(id) {
-        return await ImageRepository_1.ImageRepository.findImageById(id);
+        return await ImageRepository.findImageById(id);
     },
     async deleteImage(id, url) {
-        const imageId = await ImageRepository_1.ImageRepository.findImageByIdDocument(url);
-        const image = await ImageRepository_1.ImageRepository.findImageById(imageId);
+        const imageId = await ImageRepository.findImageByIdDocument(url);
+        const image = await ImageRepository.findImageById(imageId);
         if (!image) {
             throw new Error("Image not found");
         }
         try {
-            fs_1.default.unlinkSync(image.filepath);
+            fs.unlinkSync(image.filepath);
         }
         catch (error) {
             console.error("Failed to delete image file:", error);
         }
-        await ImageRepository_1.ImageRepository.deleteImage(imageId);
-        await DocumentRepository_1.DocumentRepository.updateDocument(id, { coverImage: null });
+        await ImageRepository.deleteImage(imageId);
+        await DocumentRepository.updateDocument(id, { coverImage: null });
         return { message: "Image deleted successfully" };
     }
 };

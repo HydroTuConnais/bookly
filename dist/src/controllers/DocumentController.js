@@ -1,18 +1,15 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DocumentController = void 0;
-const DocumentService_1 = require("../service/DocumentService");
-const AuthService_1 = require("../service/AuthService");
+import { DocumentService } from '../service/DocumentService';
+import { AuthService } from '../service/AuthService';
 const jwt = require('jsonwebtoken');
-exports.DocumentController = {
+export const DocumentController = {
     async getAllDocuments(req, res) {
         const userId = req.headers.userid;
-        const isAdmin = AuthService_1.AuthService.checkAdmin(userId);
+        const isAdmin = AuthService.checkAdmin(userId);
         if (!isAdmin) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
         try {
-            const documents = await DocumentService_1.DocumentService.getAllDocuments();
+            const documents = await DocumentService.getAllDocuments();
             res.status(200).json(documents);
         }
         catch (error) {
@@ -25,7 +22,7 @@ exports.DocumentController = {
         const id = req.params.id;
         const userId = req.headers.userid;
         try {
-            const document = await DocumentService_1.DocumentService.getDocument(id, userId);
+            const document = await DocumentService.getDocument(id, userId);
             res.status(200).json(document);
         }
         catch (error) {
@@ -38,7 +35,7 @@ exports.DocumentController = {
         const { title, parentDocumentId } = req.body;
         const userId = req.headers.userid;
         try {
-            const document = await DocumentService_1.DocumentService.createDocument(title, parentDocumentId, userId);
+            const document = await DocumentService.createDocument(title, parentDocumentId, userId);
             res.status(201).json(document);
         }
         catch (error) {
@@ -62,7 +59,7 @@ exports.DocumentController = {
         console.log(userId);
         console.log(id);
         try {
-            const document = await DocumentService_1.DocumentService.updateDocument(id, title, userId, content, icon, coverImage, isPublished);
+            const document = await DocumentService.updateDocument(id, title, userId, content, icon, coverImage, isPublished);
             console.log('updateDocument', document);
             res.status(202).json(document);
         }
@@ -76,7 +73,7 @@ exports.DocumentController = {
         const id = req.params.id;
         const userId = req.headers.userid;
         try {
-            await DocumentService_1.DocumentService.deleteDocument(id, userId);
+            await DocumentService.deleteDocument(id, userId);
             res.status(200).json({ success: true });
         }
         catch (error) {
@@ -90,7 +87,7 @@ exports.DocumentController = {
         const parentDocumentId = req.query.parentDocument;
         const userId = req.headers.userid;
         try {
-            const documents = await DocumentService_1.DocumentService.getSidebarDocuments(userId, parentDocumentId);
+            const documents = await DocumentService.getSidebarDocuments(userId, parentDocumentId);
             res.status(200).json(documents);
         }
         catch (error) {
@@ -104,7 +101,7 @@ exports.DocumentController = {
         const id = req.params.id;
         const userId = req.headers.userid;
         try {
-            await DocumentService_1.DocumentService.archiveDocument(id, userId);
+            await DocumentService.archiveDocument(id, userId);
             res.status(200).json({ success: true });
         }
         catch (error) {
@@ -117,7 +114,7 @@ exports.DocumentController = {
         const id = req.params.id;
         const userId = req.headers.userid;
         try {
-            await DocumentService_1.DocumentService.restoreDocument(id, userId);
+            await DocumentService.restoreDocument(id, userId);
             res.status(200).json({ success: true });
         }
         catch (error) {
@@ -129,7 +126,7 @@ exports.DocumentController = {
     async getArchivedDocuments(req, res) {
         const userId = req.headers.userid;
         try {
-            const documents = await DocumentService_1.DocumentService.getArchivedDocuments(userId);
+            const documents = await DocumentService.getArchivedDocuments(userId);
             res.status(200).json(documents);
         }
         catch (error) {
@@ -143,7 +140,7 @@ exports.DocumentController = {
         const id = req.params.id;
         const userId = req.headers.userid;
         try {
-            const documents = await DocumentService_1.DocumentService.favoriteDocument(id, userId);
+            const documents = await DocumentService.favoriteDocument(id, userId);
             res.status(200).json(documents);
         }
         catch (error) {
@@ -156,7 +153,7 @@ exports.DocumentController = {
         const id = req.params.id;
         const userId = req.headers.userid;
         try {
-            const documents = await DocumentService_1.DocumentService.unfavoriteDocument(id, userId);
+            const documents = await DocumentService.unfavoriteDocument(id, userId);
             res.status(200).json(documents);
         }
         catch (error) {
@@ -170,7 +167,7 @@ exports.DocumentController = {
         const forChild = req.query.forChild === 'true';
         const userId = req.headers.userid;
         try {
-            const documents = await DocumentService_1.DocumentService.getfavoriteDocuments(userId, parentFavoriteId, forChild);
+            const documents = await DocumentService.getfavoriteDocuments(userId, parentFavoriteId, forChild);
             res.status(200).json(documents);
         }
         catch (error) {
@@ -182,7 +179,7 @@ exports.DocumentController = {
     async getcountFavoriteDocuments(req, res) {
         const userId = req.headers.userid;
         try {
-            const count = await DocumentService_1.DocumentService.getNumberOfFavoriteDocuments(userId);
+            const count = await DocumentService.getNumberOfFavoriteDocuments(userId);
             res.status(200).json(count);
         }
         catch (error) {
@@ -197,7 +194,7 @@ exports.DocumentController = {
         const documentId = req.params.id;
         const { sharedEmail } = req.body;
         try {
-            const documents = await DocumentService_1.DocumentService.shareDocument(documentId, userId, sharedEmail);
+            const documents = await DocumentService.shareDocument(documentId, userId, sharedEmail);
             res.status(200).json(documents);
         }
         catch (error) {
@@ -209,7 +206,7 @@ exports.DocumentController = {
     async getSharedDocuments(req, res) {
         const userId = req.headers.userid;
         try {
-            const documents = await DocumentService_1.DocumentService.getSharedDocuments(userId);
+            const documents = await DocumentService.getSharedDocuments(userId);
             res.status(200).json(documents);
         }
         catch (error) {
@@ -223,7 +220,7 @@ exports.DocumentController = {
         const userId = req.headers.userid;
         const query = req.query.query;
         try {
-            const documents = await DocumentService_1.DocumentService.searchDocuments(userId, query);
+            const documents = await DocumentService.searchDocuments(userId, query);
             res.status(200).json(documents);
         }
         catch (error) {
@@ -237,7 +234,7 @@ exports.DocumentController = {
         const userId = req.headers.userid;
         const documentId = req.params.id;
         try {
-            await DocumentService_1.DocumentService.removeIcon(documentId, userId);
+            await DocumentService.removeIcon(documentId, userId);
             res.status(200).json({ success: true });
         }
         catch (error) {
@@ -251,7 +248,7 @@ exports.DocumentController = {
         const userId = req.headers.userid;
         const documentId = req.params.id;
         try {
-            const offset = await DocumentService_1.DocumentService.getCoverOffset(documentId, userId);
+            const offset = await DocumentService.getCoverOffset(documentId, userId);
             res.status(200).json(offset);
         }
         catch (error) {
@@ -265,7 +262,7 @@ exports.DocumentController = {
         const documentId = req.params.id;
         const { coverOffset } = req.body;
         try {
-            await DocumentService_1.DocumentService.setCoverOffset(documentId, userId, coverOffset);
+            await DocumentService.setCoverOffset(documentId, userId, coverOffset);
             res.status(200).json({ success: true });
         }
         catch (error) {

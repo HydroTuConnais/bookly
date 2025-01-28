@@ -1,10 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.cronProsess = void 0;
 const cron = require("node-cron");
-const client_1 = require("@prisma/client");
-const prisma = new client_1.PrismaClient();
-exports.cronProsess = {
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+export const cronProsess = {
     startJobCron: () => {
         cron.schedule("* */10 * * *", async () => {
             console.log("Vérification des mail `Recover` démarrée à :", new Date());

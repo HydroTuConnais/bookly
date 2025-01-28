@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ErrorClass = void 0;
-class ErrorClass {
+export class ErrorClass {
     status;
     message;
     constructor(status, message) {
@@ -9,5 +6,4 @@ class ErrorClass {
         this.message = message;
     }
 }
-exports.ErrorClass = ErrorClass;
 //# sourceMappingURL=Error.js.map

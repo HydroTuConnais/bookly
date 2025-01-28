@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DocumentRepository = void 0;
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-exports.DocumentRepository = {
+export const DocumentRepository = {
     async findDocumentById(id) {
         return await prisma.document.findUnique({ where: { id } });
     },

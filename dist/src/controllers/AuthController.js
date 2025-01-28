@@ -1,15 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthController = void 0;
-const AuthService_1 = require("../service/AuthService");
-const Error_1 = require("../utils/Error");
+import { AuthService } from '../service/AuthService';
+import { ErrorClass } from '../utils/Error';
 const jwt = require('jsonwebtoken');
 ;
-exports.AuthController = {
+export const AuthController = {
     async register(req, res) {
         const { email, password } = req.body;
         try {
-            const user = await AuthService_1.AuthService.registerUser(email, password);
+            const user = await AuthService.registerUser(email, password);
             res.status(201).json(user);
         }
         catch (error) {
@@ -21,7 +18,7 @@ exports.AuthController = {
     async login(req, res) {
         const { email, password } = req.body;
         try {
-            const { user, token } = await AuthService_1.AuthService.loginUser(email, password);
+            const { user, token } = await AuthService.loginUser(email, password);
             const userInterface = {
                 id: user?.id,
                 email: user?.email,
@@ -43,7 +40,7 @@ exports.AuthController = {
         try {
             const token = req.headers.authorization?.split(' ')[1] || '';
             const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret');
-            const response = await AuthService_1.AuthService.checkPassword(payload.email, password);
+            const response = await AuthService.checkPassword(payload.email, password);
             console.log(response);
             res.status(200).json(response);
         }
@@ -57,7 +54,7 @@ exports.AuthController = {
         try {
             const token = req.headers.authorization?.split(' ')[1] || '';
             const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret');
-            const user = await AuthService_1.AuthService.findUser(payload.id);
+            const user = await AuthService.findUser(payload.id);
             console.log("user", user);
             const userInterface = {
                 id: user?.id,
@@ -79,11 +76,11 @@ exports.AuthController = {
         try {
             const token = req.headers.authorization?.split(' ')[1] || '';
             const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret');
-            const isAdmin = await AuthService_1.AuthService.checkAdmin(payload.id);
+            const isAdmin = await AuthService.checkAdmin(payload.id);
             if (!isAdmin) {
-                throw new Error_1.ErrorClass(403, 'You are not admin');
+                throw new ErrorClass(403, 'You are not admin');
             }
-            const users = await AuthService_1.AuthService.findAllUsers();
+            const users = await AuthService.findAllUsers();
             const userInterfaces = users.map((user) => ({
                 id: user?.id,
                 email: user?.email,
@@ -107,7 +104,7 @@ exports.AuthController = {
             const token = req.headers.authorization?.split(' ')[1] || '';
             const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret');
             if (payload) {
-                const request = await AuthService_1.AuthService.findUser(payload.id);
+                const request = await AuthService.findUser(payload.id);
                 const userInterface = {
                     id: request?.id,
                     email: request?.email,
@@ -132,7 +129,7 @@ exports.AuthController = {
             const token = req.headers.authorization?.split(' ')[1] || '';
             const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret');
             if (payload) {
-                const request = await AuthService_1.AuthService.updateUser(payload.id, email, name, imageUrl, boardingStatus, password, role);
+                const request = await AuthService.updateUser(payload.id, email, name, imageUrl, boardingStatus, password, role);
                 const userInterface = {
                     id: request?.id,
                     email: request?.email,

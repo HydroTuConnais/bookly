@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.RecoveryRepository = void 0;
-const client_1 = require("@prisma/client");
-const prisma = new client_1.PrismaClient();
-exports.RecoveryRepository = {
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
+export const RecoveryRepository = {
     async createRecoveryMail(data) {
         try {
             return await prisma.recover.create({
