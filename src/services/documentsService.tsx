@@ -1,7 +1,7 @@
 import { handleErrors } from "@/components/ErrorHandler";
 import axios from "axios";
 
-const api = "http://82.66.14.184:64828/api";
+const api = "https://api.bookly.ovh/api/";
 export const DocumentService = {
     async createDocument({ token, userid, title, parentDocumentId }: { token: string, userid: string, title: string, parentDocumentId: string | null }) {
         try {
