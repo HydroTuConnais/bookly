@@ -1,7 +1,7 @@
 import { handleErrors } from "@/components/ErrorHandler";
 import axios from "axios";
 
-const api = "https://api.bookly.ovh/api/";
+const api = "https://api.bookly.ovh/api";
 export const ImageService = {
     async upload({ token, userid, file }: { token: string, userid: string, file: File }) {
         try {
