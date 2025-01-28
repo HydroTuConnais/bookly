@@ -3,8 +3,7 @@ import axios from "axios";
 import { Console } from "console";
 
 
-const api = "https://api.bookly.ovh/api";
-
+const api = "http://82.66.14.184:64828/api";
 export const RecoveryService = {
 
     async sendRecovryEmail({ token, email }: { token: string, email: string }) {
