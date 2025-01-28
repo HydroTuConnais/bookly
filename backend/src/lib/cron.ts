@@ -3,11 +3,6 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-interface RecoverData {
-    email: string;
-    createdAt: Date;
-}
-
 export const cronProsess = {
     startJobCron: () => {
         cron.schedule("* */10 * * *", async () => {
@@ -19,6 +14,10 @@ export const cronProsess = {
 
                 // Récupérer toutes les entrées
                 const allRecords = await prisma.recover.findMany();
+                console.log("Entrées vérifiées :", allRecords.map(record => ({
+                    email: record.email,
+                    createdAt: record.createdAt
+                })));
 
                 // Récupérer les entrées à supprimer
                 const recordsToDelete = await prisma.recover.findMany({
@@ -38,6 +37,10 @@ export const cronProsess = {
                     },
                 });
 
+                console.log("Entrées supprimées :", recordsToDelete.map(record => ({
+                    email: record.email,
+                    createdAt: record.createdAt
+                })));
                 console.log(`Total: ${result.count} entrées supprimées.`);
             } catch (error) {
                 console.error("Erreur dans le cron :", error);
