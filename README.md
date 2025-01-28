@@ -283,40 +283,69 @@ server
 
 #### **User**
 ```plaintext
-User = (
-    id UUID, 
-    email VARCHAR(255), 
-    name VARCHAR(255), 
-    password VARCHAR(255), 
-    createdAt TIMESTAMP, 
-    updatedAt TIMESTAMP
-);
+-----------------------------------------------
+|                    User                     |
+-----------------------------------------------
+| id              : UUID (PK)                |
+| email           : String (Unique)          |
+| name            : String (Nullable)        |
+| password        : String                   |
+| role            : String (Default: "USER") |
+| imageProfile    : String (Nullable)        |
+| createdAt       : DateTime (Default: now)  |
+| updatedAt       : DateTime (Auto-update)   |
+| boardingStatus  : Boolean (Default: false) |
+-----------------------------------------------
+| FK: - documents (1:N -> Document.userId)   |
+|     - sharedDocuments (N:M -> Document)    |
+-----------------------------------------------
 
-Document = (
-    id UUID, 
-    title VARCHAR(255), 
-    userId UUID, 
-    isArchived BOOLEAN, 
-    parentDocumentId UUID, 
-    content TEXT, 
-    coverImage VARCHAR(255), 
-    icon VARCHAR(255), 
-    isPublished BOOLEAN, 
-    urlPublished VARCHAR(255), 
-    createdAt TIMESTAMP, 
-    updatedAt TIMESTAMP
-);
+-----------------------------------------------
+|                  Document                   |
+-----------------------------------------------
+| id               : UUID (PK)               |
+| title            : String                  |
+| userId           : UUID (FK -> User.id)    |
+| isArchived       : Boolean (Default: false)|
+| archivedId       : UUID (Nullable)         |
+| isFavorite       : Boolean (Default: false)|
+| parentDocumentId : UUID (Nullable)         |
+| content          : String (Nullable)       |
+| coverImage       : String (Nullable)       |
+| offsety          : Float (Nullable)        |
+| icon             : String (Nullable)       |
+| isPublished      : Boolean (Default: false)|
+| urlPublished     : String (Unique, Nullable)|
+| createdAt        : DateTime (Default: now) |
+| updatedAt        : DateTime (Auto-update)  |
+-----------------------------------------------
+| FK: - ownerUser (N:1 -> User)              |
+|     - sharedUsers (N:M -> User)            |
+|     - parentDocument (1:N Self-relation)   |
+-----------------------------------------------
+| Index: idx_documents_by_user               |
+|        idx_documents_by_user_parent        |
+-----------------------------------------------
 
+-----------------------------------------------
+|                   Image                     |
+-----------------------------------------------
+| id         : UUID (PK)                     |
+| url        : String (Unique)               |
+| filename   : String                        |
+| filepath   : String                        |
+| uploadedAt : DateTime (Default: now)       |
+-----------------------------------------------
 
-SharedDocuments = (
-    userId UUID, 
-    documentId UUID
-);
-
-Lien_1 = (#id [User], #userId [Document]);
-Lien_2 = (#id [Document], #parentDocumentId [Document]);
-Lien_3 = (#userId [SharedDocuments], #id [User]);
-Lien_4 = (#documentId [SharedDocuments], #id [Document]);
+-----------------------------------------------
+|                   Recover                   |
+-----------------------------------------------
+| id        : UUID (PK)                      |
+| emailPrev : String                         |
+| email     : String (Nullable)              |
+| token     : String                         |
+| createdAt : DateTime (Default: now)        |
+-----------------------------------------------
 
 ```
 
