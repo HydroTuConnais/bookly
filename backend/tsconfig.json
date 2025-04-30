@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",  // Utiliser le module commonjs pour Node.js
+      "target": "es6",  // Cibler ECMAScript 6
+      "sourceMap": true,  // Générer des fichiers .map pour le débogage
+      "allowJs": true,  // Permettre l'inclusion de fichiers JavaScript
+      "skipLibCheck": true,  // Ignorer la vérification des fichiers de bibliothèque
+      "isolatedModules": true,  // Assurer que tous les fichiers sont des modules
+      "forceConsistentCasingInFileNames": true,  // Appliquer des règles de casse consistantes
+      "incremental": true,  // Utiliser la compilation incrémentielle
+      "outDir": "./dist",  // Spécifie le dossier de sortie
+      "strict": true,  // Activer les règles strictes
+      "esModuleInterop": true,  // Autoriser l'importation des modules ES
+      "baseUrl": ".",  // Définir la racine du projet pour la résolution des modules
+    },
+    "include": ["src/**/*.ts", "app.ts"],  // Inclure tous les fichiers .ts dans le dossier src
+    "exclude": ["node_modules", "dist"]  // Exclure node_modules et dist de la compilation
+  }
+  

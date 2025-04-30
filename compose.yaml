@@ -1,0 +1,6 @@
+services:
+  pawesome:
+    image: Bookly
+    build:
+      context: .
+      dockerfile: Bookly/Dockerfile
