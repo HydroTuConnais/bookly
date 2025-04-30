@@ -3,7 +3,7 @@ import { UserProfileToken } from "@/models/Users";
 import axios from "axios";
 
 
-const api = "https://api.bookly.ovh/api";
+const api = process.env.SERVER_URL || "http://localhost:5000/api";
 
 export const AuthService = {
 
@@ -89,7 +89,7 @@ export const AuthService = {
         }
     },
 
-    async update({ token, email, name, imageUrl, boardingStatus, role}: { token: string, email: string | null, name: string | null, imageUrl: string | null, boardingStatus: boolean | null, role: string | null }) {
+    async update({ token, email, name, imageUrl, boardingStatus, role }: { token: string, email: string | null, name: string | null, imageUrl: string | null, boardingStatus: boolean | null, role: string | null }) {
         try {
             const response = await axios.put(api + "/auth/update", {
                 email,
