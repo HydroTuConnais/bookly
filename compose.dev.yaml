@@ -1,0 +1,59 @@
+version: '3.9'
+
+services:
+  frontend:
+    build: ./frontend
+    container_name: react_frontend
+    ports:
+      - "443:3000"
+    volumes:
+      - ./frontend:/app
+    environment:
+      - SECRET_KEY=c21$h$$S&R%6kFM@SGJXXGTCoNfSRkp&GhaV7fnj
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend
+    container_name: api_backend
+    ports:
+      - "5000:5000"
+    networks:
+      - bookly-network
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    environment:
+      - DATABASE_URL=postgresql://postgres:azerty@db:5432/database
+      - PORT=5000
+      - JWT_SECRET=7f!jf7O$$Mjz4fWr%43c9IcRqfMQcL!TKPE!Lfwe
+      - SERVER_URL= http://localhost:5000
+    depends_on:
+      - db
+
+  db:
+    image: postgres:17
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: azerty
+      POSTGRES_DB: database
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - bookly-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  postgres_data:
+
+networks:
+  bookly-network:
+    driver: bridge
