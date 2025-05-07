@@ -5,11 +5,12 @@
   "type": "commonjs",
   "main": "app.ts",
   "scripts": {
+    "start": "node dist/app.js",
     "devv": "nodemon src/app.ts",
     "dev": "nodemon app.ts",
     "build": "tsc",
-    "email": "email dev",
-    "start": "node dist/app.js"
+    "email": "email dev"
+    
   },
   "keywords": [],
   "author": "",
