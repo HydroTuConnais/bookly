@@ -11,7 +11,6 @@ RUN npm install
 COPY . .
 
 # Installer Prisma et générer les fichiers Prisma
-RUN npm install -g prisma
 RUN npx prisma generate
 
 # Construire l'application
