@@ -31,9 +31,6 @@ COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules ./node_modules
 
-# Installer les dépendances en mode production
-RUN npm ci --only=production
-
 EXPOSE 5000
 
 CMD ["npm", "start"]
