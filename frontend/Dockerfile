@@ -1,9 +1,5 @@
 FROM node:21 AS build
 
-ARG SERVER_URL
-
-ENV SERVER_URL=$SERVER_URL
-
 WORKDIR /app
 
 COPY package*.json ./
