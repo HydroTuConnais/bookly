@@ -11,6 +11,7 @@ COPY ./dist ./dist
 COPY ./prisma ./prisma
 COPY ./node_modules ./node_modules
 COPY ./package*.json ./
+COPY start.sh ./
 
 RUN chmod +x ./start.sh
 
