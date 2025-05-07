@@ -13,7 +13,6 @@ services:
       - bookly-network
     environment:
       - SECRET_KEY=c21$h$$S&R%6kFM@SGJXXGTCoNfSRkp&GhaV7fnj
-      - SERVER_URL=http://maant.dipsw-ccicampus.dev/api
     depends_on:
       - backend
 
@@ -31,7 +30,7 @@ services:
       - DATABASE_URL=postgresql://postgres:azerty@db:5432/database
       - PORT=5000
       - JWT_SECRET=7f!jf7O$$Mjz4fWr%43c9IcRqfMQcL!TKPE!Lfwe
-      - SERVER_URL= http://maant.dipsw-ccicampus.dev
+      - SERVER_URL=http://maant.dipsw-ccicampus.dev
     depends_on:
       - db
 

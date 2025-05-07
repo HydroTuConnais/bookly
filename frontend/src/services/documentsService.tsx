@@ -1,7 +1,7 @@
 import { handleErrors } from "@/components/ErrorHandler";
 import axios from "axios";
 
-const api = process.env.SERVER_URL || "http://localhost:5000/api";
+const api = process.env.SERVER_URL || "http://maant.dipsw-ccicampus.dev/api";
 
 export const DocumentService = {
     async createDocument({ token, userid, title, parentDocumentId }: { token: string, userid: string, title: string, parentDocumentId: string | null }) {

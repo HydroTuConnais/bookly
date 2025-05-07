@@ -3,7 +3,7 @@ import axios from "axios";
 import { Console } from "console";
 
 
-const api = process.env.SERVER_URL || "http://localhost:5000/api";
+const api = process.env.SERVER_URL || "http://maant.dipsw-ccicampus.dev/api";
 
 export const RecoveryService = {
 

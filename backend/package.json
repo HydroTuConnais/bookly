@@ -8,7 +8,8 @@
     "devv": "nodemon src/app.ts",
     "dev": "nodemon app.ts",
     "build": "tsc",
-    "email": "email dev"
+    "email": "email dev",
+    "start": "node dist/app.js"
   },
   "keywords": [],
   "author": "",

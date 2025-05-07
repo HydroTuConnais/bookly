@@ -3,7 +3,7 @@ import { UserProfileToken } from "@/models/Users";
 import axios from "axios";
 
 
-const api = process.env.SERVER_URL || "http://localhost:5000/api";
+const api = process.env.SERVER_URL || "http://maant.dipsw-ccicampus.dev/api";
 
 export const AuthService = {
 
