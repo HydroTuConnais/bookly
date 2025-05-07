@@ -12,6 +12,8 @@ COPY ./prisma ./prisma
 COPY ./node_modules ./node_modules
 COPY ./package*.json ./
 
+RUN chmod +x ./start.sh
+
 # Exposer le port de l'application
 EXPOSE 5000
 
