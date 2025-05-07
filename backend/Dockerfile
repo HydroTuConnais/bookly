@@ -1,36 +1,19 @@
-# Étape 1 : Construction de l'application (builder)
-FROM node:21-alpine AS builder
-
-WORKDIR /app
-
-# Copier les fichiers package pour installer les dépendances
-COPY package*.json ./
-RUN npm install
-
-# Copier tout le code source
-COPY . .
-
-# Installer Prisma et générer les fichiers Prisma
-RUN npx prisma generate
-
-# Construire l'application
-RUN npm run build
-
-# ==========================
-# Étape 2 : Conteneur final (production)
+# Étape 1 : Conteneur final (production)
 FROM node:21-alpine
 
 WORKDIR /app
 
-# Installer le client PostgreSQL
+# Installer le client PostgreSQL si nécessaire dans le conteneur
 RUN apk add --no-cache postgresql-client
 
-# Copier les fichiers nécessaires depuis l'étape de construction
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/node_modules ./node_modules
+# Copier les fichiers nécessaires depuis l'étape de build (si le build a déjà été effectué)
+COPY ./dist ./dist
+COPY ./prisma ./prisma
+COPY ./node_modules ./node_modules
+COPY ./package*.json ./
 
+# Exposer le port de l'application
 EXPOSE 5000
 
+# Lancer l'application
 CMD ["npm", "start"]
