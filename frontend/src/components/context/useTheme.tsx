@@ -14,7 +14,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   });
 
   useEffect(() => {
-    console.log('resolvedTheme', resolvedTheme);
+    // console.log('resolvedTheme', resolvedTheme);
   }, []);
 
   useEffect(() => {

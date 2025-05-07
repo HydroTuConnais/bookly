@@ -70,7 +70,7 @@ export const Item = ({
                 if (!expanded) {
                     onExpand?.();
                 }
-                console.log("documentId:", documentId);
+                // console.log("documentId:", documentId);
                 navigate(`/documents/${documentId}`);
             });
 
@@ -115,7 +115,7 @@ export const Item = ({
 
         const promise = setfavoriteDocument({ documentId: id }).then
             ((documentId) => {
-                console.log("set favorite documentId:", documentId);
+                // console.log("set favorite documentId:", documentId);
                 // console.log(documentId);
             })
             .catch((error) => {

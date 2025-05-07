@@ -26,7 +26,7 @@ export const ConfirmRecoveryPageEmail: React.FC = () => {
     );
 
     useEffect(() => {
-        console.log("ConfirmRecoveryPageEmail");
+        // console.log("ConfirmRecoveryPageEmail");
         if (data) {
             //console.log(data);
         } else if (!isLoading && !isError) {

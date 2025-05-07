@@ -14,10 +14,6 @@ export const DocumentPageId = ({ documentId }: { documentId: string }) => {
   const { getDocument, updateDocument, getImageOffset, documents, archiveDocument, restoreDocument } = useDocuments();
   const { resolvedTheme } = useTheme();
 
-  useEffect(() => {
-    console.log("DocumentPageId");
-  }, []);
-
   const { data: document, isLoading, isError, refetch } = useQuery<Document | null>(
     ["document", documentId, archiveDocument, restoreDocument],
     () => getDocument({ id: documentId }),

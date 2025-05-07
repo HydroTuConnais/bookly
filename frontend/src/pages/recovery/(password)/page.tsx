@@ -19,7 +19,7 @@ export const ConfirmRecoveryPagePassword: React.FC = () => {
         ['recoveryPassword', id, token],
         () => {
             if (id && token) {
-                console.log("id", id);
+                // console.log("id", id);
                 return RecoveryService.recoveryPassword({ id, token });
             }
         },
@@ -33,7 +33,7 @@ export const ConfirmRecoveryPagePassword: React.FC = () => {
     }
 
     const onConfirm = (newPassword: string) => {
-        console.log('Confirm password:', newPassword);
+        // console.log('Confirm password:', newPassword);
         if (token) {
             RecoveryService.changePassword({ token, password: newPassword }).then((response) => {
                 if (response) {

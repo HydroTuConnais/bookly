@@ -27,9 +27,9 @@ export const Cover = ({ url, id, preview, offset }: CoverImageProps) => {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   const onDelete = async () => {
-    console.log("onDelete");
-    console.log("url", url);
-    console.log("documentId", documentId);
+    // console.log("onDelete");
+    // console.log("url", url);
+    // console.log("documentId", documentId);
     if (url && documentId) {
       const response = await remove({
         url,

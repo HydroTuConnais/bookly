@@ -37,7 +37,7 @@ export const SettingsModal = () => {
 
     useEffect(() => {
         setIsMounted(true);
-        console.log("SettingsModal mounted");
+        // console.log("SettingsModal mounted");
     }, []);
 
     if (!isMounted) {
@@ -51,12 +51,12 @@ export const SettingsModal = () => {
     };
 
     const onEmailChange = (newEmail: string) => {
-        console.log('New email:', newEmail);
+        // console.log('New email:', newEmail);
         sendRecovryEmail(newEmail);
     };
 
     const onPasswordChange = (newPassword: string) => {
-        console.log('Confirm password:', newPassword);
+        // console.log('Confirm password:', newPassword);
         changePassword(newPassword);
     };
 

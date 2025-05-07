@@ -37,7 +37,7 @@ export const Navbar = ( {
 
     useEffect(() => {
         refetch();
-        console.log("refetching");
+        // console.log("refetching");
     }, [archiveDocument, restoreDocument]);
 
     if (isLoading) {

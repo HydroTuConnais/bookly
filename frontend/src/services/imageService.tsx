@@ -43,13 +43,13 @@ export const fetchData = async ({ method, endpoint, params, formData, body, head
             data = JSON.stringify(body);
         }
 
-        console.log({
-            method: method,
-            url: `${api}${endpoint}`,
-            data: data,
-            headers: headers,
-            params: params,
-        });
+        // console.log({
+        //     method: method,
+        //     url: `${api}${endpoint}`,
+        //     data: data,
+        //     headers: headers,
+        //     params: params,
+        // });
 
         const response = await axios({
             method: method,

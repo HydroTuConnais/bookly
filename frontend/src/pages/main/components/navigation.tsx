@@ -50,15 +50,6 @@ export const Navigation = () => {
         getSidebarCountFavoriteDocuments,
     } = useDocuments();
 
-    useEffect(() => {
-        console.log("setFavoriteDoucument");
-    }, [setfavoriteDocument]);
-
-    useEffect(() => {
-        console.log("unFavoriteDoucument");
-    }, [unfavoriteDocument]);
-
-
     const { data, loading, error } = usePromise(() => getSidebarCountFavoriteDocuments(), [setfavoriteDocument, unfavoriteDocument]);
 
     useEffect(() => {
@@ -86,7 +77,7 @@ export const Navigation = () => {
     }, [pathname, isMobile]);
 
     useEffect(() => {
-        console.log("userNavigation", user);
+        // console.log("userNavigation", user);
     }, [user]);
 
     const handleMouseDown = (

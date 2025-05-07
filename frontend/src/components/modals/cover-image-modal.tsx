@@ -27,9 +27,9 @@ export const CoverImageModal = () => {
     }
 
     const onChange = async (file?: File) => {
-        console.log("onChange");
+        // console.log("onChange");
         if (file) {
-            console.log(file)
+            // console.log(file)
             setIsSubmitting(true);
             setFile(file);
 
@@ -37,10 +37,10 @@ export const CoverImageModal = () => {
                 file
             });
 
-            console.log("response", response);
+            // console.log("response", response);
 
             if (response !== undefined && response !== null && documentId) {
-                console.log("updateDocument");
+                // console.log("updateDocument");
                 updateDocument({ id: documentId, coverImage: response });
             };
 

@@ -71,7 +71,7 @@ export const DocumentProvider = ({ children }: { children: React.ReactNode }) =>
     const [error, setError] = useState<string | null>(null);
 
     const logCall = (functionName: string) => {
-        console.log(`useDocuments: ${functionName} called`);
+        // console.log(`useDocuments: ${functionName} called`);
         console.trace();
     };
 

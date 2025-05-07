@@ -40,7 +40,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
 
     useEffect(() => {
         refetch();
-        console.log("DocumentList", documentsList);
+        // console.log("DocumentList", documentsList);
     }, [documents]);
 
     const onRedirect = (documentId: string) => {

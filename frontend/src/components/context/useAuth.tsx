@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-        console.log("checkToken Validating");
+        // console.log("checkToken Validating");
         if (token) {
             checkAuth();
         } else {
@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }, []);
 
     useEffect(() => {
-        console.log("contextAuth", user);
+        // console.log("contextAuth", user);
     }, [user]);
 
     const registerUser = async (email: string, userName: string, password: string) => {
@@ -67,14 +67,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             const res = await AuthService.registerAPI({ email, userName, password });
             if (res) {
                 const { token, user } = res.data;
-                console.log("User registered successfully");
+                // console.log("User registered successfully");
                 setToken(token);
                 setUser(user);
                 setIsAuthenticated(true);
                 toast.success("User registered successfully");
             }
         } catch (error) {
-            console.error("Registration error:", error);
+            // console.error("Registration error:", error);
             toast.warning("Server error occurred");
         }
     };
@@ -112,7 +112,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             }
             return null;
         } else {
-            console.log("User is not authenticated");
+            // console.log("User is not authenticated");
             return null;
         }
 
@@ -122,7 +122,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         try {
             const res = await AuthService.getAllUsersAPI({ token: token || "" });
             if (res) {
-                console.log(res.users)
+                // console.log(res.users)
                 return res.users;
             }
         } catch (error) {
@@ -137,13 +137,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (res) {
             setUser(res.user);
             setToken(res.token);
-            console.log("User is authenticated");
+            // console.log("User is authenticated");
             setIsAuthenticated(true);
             setIsLoading(false);
             return true;
         } else {
             logoutUser();
-            console.log("User is not authenticated");
+            // console.log("User is not authenticated");
             return false;
         }
     };
@@ -165,10 +165,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         try {
             const res = await AuthService.checkPassword({ token: token || "", password });
             if (res) {
-                console.log("Password is correct");
+                // console.log("Password is correct");
                 return true;
             } else {
-                console.log("Password is incorrect");
+                // console.log("Password is incorrect");
                 return false;
             }
         } catch (error) {
@@ -183,9 +183,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             try {
                 await AuthService.update({ token, email: email ?? null, name: name ?? null, imageUrl: imageUrl ?? null, boardingStatus: boardingStatus ?? null, role: role ?? null }).then((res) => {
                     if (res) {
-                        console.log(res.user);
+                        // console.log(res.user);
                         setUser(res.user);
-                        console.log("User updated successfully");
+                        // console.log("User updated successfully");
                         return true;
                     } else {
                         setError('Échec de la mise à jour de l\'utilisateur');
@@ -204,7 +204,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             try {
                 await RecoveryService.sendRecovryEmail({ token, email }).then((res) => {
                     if (res) {
-                        console.log(res);
+                        // console.log(res);
                         toast.success("Email envoyé avec succès");
                     } else {
                         setError('Échec de l\'envoi de l\'email');
@@ -212,7 +212,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 });
             } catch (err: any) {
                 setError('Échec de l\'envoi de l\'email');
-                console.error(err);
+                // console.error(err);
             }
         }
     };
@@ -222,7 +222,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             try {
                 await RecoveryService.sendRecovryPassword({ token, email }).then((res) => {
                     if (res) {
-                        console.log(res);
+                        // console.log(res);
                         toast.success("Email envoyée si l'email existe");
                     } else {
                         setError('Échec de l\'envoi de l\'email');
@@ -230,7 +230,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 });
             } catch (err: any) {
                 setError('Échec de l\'envoi de l\'email');
-                console.error(err);
+                // console.error(err);
             }
         }
     };
@@ -240,7 +240,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             try {
                 await RecoveryService.changePassword({ token, password }).then((res) => {
                     if (res) {
-                        console.log(res);
+                        // console.log(res);
                         toast.success("Mot de passe mis à jour avec succès");
                     } else {
                         setError('Échec de la mise à jour du mot de passe');
@@ -248,7 +248,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 });
             } catch (err: any) {
                 setError('Échec de la mise à jour du mot de passe');
-                console.error(err);
+                // console.error(err);
             }
         }
     };

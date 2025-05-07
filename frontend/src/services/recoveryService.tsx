@@ -47,8 +47,8 @@ export const RecoveryService = {
     },
 
     async changePassword({ token, password }: { token: string, password: string }) {
-        console.log("token", token);
-        console.log("password", password);
+        //console.log("token", token);
+        //console.log("password", password);
         try {
             const response = await axios.post(api + "/recovery/reset/password", {
                 password

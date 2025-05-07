@@ -35,7 +35,7 @@ export const DocumentService = {
     async updateDocument({ token, userid, id, title, content, icon, coverImage, isPublished }: { token: string, userid: string, id: string, title?: string, content?: string | null, icon?: string, coverImage?: string, isPublished?: boolean }) {
         try {
             const data = await fetchData({ method: "PUT", endpoint: `/documents/${id}/content`, body: { title, content, icon, coverImage, isPublished }, header: { UserId: userid }, token });
-            console.log("updateDocument", data);
+            // console.log("updateDocument", data);
             return data;
         } catch (error) {
             handleErrors(error);
@@ -182,17 +182,17 @@ export const DocumentService = {
 
 export const fetchData = async ({ method, endpoint, params, body, header, token }: { method: string, token: string, endpoint: string, header?: any, params?: any, body?: any }) => {
     try {
-        console.log({
-            method: method,
-            url: `${api}${endpoint}`,
-            data: body,
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': "Bearer " + token,
-                ...header,
-            },
-            params: params,
-        });
+        // console.log({
+        //     method: method,
+        //     url: `${api}${endpoint}`,
+        //     data: body,
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': "Bearer " + token,
+        //         ...header,
+        //     },
+        //     params: params,
+        // });
 
         const response = await axios({
             method: method,

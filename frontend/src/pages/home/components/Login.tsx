@@ -59,7 +59,7 @@ const LoginPage = (props: Props) => {
     const handleForgetPasswordSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         try {
-            console.log("Forget password email: ", forgetPasswordEmail);
+            // console.log("Forget password email: ", forgetPasswordEmail);
             await sendRecovryPassword(forgetPasswordEmail);
             setForgetPasswordEmail('');
             closePopup();
